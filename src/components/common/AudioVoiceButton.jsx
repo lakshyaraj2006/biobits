@@ -26,8 +26,8 @@ export const AudioVoiceButton = ({ text, label = '', size = 'md', className = ''
       onClick={handleToggle}
       className={`inline-flex items-center gap-1.5 rounded-full transition-all duration-200 ${
         isAudioPlaying
-          ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/30 ring-2 ring-emerald-400 animate-pulse'
-          : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800 border border-emerald-200'
+          ? 'bg-brand-primary text-white shadow-md shadow-brand-primary/30 ring-2 ring-rose-300 animate-pulse'
+          : 'bg-white text-brand-deep hover:bg-rose-50 hover:text-brand-primary border border-rose-200 shadow-sm'
       } ${sizeClasses[size] || sizeClasses.md} ${className}`}
       title="Listen in vernacular voice"
       aria-label="Play audio explanation"
@@ -44,8 +44,8 @@ export const AudioVoiceButton = ({ text, label = '', size = 'md', className = ''
         </>
       ) : (
         <>
-          <Volume2 className="w-4 h-4 text-emerald-600" />
-          {label && <span className="font-medium text-xs text-emerald-800">{label}</span>}
+          <Volume2 className="w-4 h-4 text-brand-primary" />
+          {label && <span className="font-medium text-xs text-brand-deep">{label}</span>}
         </>
       )}
     </button>
