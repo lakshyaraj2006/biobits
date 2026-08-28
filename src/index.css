@@ -1,5 +1,22 @@
 @import "tailwindcss";
 
+/* Tailwind v4 theme tokens: these MUST be registered here for custom
+   utilities such as bg-brand-primary, bg-cream-bg, text-text-dark,
+   border-cream-border, etc. to actually generate CSS. */
+@theme {
+  --font-heading: 'Outfit', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  --color-brand-primary: #be123c;
+  --color-brand-deep: #881337;
+  --color-brand-light: #fef2f2;
+  --color-cream-bg: #fdfbf7;
+  --color-cream-panel: #faf8f5;
+  --color-cream-border: #eaddcd;
+  --color-text-dark: #292524;
+  --color-text-muted: #57534e;
+}
+
 @layer base {
   :root {
     --font-heading: 'Outfit', sans-serif;
@@ -13,21 +30,26 @@
     --color-text-dark: #292524;
     --color-text-muted: #57534e;
   }
+
   body {
     font-family: var(--font-sans);
     -webkit-tap-highlight-color: transparent;
     background: var(--color-cream-bg);
     color: var(--color-text-dark);
   }
+
   h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); }
 }
 
-/* SAHAY VISIBILITY / CONTRAST SYSTEM */
+/* =========================================================
+   SAHAY — VISIBILITY / CONTRAST SYSTEM
+   ========================================================= */
 button { min-height: 34px; border-radius: 0.625rem; }
 button:not(:disabled)[class*="opacity-"] { opacity: 1 !important; }
 button:disabled { opacity: 0.55; cursor: not-allowed; }
 
-/* Important controls must not disappear into translucent surfaces. */
+/* Controls that were intentionally translucent are made opaque so
+   their labels remain readable. This does not affect page backgrounds. */
 button[class*="bg-white/"] {
   background-color: #ffffff !important;
   color: var(--color-brand-deep) !important;
@@ -68,7 +90,9 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
   outline-offset: 2px;
 }
 
-/* LEGACY GREEN/TEAL -> SAHAY RED PALETTE */
+/* =========================================================
+   LEGACY GREEN/TEAL -> SAHAY RED PALETTE
+   ========================================================= */
 .bg-emerald-950 { background-color: #4c0519 !important; }
 .bg-emerald-900 { background-color: #881337 !important; }
 .bg-emerald-800 { background-color: #9f1239 !important; }
