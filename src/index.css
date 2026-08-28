@@ -19,11 +19,106 @@
   body {
     font-family: var(--font-sans);
     -webkit-tap-highlight-color: transparent;
+    background: var(--color-cream-bg);
+    color: var(--color-text-dark);
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
   }
+}
+
+/* ---------------------------------------------------------
+   Sahay UI visibility + palette corrections
+   --------------------------------------------------------- */
+
+/* Never let a button become visually invisible because of an
+   accidental transparent background. Explicit bg-* utilities
+   still win because they are more specific than this fallback. */
+button {
+  min-height: 34px;
+  border-radius: 0.625rem;
+}
+
+button:not([class*="bg-"]) {
+  background-color: var(--color-brand-primary);
+  color: #ffffff;
+  border: 1px solid var(--color-brand-primary);
+}
+
+/* Buttons intentionally using transparent backgrounds need a
+   visible surface and border, especially on cream/white panels. */
+button[class*="bg-transparent"] {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  color: var(--color-brand-deep) !important;
+  border: 1px solid var(--color-cream-border) !important;
+  opacity: 1 !important;
+}
+
+/* Do not allow generic opacity utilities to make enabled controls
+   disappear. Disabled controls retain a clear but subdued state. */
+button:not(:disabled)[class*="opacity-"] {
+  opacity: 1 !important;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 3px solid rgba(190, 18, 60, 0.28);
+  outline-offset: 2px;
+}
+
+/* Sahay red/cream replacements for the older green/teal hero
+   treatment used in a few modules. */
+.bg-emerald-950 { background-color: #4c0519 !important; }
+.bg-emerald-900 { background-color: #881337 !important; }
+.bg-emerald-800 { background-color: #9f1239 !important; }
+.bg-emerald-700 { background-color: #be123c !important; }
+.bg-emerald-600 { background-color: #be123c !important; }
+.bg-emerald-500 { background-color: #e11d48 !important; }
+.bg-emerald-100 { background-color: #ffe4e6 !important; }
+.bg-emerald-50 { background-color: #fff1f2 !important; }
+
+.text-emerald-950 { color: #4c0519 !important; }
+.text-emerald-900 { color: #881337 !important; }
+.text-emerald-800 { color: #9f1239 !important; }
+.text-emerald-700 { color: #be123c !important; }
+.text-emerald-600 { color: #be123c !important; }
+.text-emerald-500 { color: #e11d48 !important; }
+.text-emerald-300 { color: #fda4af !important; }
+.text-emerald-200 { color: #fecdd3 !important; }
+.text-emerald-100 { color: #ffe4e6 !important; }
+
+.border-emerald-700 { border-color: #9f1239 !important; }
+.border-emerald-600 { border-color: #be123c !important; }
+.border-emerald-500 { border-color: #e11d48 !important; }
+.border-emerald-400 { border-color: #fb7185 !important; }
+
+/* Remove green glow from the legacy animation. */
+.animate-pulse-glow {
+  animation: sahay-pulse-glow 2.5s infinite;
+}
+
+@keyframes sahay-pulse-glow {
+  0%, 100% { box-shadow: 0 0 15px rgba(190, 18, 60, 0.22); }
+  50% { box-shadow: 0 0 25px rgba(190, 18, 60, 0.42); }
+}
+
+/* Better default form controls on the cream theme. */
+select,
+input,
+textarea {
+  color: var(--color-text-dark);
+}
+
+select {
+  background-color: var(--color-cream-panel);
 }
 
 /* Custom modern animations & utility styles */
@@ -48,10 +143,6 @@
 @keyframes wave-bounce {
   0%, 100% { transform: scaleY(0.4); }
   50% { transform: scaleY(1.2); }
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2.5s infinite;
 }
 
 .animate-radar {
