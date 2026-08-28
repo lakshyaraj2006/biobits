@@ -35,11 +35,8 @@ export const TeleconsultationHub = () => {
   const [viewMode, setViewMode] = useState(userRole === 'doctor' ? 'doctor' : 'patient');
   const [filterQuery, setFilterQuery] = useState('');
 
-  // Keep viewMode synced if user changes role in navbar
   React.useEffect(() => {
-    if (userRole === 'doctor') {
-      setViewMode('doctor');
-    }
+    if (userRole === 'doctor') setViewMode('doctor');
   }, [userRole]);
 
   const totalCases = cases.length;
@@ -55,12 +52,10 @@ export const TeleconsultationHub = () => {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
-      
-      {/* Hero Banner with Layman Friendly CTA */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-800 via-teal-800 to-slate-900 text-white p-6 sm:p-9 shadow-xl border border-emerald-700/50">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-deep via-[#9f1239] to-[#4c0519] text-white p-6 sm:p-9 shadow-xl border border-brand-deep">
         <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs font-bold border border-emerald-400/30">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-300" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-rose-100 text-xs font-bold border border-white/20">
+            <Sparkles className="w-3.5 h-3.5 text-rose-200" />
             <span>Store & Forward Rural Teleconsultation • 100% Offline Compatible</span>
           </div>
 
@@ -71,44 +66,33 @@ export const TeleconsultationHub = () => {
             <AudioVoiceButton
               text={`${t('teleHeader')}. ${t('teleSubheader')}. Tap the button to log a new case with symptoms and vitals.`}
               size="lg"
-              className="bg-white/20 text-white border-white/30"
+              className="!bg-white !text-brand-deep !border-white shrink-0"
             />
           </div>
 
-          <p className="text-xs sm:text-base text-emerald-100/90 leading-relaxed font-medium">
-            {t(
-              'teleSubheader',
-              'The doctor gets a case file (symptoms, vitals, photo) and replies with a prescription whenever they are free — no need for both people online at once.'
-            )}
+          <p className="text-xs sm:text-base text-rose-100 leading-relaxed font-medium">
+            {t('teleSubheader', 'The doctor gets a case file (symptoms, vitals, photo) and replies with a prescription whenever they are free — no need for both people online at once.')}
           </p>
 
           <div className="pt-1 flex flex-wrap items-center gap-2.5">
             <button
               onClick={() => setIsNewCaseModalOpen(true)}
-              className="flex items-center gap-2 bg-white text-emerald-950 hover:bg-emerald-50 font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-md shadow-black/15 hover:scale-[1.01] active:scale-[0.99] transition-all"
+              className="flex items-center gap-2 bg-white text-brand-deep hover:bg-rose-50 font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-md shadow-black/15 hover:scale-[1.01] active:scale-[0.99] transition-all border border-white"
             >
-              <PlusCircle className="w-4 h-4 text-emerald-600" />
+              <PlusCircle className="w-4 h-4 text-brand-primary" />
               <span>{t('btnNewCase', '+ Log New Case File')}</span>
             </button>
 
-            <div className="flex items-center gap-1 bg-emerald-950/60 backdrop-blur-sm p-1 rounded-xl border border-emerald-600/40 text-xs">
+            <div className="flex items-center gap-1 bg-[#4c0519] p-1 rounded-xl border border-rose-300/30 text-xs shadow-inner">
               <button
                 onClick={() => setViewMode('patient')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs ${
-                  viewMode === 'patient'
-                    ? 'bg-emerald-600 text-white shadow-xs'
-                    : 'text-emerald-200 hover:text-white'
-                }`}
+                className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs border ${viewMode === 'patient' ? 'bg-brand-primary text-white border-rose-300 shadow-sm' : 'bg-transparent text-rose-100 border-transparent hover:bg-white/10'}`}
               >
                 👤 Patient View
               </button>
               <button
                 onClick={() => setViewMode('doctor')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs ${
-                  viewMode === 'doctor'
-                    ? 'bg-emerald-600 text-white shadow-xs'
-                    : 'text-emerald-200 hover:text-white'
-                }`}
+                className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs border ${viewMode === 'doctor' ? 'bg-brand-primary text-white border-rose-300 shadow-sm' : 'bg-transparent text-rose-100 border-transparent hover:bg-white/10'}`}
               >
                 🩺 Doctor Queue ({pendingReview})
               </button>
@@ -116,60 +100,25 @@ export const TeleconsultationHub = () => {
           </div>
         </div>
 
-        {/* Decorative background glow circles */}
-        <div className="absolute right-0 top-0 -mt-10 -mr-10 w-80 h-80 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute right-40 bottom-0 -mb-10 w-60 h-60 bg-teal-400/10 rounded-full blur-2xl pointer-events-none"></div>
+        <div className="absolute right-0 top-0 -mt-10 -mr-10 w-80 h-80 bg-rose-300/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute right-40 bottom-0 -mb-10 w-60 h-60 bg-rose-200/10 rounded-full blur-2xl pointer-events-none"></div>
       </div>
 
-      {/* Metric Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-        <StatCard
-          title="Total Registered Cases"
-          value={totalCases}
-          subtitle="Cases logged across PHC villages"
-          icon={Users}
-          color="emerald"
-        />
-        <StatCard
-          title="Prescriptions Issued"
-          value={prescriptionsIssued}
-          subtitle="Digital signed slips ready"
-          icon={FileCheck}
-          color="sky"
-        />
-        <StatCard
-          title="Pending Clinical Review"
-          value={pendingReview}
-          subtitle="Awaiting doctor evaluation"
-          icon={Clock}
-          color="amber"
-        />
-        <StatCard
-          title="Emergency Triaged"
-          value={emergencyCount}
-          subtitle="Immediate clinical priority"
-          icon={AlertTriangle}
-          color="rose"
-        />
+        <StatCard title="Total Registered Cases" value={totalCases} subtitle="Cases logged across PHC villages" icon={Users} color="rose" />
+        <StatCard title="Prescriptions Issued" value={prescriptionsIssued} subtitle="Digital signed slips ready" icon={FileCheck} color="rose" />
+        <StatCard title="Pending Clinical Review" value={pendingReview} subtitle="Awaiting doctor evaluation" icon={Clock} color="amber" />
+        <StatCard title="Emergency Triaged" value={emergencyCount} subtitle="Immediate clinical priority" icon={AlertTriangle} color="rose" />
       </div>
 
-      {/* Main View Mode Selector Content */}
       {viewMode === 'doctor' ? (
-        <DoctorQueueView
-          onSelectCaseForRx={(caseItem) => setSelectedCaseForRx(caseItem)}
-        />
+        <DoctorQueueView onSelectCaseForRx={(caseItem) => setSelectedCaseForRx(caseItem)} />
       ) : (
         <div className="space-y-5">
-          {/* Subheader & Search */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-cream-border shadow-sm">
             <div className="flex items-center gap-2">
-              <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
-                {t('myCases', 'Community Case History')} ({filteredCases.length})
-              </h3>
-              <AudioVoiceButton
-                text="Showing case files logged for your village. Tap View Prescription to see doctor instructions."
-                size="sm"
-              />
+              <h3 className="text-base sm:text-lg font-extrabold text-text-dark">{t('myCases', 'Community Case History')} ({filteredCases.length})</h3>
+              <AudioVoiceButton text="Showing case files logged for your village. Tap View Prescription to see doctor instructions." size="sm" />
             </div>
 
             <div className="relative w-full sm:w-72">
@@ -179,37 +128,22 @@ export const TeleconsultationHub = () => {
                 value={filterQuery}
                 onChange={(e) => setFilterQuery(e.target.value)}
                 placeholder="Search patient, symptom or village..."
-                className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50/70"
+                className="w-full pl-9 pr-3 py-2 rounded-xl border border-cream-border text-xs focus:outline-none focus:ring-2 focus:ring-brand-primary bg-cream-panel"
               />
             </div>
           </div>
 
-          {/* Patient Case Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredCases.map((caseItem) => (
-              <PatientCaseCard
-                key={caseItem.id}
-                caseItem={caseItem}
-                onOpenRx={(item) => setSelectedCaseForRx(item)}
-                onReview={(item) => setSelectedCaseForRx(item)}
-              />
+              <PatientCaseCard key={caseItem.id} caseItem={caseItem} onOpenRx={(item) => setSelectedCaseForRx(item)} onReview={(item) => setSelectedCaseForRx(item)} />
             ))}
           </div>
         </div>
       )}
 
-      {/* Modals */}
-      <NewCaseModal
-        isOpen={isNewCaseModalOpen}
-        onClose={() => setIsNewCaseModalOpen(false)}
-      />
-
+      <NewCaseModal isOpen={isNewCaseModalOpen} onClose={() => setIsNewCaseModalOpen(false)} />
       {selectedCaseForRx && (
-        <PrescriptionModal
-          caseData={selectedCaseForRx}
-          isOpen={Boolean(selectedCaseForRx)}
-          onClose={() => setSelectedCaseForRx(null)}
-        />
+        <PrescriptionModal caseData={selectedCaseForRx} isOpen={Boolean(selectedCaseForRx)} onClose={() => setSelectedCaseForRx(null)} />
       )}
     </div>
   );
