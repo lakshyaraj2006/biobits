@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import { Bot, X, MessageSquare, Sparkles } from 'lucide-react';
-import { useHealthData } from '../../context/HealthDataContext';
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Bot, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 
 export const ChatbotWidget = () => {
-  const { activeTab, setActiveTab } = useHealthData();
+  const location = useLocation();
+  const navigate = useNavigate();
   const { t } = useLanguage();
 
-  if (activeTab === 'chatbot') return null; // Don't show floating button if already on chatbot tab
+  if (location.pathname === '/chatbot') return null; // Don't show floating button if already on chatbot route
 
   return (
     <div className="fixed bottom-6 right-6 z-40">
       <button
-        onClick={() => setActiveTab('chatbot')}
+        onClick={() => navigate('/chatbot')}
         className="group flex items-center gap-2.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white p-3 sm:px-4 sm:py-3 rounded-full shadow-2xl shadow-emerald-700/40 hover:scale-105 active:scale-95 transition-all ring-4 ring-emerald-400/20"
         title="Open AI Health Assistant"
         aria-label="Open BioBits Swasthya Saathi"

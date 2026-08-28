@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Bot,
   Send,
@@ -21,7 +22,8 @@ import { AudioVoiceButton } from '../common/AudioVoiceButton';
 
 export const ChatbotSection = () => {
   const { t, currentLang } = useLanguage();
-  const { setActiveTab, setIsNewCaseModalOpen } = useHealthData();
+  const { setIsNewCaseModalOpen } = useHealthData();
+  const navigate = useNavigate();
 
   const [messages, setMessages] = useState([
     {
@@ -84,12 +86,12 @@ export const ChatbotSection = () => {
     if (!action) return;
     if (action.type === 'navigate') {
       if (action.value === 'teleconsult_new') {
-        setActiveTab('teleconsult');
+        navigate('/teleconsult');
         setIsNewCaseModalOpen(true);
       } else if (action.value === 'epidemic') {
-        setActiveTab('epidemic');
+        navigate('/epidemic');
       } else if (action.value === 'maternal_mom' || action.value === 'maternal_child') {
-        setActiveTab('maternal');
+        navigate('/maternal-child');
       }
     } else if (action.type === 'call') {
       window.location.href = `tel:${action.value}`;

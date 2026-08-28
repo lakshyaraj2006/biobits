@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import {
+  Home,
   Stethoscope,
   Activity,
   HeartHandshake,
@@ -13,7 +15,8 @@ import {
   ShieldCheck,
   Menu,
   X,
-  Volume2
+  Volume2,
+  Database
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useOffline } from '../../context/OfflineContext';
@@ -22,14 +25,15 @@ import { useHealthData } from '../../context/HealthDataContext';
 export const Navbar = () => {
   const { currentLang, setLanguage, languages, t, speak } = useLanguage();
   const { isOffline, toggleOfflineSimulation, pendingSyncQueue, syncOfflineQueue, isSyncing } = useOffline();
-  const { activeTab, setActiveTab, userRole, setUserRole } = useHealthData();
+  const { userRole, setUserRole } = useHealthData();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { id: 'teleconsult', label: t('navTeleconsult', 'Teleconsultation'), icon: Stethoscope, badge: null },
-    { id: 'epidemic', label: t('navEpidemic', 'Epidemic Radar'), icon: Activity, badge: 'ALERT' },
-    { id: 'maternal', label: t('navMaternal', 'Maternal & Child'), icon: HeartHandshake, badge: null },
-    { id: 'chatbot', label: t('navChatbot', 'AI Health Saathi'), icon: Bot, badge: 'AI' },
+    { to: '/', label: 'Home', icon: Home, badge: null },
+    { to: '/teleconsult', label: t('navTeleconsult', 'Teleconsultation'), icon: Stethoscope, badge: null },
+    { to: '/epidemic', label: t('navEpidemic', 'Epidemic Radar'), icon: Activity, badge: 'ALERT' },
+    { to: '/maternal-child', label: t('navMaternal', 'Maternal & Child'), icon: HeartHandshake, badge: null },
+    { to: '/chatbot', label: t('navChatbot', 'AI Health Saathi'), icon: Bot, badge: 'AI' },
   ];
 
   const roles = [
@@ -40,11 +44,11 @@ export const Navbar = () => {
   ];
 
   const handleVoiceHelp = () => {
-    speak(`${t('appTitle')}. ${t('appSubtitle')}. Select Teleconsultation to send symptoms to doctor, Epidemic Radar to check village outbreaks, or Maternal and Child for baby vaccines.`);
+    speak(`${t('appTitle')}. ${t('appSubtitle')}. Select Teleconsultation to send symptoms to doctor, Epidemic Radar to check village outbreaks, Maternal and Child for baby vaccines, or AI Saathi for emergency guidance.`);
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
       {/* Top micro banner for SIH & Team BioBits */}
       <div className="bg-gradient-to-r from-emerald-800 via-teal-800 to-emerald-900 text-white text-xs px-4 py-1.5 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2 font-medium">
@@ -76,7 +80,7 @@ export const Navbar = () => {
         <div className="flex items-center justify-between h-14 sm:h-16 gap-3">
           
           {/* Logo & Brand */}
-          <div className="flex items-center gap-2 cursor-pointer shrink-0" onClick={() => setActiveTab('teleconsult')}>
+          <Link to="/" className="flex items-center gap-2 cursor-pointer shrink-0">
             <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white shadow-sm ring-1 ring-emerald-400/40">
               <Sparkles className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
             </div>
@@ -90,31 +94,37 @@ export const Navbar = () => {
                 </span>
               </div>
             </div>
-          </div>
+          </Link>
 
-          {/* Desktop Navigation Tabs - Clean Compact Pill Design */}
+          {/* Desktop Navigation Tabs - Using React Router NavLinks */}
           <nav className="hidden lg:flex items-center gap-1 bg-slate-100/80 p-1 rounded-xl border border-slate-200/60">
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = activeTab === item.id;
               return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 relative ${
-                    isActive
-                      ? 'bg-white text-emerald-700 shadow-xs font-bold border border-slate-200/50'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
-                  }`}
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.to === '/'}
+                  className={({ isActive }) =>
+                    `flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 relative ${
+                      isActive
+                        ? 'bg-white text-emerald-700 shadow-xs font-bold border border-slate-200/50'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                    }`
+                  }
                 >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-emerald-600' : 'text-slate-400'}`} />
-                  <span>{item.label}</span>
-                  {item.badge && (
-                    <span className="px-1.5 py-0.2 text-[9px] font-extrabold rounded-full bg-rose-500 text-white">
-                      {item.badge}
-                    </span>
+                  {({ isActive }) => (
+                    <>
+                      <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-emerald-600' : 'text-slate-400'}`} />
+                      <span>{item.label}</span>
+                      {item.badge && (
+                        <span className="px-1.5 py-0.2 text-[9px] font-extrabold rounded-full bg-rose-500 text-white">
+                          {item.badge}
+                        </span>
+                      )}
+                    </>
                   )}
-                </button>
+                </NavLink>
               );
             })}
           </nav>
@@ -158,15 +168,16 @@ export const Navbar = () => {
               </div>
             </div>
 
-            {/* Offline Simulation Toggle */}
+            {/* Offline Simulation Toggle Button (In-Place, No Page Redirection) */}
             <button
+              type="button"
               onClick={toggleOfflineSimulation}
               className={`flex items-center gap-1.5 px-2.5 py-1.2 rounded-lg text-xs font-bold transition-all duration-150 border ${
                 isOffline
                   ? 'bg-amber-100 text-amber-900 border-amber-300 ring-1 ring-amber-400'
                   : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
               }`}
-              title="Simulate remote village offline status"
+              title="Click to toggle offline mode directly on this page"
             >
               {isOffline ? (
                 <>
@@ -181,7 +192,7 @@ export const Navbar = () => {
               )}
 
               {pendingSyncQueue.length > 0 && (
-                <span className="bg-amber-600 text-white text-[9px] font-extrabold px-1.5 py-0.2 rounded-full">
+                <span className="bg-amber-600 text-white text-[9px] font-extrabold px-1.5 py-0.2 rounded-full animate-pulse">
                   {pendingSyncQueue.length}
                 </span>
               )}
@@ -217,23 +228,27 @@ export const Navbar = () => {
           <div className="grid grid-cols-2 gap-2">
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = activeTab === item.id;
               return (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    setActiveTab(item.id);
-                    setMobileMenuOpen(false);
-                  }}
-                  className={`flex items-center gap-2 p-3 rounded-xl text-xs font-bold text-left transition-all ${
-                    isActive
-                      ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
-                      : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
-                  }`}
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.to === '/'}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 p-2.5 rounded-xl text-xs font-bold text-left transition-all ${
+                      isActive
+                        ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
+                        : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
+                    }`
+                  }
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-500'}`} />
-                  <span className="truncate">{item.label}</span>
-                </button>
+                  {({ isActive }) => (
+                    <>
+                      <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-500'}`} />
+                      <span className="truncate">{item.label}</span>
+                    </>
+                  )}
+                </NavLink>
               );
             })}
           </div>
