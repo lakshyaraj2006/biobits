@@ -4,6 +4,16 @@
   :root {
     --font-heading: 'Outfit', sans-serif;
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    
+    /* Sahay Color Palette */
+    --color-brand-primary: #be123c;
+    --color-brand-deep: #881337;
+    --color-brand-light: #fef2f2;
+    --color-cream-bg: #fdfbf7;
+    --color-cream-panel: #faf8f5;
+    --color-cream-border: #eaddcd;
+    --color-text-dark: #292524;
+    --color-text-muted: #57534e;
   }
 
   body {

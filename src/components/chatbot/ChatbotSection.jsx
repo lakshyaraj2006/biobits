@@ -13,7 +13,8 @@ import {
   Stethoscope,
   Activity,
   Heart,
-  Baby
+  Baby,
+  X
 } from 'lucide-react';
 import { QUICK_PROMPTS, findBotResponse } from '../../data/chatbotKnowledge';
 import { useLanguage } from '../../context/LanguageContext';
@@ -29,7 +30,7 @@ export const ChatbotSection = () => {
     {
       id: 'msg-0',
       sender: 'bot',
-      title: 'Namaste! I am BioBits Swasthya Saathi 🙏',
+      title: 'Namaste! I am Sahay Saathi 🙏',
       content:
         'I am your offline rural health & first-aid assistant. You can ask me about symptoms (fever, diarrhea, cough), emergency protocols (snakebite, dog bite, ORS), baby vaccines, pregnancy checkups, or how to use the app.\n\n*Tap any of the quick emergency topics below or type your question:*',
       action: null,
@@ -70,7 +71,7 @@ export const ChatbotSection = () => {
       const newBotMsg = {
         id: `msg-bot-${Date.now()}`,
         sender: 'bot',
-        title: botResponse.title,
+        title: botResponse.title.replace('BioBits Swasthya Saathi', 'Sahay Saathi'),
         severity: botResponse.severity,
         content: botResponse.content,
         action: botResponse.action,
@@ -102,25 +103,25 @@ export const ChatbotSection = () => {
     <div className="space-y-6 animate-in fade-in duration-300">
       
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-teal-800 via-emerald-800 to-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-emerald-700/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="space-y-2 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs font-bold border border-emerald-400/30">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-300" />
+      <div className="bg-gradient-to-br from-brand-deep via-[#5c0d24] to-stone-950 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-rose-900/40 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-2 max-w-2xl text-left">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/20 text-rose-200 text-xs font-bold border border-brand-primary/30">
+            <Sparkles className="w-3.5 h-3.5 text-rose-300" />
             <span>100% Offline Standalone AI • Diagnostic First-Aid Decision Trees</span>
           </div>
 
           <div className="flex items-center gap-3">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
-              {t('chatTitle', 'BioBits Swasthya Saathi (Health Assistant)')}
+              {t('chatTitle', 'Sahay Saathi (Health Assistant)')}
             </h2>
             <AudioVoiceButton
-              text="Welcome to BioBits Swasthya Saathi, your offline rural health assistant. Tap quick emergency chips or type your health question."
+              text="Welcome to Sahay Saathi, your offline rural health assistant. Tap quick emergency chips or type your health question."
               size="md"
               className="bg-white/20 text-white border-white/30"
             />
           </div>
 
-          <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed font-medium">
+          <p className="text-xs sm:text-sm text-rose-100/90 leading-relaxed font-medium">
             {t(
               'chatSubtitle',
               '24/7 Vernacular Health & Emergency Assistant. Provides life-saving first-aid protocols, triage advice, and easy app navigation for rural families.'
@@ -128,20 +129,20 @@ export const ChatbotSection = () => {
           </p>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/20 text-xs space-y-1 self-start">
-          <span className="font-bold text-emerald-300 block">🚑 Emergency Helplines:</span>
-          <p className="text-[11px] text-white">Ambulance: <strong className="text-white">108</strong></p>
-          <p className="text-[11px] text-white">Health Helpline: <strong className="text-white">104</strong></p>
+        <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/20 text-xs space-y-1 self-start text-left shrink-0">
+          <span className="font-bold text-rose-300 block">🚑 Emergency Helplines:</span>
+          <p className="text-[11px] text-white">Ambulance: <strong>108</strong></p>
+          <p className="text-[11px] text-white">Health Helpline: <strong>104</strong></p>
         </div>
       </div>
 
       {/* Main Chat Container */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[650px]">
+      <div className="bg-white rounded-3xl border border-cream-border shadow-sm overflow-hidden flex flex-col h-[650px]">
         
         {/* Quick Emergency Topic Chips Bar */}
-        <div className="bg-slate-50 border-b border-slate-200 p-3 sm:p-4 overflow-x-auto">
-          <div className="flex items-center gap-2 text-xs text-slate-500 font-bold mb-2">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+        <div className="bg-cream-panel border-b border-cream-border p-3 sm:p-4 overflow-x-auto text-left">
+          <div className="flex items-center gap-2 text-xs text-text-muted font-bold mb-2">
+            <Sparkles className="w-3.5 h-3.5 text-brand-primary" />
             <span>Quick Rural Health Questions & Emergency Chips:</span>
           </div>
           <div className="flex gap-2 min-w-max pb-1">
@@ -150,7 +151,7 @@ export const ChatbotSection = () => {
                 key={idx}
                 type="button"
                 onClick={() => handleSend(prompt.query)}
-                className="px-3.5 py-1.5 rounded-xl bg-white text-slate-700 hover:text-emerald-800 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-xs font-bold transition-all shadow-2xs hover:shadow-xs whitespace-nowrap"
+                className="px-3.5 py-1.5 rounded-xl bg-white text-text-dark hover:text-brand-primary hover:bg-rose-50 border border-cream-border hover:border-brand-primary/40 text-xs font-bold transition-all shadow-2xs hover:shadow-xs whitespace-nowrap"
               >
                 {prompt.label}
               </button>
@@ -159,7 +160,7 @@ export const ChatbotSection = () => {
         </div>
 
         {/* Message Log */}
-        <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-5 bg-slate-50/40">
+        <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-5 bg-cream-bg/30">
           {messages.map((msg) => {
             const isBot = msg.sender === 'bot';
             return (
@@ -171,8 +172,8 @@ export const ChatbotSection = () => {
                 <div
                   className={`w-9 h-9 rounded-2xl flex items-center justify-center text-white shrink-0 shadow-sm ${
                     isBot
-                      ? 'bg-gradient-to-br from-emerald-600 to-teal-700 ring-2 ring-emerald-400/30'
-                      : 'bg-slate-800'
+                      ? 'bg-brand-primary ring-2 ring-rose-400/20'
+                      : 'bg-stone-800'
                   }`}
                 >
                   {isBot ? <Bot className="w-5 h-5" /> : <User className="w-5 h-5" />}
@@ -180,21 +181,21 @@ export const ChatbotSection = () => {
 
                 {/* Message Bubble */}
                 <div
-                  className={`max-w-[85%] sm:max-w-xl rounded-3xl p-4 sm:p-5 shadow-sm space-y-2.5 ${
+                  className={`max-w-[85%] sm:max-w-xl rounded-3xl p-4 sm:p-5 shadow-sm space-y-2.5 text-left ${
                     isBot
-                      ? 'bg-white border border-slate-200/90 text-slate-800'
-                      : 'bg-emerald-700 text-white'
+                      ? 'bg-white border border-cream-border text-text-dark'
+                      : 'bg-brand-primary text-white'
                   }`}
                 >
                   {/* Bot Message Header */}
                   {isBot && (
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                    <div className="flex items-center justify-between border-b border-cream-border/60 pb-2">
                       <div className="flex items-center gap-2">
-                        <span className="font-extrabold text-xs text-slate-900">
-                          {msg.title || 'BioBits Saathi'}
+                        <span className="font-extrabold text-xs text-text-dark">
+                          {msg.title || 'Sahay Saathi'}
                         </span>
                         {msg.severity && (
-                          <span className="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                          <span className="bg-rose-50 text-brand-primary text-[10px] font-bold px-2 py-0.5 rounded-full border border-rose-100">
                             {msg.severity}
                           </span>
                         )}
@@ -214,7 +215,7 @@ export const ChatbotSection = () => {
                       <button
                         type="button"
                         onClick={() => handleActionClick(msg.action)}
-                        className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs px-4 py-2 rounded-xl shadow-md shadow-emerald-600/30 transition-all hover:scale-105 active:scale-95"
+                        className="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-deep text-white font-extrabold text-xs px-4 py-2 rounded-xl shadow-md transition-all hover:scale-105 active:scale-95"
                       >
                         <span>{msg.action.label}</span>
                       </button>
@@ -224,7 +225,7 @@ export const ChatbotSection = () => {
                   {/* Timestamp */}
                   <div
                     className={`text-[10px] ${
-                      isBot ? 'text-slate-400' : 'text-emerald-200 text-right'
+                      isBot ? 'text-text-muted' : 'text-rose-200 text-right'
                     }`}
                   >
                     {msg.timestamp}
@@ -237,13 +238,13 @@ export const ChatbotSection = () => {
           {/* Typing Indicator */}
           {isTyping && (
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shrink-0">
+              <div className="w-9 h-9 rounded-2xl bg-brand-primary flex items-center justify-center text-white shrink-0">
                 <Bot className="w-5 h-5" />
               </div>
-              <div className="bg-white border border-slate-200 rounded-2xl px-4 py-3 shadow-sm flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '300ms' }}></span>
+              <div className="bg-white border border-cream-border rounded-2xl px-4 py-3 shadow-sm flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-brand-primary animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                <span className="w-2 h-2 rounded-full bg-brand-primary animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                <span className="w-2 h-2 rounded-full bg-brand-primary animate-bounce" style={{ animationDelay: '300ms' }}></span>
               </div>
             </div>
           )}
@@ -252,7 +253,7 @@ export const ChatbotSection = () => {
         </div>
 
         {/* Input Bar */}
-        <div className="p-3 sm:p-4 bg-white border-t border-slate-200">
+        <div className="p-3 sm:p-4 bg-white border-t border-cream-border">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -265,23 +266,23 @@ export const ChatbotSection = () => {
               value={inputQuery}
               onChange={(e) => setInputQuery(e.target.value)}
               placeholder={t('chatPlaceholder', 'Ask about symptoms, first-aid, vaccines or doctor consultation...')}
-              className="flex-1 px-4 py-3 rounded-2xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50/50 font-medium"
+              className="flex-1 px-4 py-3 rounded-2xl border border-cream-border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary bg-[#fdfbf7] font-medium text-text-dark placeholder-stone-400"
             />
 
             <button
               type="submit"
               disabled={!inputQuery.trim()}
-              className="flex items-center gap-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-5 py-3 rounded-2xl text-xs sm:text-sm font-extrabold shadow-md shadow-emerald-600/30 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex items-center gap-1.5 bg-brand-primary hover:bg-brand-deep text-white px-5 py-3 rounded-2xl text-xs sm:text-sm font-extrabold shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <Send className="w-4 h-4" />
               <span className="hidden sm:inline">{t('chatSend', 'Ask Saathi')}</span>
             </button>
           </form>
 
-          <p className="text-[10px] text-slate-400 text-center mt-2">
+          <p className="text-[10px] text-text-muted text-center mt-2">
             {t(
               'emergencyDisclaimer',
-              'BioBits Saathi AI provides offline first-aid & triage decision support. In critical life-threatening emergency, call 108 immediately.'
+              'Sahay Saathi AI provides offline first-aid & triage decision support. In critical life-threatening emergency, call 108 immediately.'
             )}
           </p>
         </div>
