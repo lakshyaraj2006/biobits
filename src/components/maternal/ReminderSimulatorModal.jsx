@@ -43,16 +43,16 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
       <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         
         {/* Header */}
-        <div className="bg-gradient-to-r from-teal-800 via-emerald-800 to-teal-900 text-white p-5 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-brand-deep via-[#9f1239] to-brand-deep text-white p-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-xl bg-white/10">
-              <MessageSquare className="w-5 h-5 text-emerald-200" />
+              <MessageSquare className="w-5 h-5 text-rose-200" />
             </div>
             <div>
               <h3 className="font-extrabold text-base sm:text-lg text-white">
                 Dispatch Vernacular Health Reminder
               </h3>
-              <p className="text-xs text-emerald-200 mt-0.5">
+              <p className="text-xs text-rose-200 mt-0.5">
                 To: {recipient.name} ({recipient.phone || '+91 98765 43210'})
               </p>
             </div>
@@ -79,7 +79,7 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
                 onClick={() => setChannel('sms')}
                 className={`py-2 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
                   channel === 'sms'
-                    ? 'bg-emerald-50 border-emerald-600 text-emerald-900 ring-2 ring-emerald-500'
+                    ? 'bg-rose-50 border-brand-primary text-brand-deep ring-2 ring-rose-500/40'
                     : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
                 }`}
               >
@@ -91,7 +91,7 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
                 onClick={() => setChannel('whatsapp')}
                 className={`py-2 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
                   channel === 'whatsapp'
-                    ? 'bg-emerald-50 border-emerald-600 text-emerald-900 ring-2 ring-emerald-500'
+                    ? 'bg-rose-50 border-brand-primary text-brand-deep ring-2 ring-rose-500/40'
                     : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
                 }`}
               >
@@ -103,7 +103,7 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
                 onClick={() => setChannel('call')}
                 className={`py-2 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
                   channel === 'call'
-                    ? 'bg-emerald-50 border-emerald-600 text-emerald-900 ring-2 ring-emerald-500'
+                    ? 'bg-rose-50 border-brand-primary text-brand-deep ring-2 ring-rose-500/40'
                     : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
                 }`}
               >
@@ -125,11 +125,11 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
 
             {channel === 'call' ? (
               <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
-                <div className="flex items-center gap-2 text-emerald-700 font-bold text-xs">
-                  <PhoneCall className="w-4 h-4 animate-bounce" />
+                <div className="flex items-center gap-2 text-brand-deep font-bold text-xs">
+                  <PhoneCall className="w-4 h-4 text-brand-primary animate-bounce" />
                   <span>Automated Voice Call (Dialing +91 {recipient.phone?.slice(-10)})</span>
                 </div>
-                <p className="text-xs text-slate-700 font-medium leading-relaxed italic bg-emerald-50/60 p-2.5 rounded-lg border border-emerald-100">
+                <p className="text-xs text-slate-700 font-medium leading-relaxed italic bg-rose-50/60 p-2.5 rounded-lg border border-rose-100">
                   "{voiceCallScript}"
                 </p>
                 <span className="text-[10px] text-slate-500 block">
@@ -138,7 +138,7 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
               </div>
             ) : (
               <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm space-y-2">
-                <div className="flex items-center justify-between text-[11px] font-bold text-emerald-800">
+                <div className="flex items-center justify-between text-[11px] font-bold text-brand-deep">
                   <span>From: NHM-BioBits Health</span>
                   <span className="text-[10px] text-slate-400">Just Now</span>
                 </div>
@@ -154,8 +154,8 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
 
           {/* Success state banner if dispatched */}
           {isSent && (
-            <div className="p-3 rounded-xl bg-emerald-100 border border-emerald-300 text-emerald-900 text-xs font-bold flex items-center gap-2 animate-bounce">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <div className="p-3 rounded-xl bg-rose-100 border border-rose-300 text-brand-deep text-xs font-bold flex items-center gap-2 animate-bounce">
+              <CheckCircle2 className="w-4 h-4 text-brand-primary" />
               <span>Reminder dispatched successfully to {recipient.phone}!</span>
             </div>
           )}
@@ -173,7 +173,7 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
           <button
             onClick={handleSend}
             disabled={isSent}
-            className="flex items-center gap-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-5 py-2.5 rounded-xl text-xs font-extrabold shadow-md shadow-emerald-600/30 hover:opacity-95 transition-opacity"
+            className="flex items-center gap-1.5 bg-gradient-to-r from-brand-primary to-brand-deep text-white px-5 py-2.5 rounded-xl text-xs font-extrabold shadow-md shadow-rose-900/20 hover:opacity-95 transition-opacity"
           >
             <Send className="w-3.5 h-3.5" />
             <span>{isSent ? 'Sending...' : 'Send Reminder Now'}</span>

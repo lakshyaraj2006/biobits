@@ -41,10 +41,10 @@ export const MaternalChildHub = () => {
     <div className="space-y-8 animate-in fade-in duration-300">
       
       {/* Hero Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-teal-900 via-emerald-800 to-slate-900 text-white p-6 sm:p-9 shadow-xl border border-teal-700/50">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-deep via-[#9f1239] to-[#4c0519] text-white p-6 sm:p-9 shadow-xl border border-brand-deep">
         <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs font-bold border border-emerald-400/30">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-300" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-rose-100 text-xs font-bold border border-white/20">
+            <Sparkles className="w-3.5 h-3.5 text-rose-200" />
             <span>Janani & Shishu Suraksha • National Universal Immunization (UIP)</span>
           </div>
 
@@ -55,11 +55,11 @@ export const MaternalChildHub = () => {
             <AudioVoiceButton
               text={`${t('maternalHeader')}. ${t('maternalSubheader')}. Track prenatal visits for mothers and timely vaccination milestones for infants.`}
               size="lg"
-              className="bg-white/20 text-white border-white/30"
+              className="!bg-white !text-brand-deep !border-white shrink-0 shadow-sm"
             />
           </div>
 
-          <p className="text-xs sm:text-base text-emerald-100/90 leading-relaxed font-medium">
+          <p className="text-xs sm:text-base text-rose-100 leading-relaxed font-medium">
             {t(
               'maternalSubheader',
               'Sends automated reminders for vaccines and pregnancy checkups so mothers and babies don’t miss life-saving care.'
@@ -70,22 +70,22 @@ export const MaternalChildHub = () => {
           <div className="pt-1 flex flex-wrap items-center gap-2 text-xs">
             <button
               onClick={() => setActiveSubTab('mothers')}
-              className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all text-xs ${
+              className={`px-3.5 py-2 rounded-xl font-extrabold flex items-center gap-2 transition-all text-xs border ${
                 activeSubTab === 'mothers'
-                  ? 'bg-white text-emerald-950 shadow-md'
-                  : 'bg-emerald-950/60 text-emerald-100 hover:bg-emerald-900 border border-emerald-600/40'
+                  ? 'bg-white text-brand-deep border-white shadow-md'
+                  : 'bg-[#4c0519]/70 text-rose-100 hover:bg-[#4c0519] border-rose-300/30'
               }`}
             >
-              <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
+              <Heart className="w-3.5 h-3.5 text-rose-600 fill-rose-600" />
               <span>{t('tabMothers', 'Pregnant Mothers (ANC)')} ({totalMothers})</span>
             </button>
 
             <button
               onClick={() => setActiveSubTab('children')}
-              className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all text-xs ${
+              className={`px-3.5 py-2 rounded-xl font-extrabold flex items-center gap-2 transition-all text-xs border ${
                 activeSubTab === 'children'
-                  ? 'bg-white text-emerald-950 shadow-md'
-                  : 'bg-emerald-950/60 text-emerald-100 hover:bg-emerald-900 border border-emerald-600/40'
+                  ? 'bg-white text-brand-deep border-white shadow-md'
+                  : 'bg-[#4c0519]/70 text-rose-100 hover:bg-[#4c0519] border-rose-300/30'
               }`}
             >
               <Baby className="w-3.5 h-3.5 text-sky-400" />
@@ -94,10 +94,10 @@ export const MaternalChildHub = () => {
 
             <button
               onClick={() => setActiveSubTab('growth')}
-              className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all text-xs ${
+              className={`px-3.5 py-2 rounded-xl font-extrabold flex items-center gap-2 transition-all text-xs border ${
                 activeSubTab === 'growth'
-                  ? 'bg-white text-emerald-950 shadow-md'
-                  : 'bg-emerald-950/60 text-emerald-100 hover:bg-emerald-900 border border-emerald-600/40'
+                  ? 'bg-white text-brand-deep border-white shadow-md'
+                  : 'bg-[#4c0519]/70 text-rose-100 hover:bg-[#4c0519] border-rose-300/30'
               }`}
             >
               <Scale className="w-3.5 h-3.5 text-amber-300" />
@@ -107,7 +107,7 @@ export const MaternalChildHub = () => {
         </div>
 
         {/* Decorative background circle */}
-        <div className="absolute right-0 bottom-0 -mb-10 -mr-10 w-72 h-72 bg-teal-400/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute right-0 bottom-0 -mb-10 -mr-10 w-72 h-72 bg-rose-400/10 rounded-full blur-3xl pointer-events-none"></div>
       </div>
 
       {/* Metric Stat Cards */}

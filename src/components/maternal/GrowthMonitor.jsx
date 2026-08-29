@@ -19,7 +19,7 @@ export const GrowthMonitor = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-teal-50 text-teal-700 border border-teal-200">
+            <span className="p-2 rounded-xl bg-rose-50 text-brand-primary border border-rose-200">
               <Scale className="w-5 h-5" />
             </span>
             <h3 className="text-xl font-extrabold text-slate-900">
