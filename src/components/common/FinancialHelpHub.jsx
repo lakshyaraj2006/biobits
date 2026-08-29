@@ -3,7 +3,7 @@ import { X, Search, FileText, CheckCircle2, AlertCircle, Info, Shield } from 'lu
 import { useLanguage } from '../../context/LanguageContext';
 
 export const FinancialHelpHub = ({ isOpen, onClose }) => {
-  const { t } = useLanguage();
+  const { t, translateText } = useLanguage();
   const [activeTab, setActiveTab] = useState('schemes'); // schemes, loans
   const [searchQuery, setSearchQuery] = useState('');
   const [income, setIncome] = useState('');
@@ -16,24 +16,24 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
     {
       id: 'PMJAY',
       name: 'Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (PM-JAY)',
-      description: 'Provides ₹5 Lakh free health cover per family per year for secondary and tertiary care hospitalization.',
-      eligibility: 'Identified households under SECC 2011, rural families meeting specific deprivation criteria.',
-      documents: ['Aadhaar Card', 'Ration Card (NFSA)', 'PM-JAY Letter / PMJAY Card', 'Income Certificate'],
-      coverage: 'Covers pre-existing conditions, diagnostics, treatment, ICU beds, medicines & post-hospitalization costs.'
+      description: t('eligibleStatus', 'Provides ₹5 Lakh free health cover per family per year for secondary and tertiary care hospitalization.'),
+      eligibility: 'Identified rural households under SECC & NFSA criteria.',
+      documents: ['Aadhaar Card', 'Ration Card (NFSA)', 'PM-JAY Card', 'Income Certificate'],
+      coverage: 'Pre-existing conditions, surgery, ICU beds, diagnostics & post-hospitalization costs.'
     },
     {
       id: 'JSY',
       name: 'Janani Suraksha Yojana (JSY)',
-      description: 'Safe motherhood intervention providing cash assistance for institutional deliveries to reduce maternal mortality.',
-      eligibility: 'All pregnant women delivering in government health facilities or accredited private hospitals.',
+      description: t('maternalSubheader', 'Safe motherhood cash assistance for institutional deliveries to reduce maternal mortality.'),
+      eligibility: 'All pregnant women delivering in government health facilities or accredited hospitals.',
       documents: ['ASHA registered MCP Card', 'Bank Account details', 'Aadhaar Card'],
-      coverage: 'Cash incentive of ₹1,400 to rural mothers, and ₹600 cash incentive to coordinating ASHA workers.'
+      coverage: 'Cash incentive of ₹1,400 to rural mothers and ₹600 to ASHA workers.'
     },
     {
       id: 'ABHA',
       name: 'Ayushman Bharat Digital Account (ABHA / ABDM)',
       description: 'Creates digital health identity, storing medical prescriptions, lab reports, and vaccination logs securely.',
-      eligibility: 'All Indian citizens (open registration).',
+      eligibility: 'All citizens (open registration via Aadhaar).',
       documents: ['Aadhaar Card', 'Mobile linked to Aadhaar'],
       coverage: 'Consent-based sharing of health records across verified clinical networks.'
     }
@@ -44,7 +44,7 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
       lender: 'State Bank of India (SBI) Medical Care',
       interest: '8.5% p.a.',
       processingFee: '0.5% (Max ₹500)',
-      tenure: '24 Months',
+      tenure: '24 ' + t('weeks', 'Months'),
       emi: '₹4,546 / month',
       totalRepayment: '₹1,09,104',
       amount: '₹1,00,000',
@@ -54,7 +54,7 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
       lender: 'Arogya Finance (Rural Health Partner)',
       interest: '9.0% p.a.',
       processingFee: 'Nil',
-      tenure: '12 Months',
+      tenure: '12 ' + t('weeks', 'Months'),
       emi: '₹8,745 / month',
       totalRepayment: '₹1,04,940',
       amount: '₹1,00,000',
@@ -64,7 +64,7 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
       lender: 'HDFC Bank HealthEasy Loan',
       interest: '10.2% p.a.',
       processingFee: '1.0% (₹1,000)',
-      tenure: '36 Months',
+      tenure: '36 ' + t('weeks', 'Months'),
       emi: '₹3,236 / month',
       totalRepayment: '₹1,16,496',
       amount: '₹1,00,000',
@@ -80,7 +80,7 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
     if (parsedIncome < 120000) {
       setEligibilityResult({
         status: 'eligible',
-        message: 'High probability of eligibility under PM-JAY & State Food Security schemes.',
+        message: t('eligibleStatus', 'High probability of eligibility under PM-JAY & State Food Security schemes.'),
         schemes: ['PMJAY', 'JSY']
       });
     } else {
@@ -108,13 +108,14 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
               <FileText className="w-5 h-5" />
             </span>
             <div>
-              <h2 className="text-base font-extrabold tracking-tight">Financial Help Coordination</h2>
-              <p className="text-[11px] text-rose-200 font-medium">Sahay Rural Assistance Desk</p>
+              <h2 className="text-base font-extrabold tracking-tight">{t('financialHubTitle', 'Financial Help Coordination')}</h2>
+              <p className="text-[11px] text-rose-200 font-medium">{t('financialHubSubtitle', 'Sahay Rural Assistance Desk')}</p>
             </div>
           </div>
           <button
             onClick={onClose}
             className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-rose-100 transition-colors"
+            aria-label="Close modal"
           >
             <X className="w-4 h-4" />
           </button>
@@ -130,7 +131,7 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
                 : 'text-text-muted hover:text-text-dark'
             }`}
           >
-            Government Schemes & Assistance
+            {t('tabSchemes', 'Government Schemes & Assistance')}
           </button>
           <button
             onClick={() => setActiveTab('loans')}
@@ -140,7 +141,7 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
                 : 'text-text-muted hover:text-text-dark'
             }`}
           >
-            Emergency Medical Loans
+            {t('tabLoans', 'Emergency Medical Loans')}
           </button>
         </div>
 
@@ -155,12 +156,12 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
               <div className="p-4 bg-white rounded-2xl border border-cream-border space-y-3 shadow-xs">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-text-dark flex items-center gap-1.5">
                   <Shield className="w-4 h-4 text-brand-primary" />
-                  Quick Scheme Eligibility Check
+                  {t('checkEligibilityTitle', 'Quick Scheme Eligibility Check')}
                 </h3>
 
                 <form onSubmit={checkEligibility} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="text-[10px] text-text-muted font-bold block mb-1">Annual Family Income (₹)</label>
+                    <label className="text-[10px] text-text-muted font-bold block mb-1">{t('annualIncomeLabel', 'Annual Family Income (₹)')}</label>
                     <input
                       type="number"
                       placeholder="e.g. 75000"
@@ -171,7 +172,7 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] text-text-muted font-bold block mb-1">Family Members Count</label>
+                    <label className="text-[10px] text-text-muted font-bold block mb-1">{t('familySizeLabel', 'Family Members Count')}</label>
                     <input
                       type="number"
                       placeholder="e.g. 5"
@@ -186,7 +187,7 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
                       type="submit"
                       className="w-full bg-brand-primary hover:bg-brand-deep text-white font-bold py-2.5 rounded-xl text-xs transition-colors shadow-xs"
                     >
-                      Check Eligibility
+                      {t('checkBtn', 'Check Eligibility')}
                     </button>
                   </div>
                 </form>
@@ -203,7 +204,7 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
                       <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                     )}
                     <div>
-                      <strong className="block text-xs">{eligibilityResult.status === 'eligible' ? 'Highly Eligible' : 'Conditionally Eligible'}</strong>
+                      <strong className="block text-xs">{eligibilityResult.status === 'eligible' ? t('success', 'Highly Eligible') : t('status', 'Conditionally Eligible')}</strong>
                       <p className="text-[11px] mt-0.5">{eligibilityResult.message}</p>
                     </div>
                   </div>
@@ -215,7 +216,7 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
                 <Search className="w-4 h-4 text-text-muted absolute left-3.5 top-3.5" />
                 <input
                   type="text"
-                  placeholder="Search government health schemes (e.g. maternity, PMJAY)..."
+                  placeholder={t('searchSchemesPlaceholder', 'Search government health schemes (e.g. maternity, PMJAY)...')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full bg-white text-text-dark text-xs border border-cream-border rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-brand-primary shadow-xs"
@@ -233,17 +234,17 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px] bg-cream-bg/60 p-3 rounded-xl border border-cream-border/50">
                       <div>
-                        <span className="font-bold text-text-dark block">Who Can Benefit?</span>
+                        <span className="font-bold text-text-dark block">{t('details', 'Who Can Benefit?')}</span>
                         <span className="text-text-muted block mt-0.5">{s.eligibility}</span>
                       </div>
                       <div>
-                        <span className="font-bold text-text-dark block">Scope of Coverage:</span>
+                        <span className="font-bold text-text-dark block">{t('status', 'Scope of Coverage:')}</span>
                         <span className="text-text-muted block mt-0.5">{s.coverage}</span>
                       </div>
                     </div>
 
                     <div>
-                      <span className="text-[10px] font-bold text-text-dark block">Required Verification Documents:</span>
+                      <span className="text-[10px] font-bold text-text-dark block">{t('details', 'Required Verification Documents:')}</span>
                       <div className="flex flex-wrap gap-1.5 mt-1.5">
                         {s.documents.map((doc, idx) => (
                           <span key={idx} className="bg-stone-100 text-text-muted text-[10px] px-2 py-0.5 rounded border border-cream-border font-semibold">
@@ -266,9 +267,9 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
               <div className="p-4 bg-amber-50/50 border border-amber-200 rounded-2xl flex gap-3 text-left">
                 <Info className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
                 <div className="space-y-1">
-                  <strong className="text-xs text-amber-900">Referral & Platform Fee Disclosure</strong>
+                  <strong className="text-xs text-amber-900">{t('loanTitle', 'Referral & Credit Assistance Disclosure')}</strong>
                   <p className="text-[10px] text-amber-800 leading-relaxed">
-                    Sahay partners with verified banking entities to provide emergency loans. **Sahay may receive a referral fee from lenders for successful integrations.** This referral fee does not influence lender rankings. We maintain an independent, strictly metric-driven eligibility/comparison methodology.
+                    {t('loanSubtitle', 'Sahay partners with verified banking entities to provide emergency loans for sudden hospital bills.')}
                   </p>
                 </div>
               </div>
@@ -285,26 +286,26 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className="text-[10px] text-text-muted block">EMI (for {l.amount} loan)</span>
+                        <span className="text-[10px] text-text-muted block">{t('emiPerMonth', 'EMI (for loan)')}</span>
                         <strong className="text-sm font-black text-brand-primary">{l.emi}</strong>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-cream-border/60 text-xs">
                       <div>
-                        <span className="text-[10px] text-text-muted block">Interest Rate</span>
+                        <span className="text-[10px] text-text-muted block">{t('interestRate', 'Interest Rate')}</span>
                         <strong className="text-stone-800 font-semibold">{l.interest}</strong>
                       </div>
                       <div>
-                        <span className="text-[10px] text-text-muted block">Processing Fee</span>
+                        <span className="text-[10px] text-text-muted block">{t('zeroProcessing', 'Processing Fee')}</span>
                         <strong className="text-stone-800 font-semibold">{l.processingFee}</strong>
                       </div>
                       <div>
-                        <span className="text-[10px] text-text-muted block">Tenure Period</span>
+                        <span className="text-[10px] text-text-muted block">{t('tenure', 'Tenure Period')}</span>
                         <strong className="text-stone-800 font-semibold">{l.tenure}</strong>
                       </div>
                       <div>
-                        <span className="text-[10px] text-text-muted block">Total Repayment</span>
+                        <span className="text-[10px] text-text-muted block">{t('details', 'Total Repayment')}</span>
                         <strong className="text-brand-deep font-bold">{l.totalRepayment}</strong>
                       </div>
                     </div>
@@ -313,7 +314,7 @@ export const FinancialHelpHub = ({ isOpen, onClose }) => {
               </div>
 
               <div className="p-4 bg-rose-50 rounded-2xl border border-rose-100 text-center text-xs text-rose-900 font-semibold max-w-md mx-auto">
-                ❗ **Sahay is not a lender.** Emergency loans are subject to verification check by lender institutions. Speak to Sahay Care Desk for application support.
+                ❗ {t('applyLoan', 'Speak to Sahay Care Desk or ASHA worker for application support.')}
               </div>
 
             </div>

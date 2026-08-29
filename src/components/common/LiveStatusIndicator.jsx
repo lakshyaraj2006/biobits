@@ -1,27 +1,30 @@
 import React from 'react';
 import { Clock } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const LiveStatusIndicator = ({ level, time, className = '' }) => {
+  const { t, translateText } = useLanguage();
+
   const configs = {
     high: {
       dot: 'bg-emerald-500',
       badge: 'bg-emerald-50 border-emerald-200 text-emerald-800',
-      label: 'Confirmed <15 min ago'
+      label: t('confirmedAgo', 'Confirmed') + ' <15 min'
     },
     medium: {
       dot: 'bg-amber-500',
       badge: 'bg-amber-50 border-amber-200 text-amber-800',
-      label: 'Confirmed 15–60 min ago'
+      label: t('confirmedAgo', 'Confirmed') + ' 15–60 min'
     },
     stale: {
       dot: 'bg-orange-500',
       badge: 'bg-orange-50 border-orange-200 text-orange-800',
-      label: 'Older than 60 min'
+      label: t('confirmedAgo', 'Confirmed') + ' >60 min'
     },
     unverified: {
       dot: 'bg-stone-400',
       badge: 'bg-stone-50 border-stone-200 text-stone-700',
-      label: 'Unverified'
+      label: t('unverified', 'Unverified')
     }
   };
 
@@ -41,7 +44,7 @@ export const LiveStatusIndicator = ({ level, time, className = '' }) => {
       {time && (
         <span className="flex items-center gap-1 text-[9px] font-semibold text-text-muted bg-stone-100/50 px-1.5 py-0.5 rounded-md">
           <Clock className="w-3 h-3 text-text-muted shrink-0" />
-          <span>Last Confirmed: {time}</span>
+          <span>{t('confirmedAgo', 'Last Confirmed')}: {translateText(time)}</span>
         </span>
       )}
     </div>

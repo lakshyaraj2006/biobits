@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import {
-  HeartHandshake,
   Heart,
   Baby,
   Scale,
-  Calendar,
   Sparkles,
   ShieldCheck,
-  Send,
-  Volume2
+  HeartHandshake
 } from 'lucide-react';
 import { useHealthData } from '../../context/HealthDataContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -45,7 +42,7 @@ export const MaternalChildHub = () => {
         <div className="relative z-10 max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-rose-100 text-xs font-bold border border-white/20">
             <Sparkles className="w-3.5 h-3.5 text-rose-200" />
-            <span>Janani & Shishu Suraksha • National Universal Immunization (UIP)</span>
+            <span>{t('jananiUipBanner', 'Janani & Shishu Suraksha • National Universal Immunization (UIP)')}</span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -53,7 +50,7 @@ export const MaternalChildHub = () => {
               {t('maternalHeader', 'Maternal & Child Health Module')}
             </h2>
             <AudioVoiceButton
-              text={`${t('maternalHeader')}. ${t('maternalSubheader')}. Track prenatal visits for mothers and timely vaccination milestones for infants.`}
+              text={`${t('maternalHeader')}. ${t('maternalSubheader')}.`}
               size="lg"
               className="!bg-white !text-brand-deep !border-white shrink-0 shadow-sm"
             />
@@ -113,30 +110,30 @@ export const MaternalChildHub = () => {
       {/* Metric Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         <StatCard
-          title="Registered Mothers (ANC)"
+          title={t('registeredMothers', 'Registered Mothers (ANC)')}
           value={totalMothers}
-          subtitle="Prenatal tracking active"
+          subtitle={t('ancTrackingActive', 'Prenatal tracking active')}
           icon={Heart}
           color="rose"
         />
         <StatCard
-          title="High-Risk Pregnancy Alerts"
+          title={t('highRiskMothers', 'High-Risk Pregnancy Alerts')}
           value={highRiskMothers}
-          subtitle="Specialist doctor monitoring"
+          subtitle={t('highRiskFlag', 'Specialist doctor monitoring')}
           icon={HeartHandshake}
           color="amber"
         />
         <StatCard
-          title="Immunized Children (UIP)"
+          title={t('immunizedChildren', 'Immunized Children (UIP)')}
           value={totalChildren}
-          subtitle="Universal vaccination cards"
+          subtitle={t('vaccinationCard', 'Universal vaccination cards')}
           icon={Baby}
           color="sky"
         />
         <StatCard
-          title="Overdue Vaccine Alerts"
+          title={t('overdueVaccines', 'Overdue Vaccine Alerts')}
           value={overdueVaccinesCount}
-          subtitle="Immediate reminder needed"
+          subtitle={t('immediateReminder', 'Immediate reminder needed')}
           icon={ShieldCheck}
           color={overdueVaccinesCount > 0 ? 'rose' : 'emerald'}
         />

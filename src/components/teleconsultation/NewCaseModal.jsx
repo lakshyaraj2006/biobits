@@ -1,19 +1,14 @@
 import React, { useState } from 'react';
 import {
   X,
-  User,
-  Heart,
   Thermometer,
   Camera,
   Mic,
   MicOff,
   CheckCircle2,
-  AlertTriangle,
   Sparkles,
   ArrowRight,
-  ArrowLeft,
-  Upload,
-  Info
+  ArrowLeft
 } from 'lucide-react';
 import { useHealthData } from '../../context/HealthDataContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -21,18 +16,18 @@ import { AudioVoiceButton } from '../common/AudioVoiceButton';
 import { SAMPLE_MEDICAL_PHOTOS } from '../../data/mockData';
 
 const COMMON_SYMPTOMS = [
-  'High Fever (तेज बुखार)',
-  'Loose Stools / Diarrhea (दस्त)',
-  'Vomiting (उल्टी)',
-  'Skin Rash / Redness (त्वचा पर दाने)',
-  'Severe Joint Pain (जोड़ों का दर्द)',
-  'Cough & Cold (खांसी व जुकाम)',
-  'Shortness of Breath (सांस लेने में तकलीफ)',
-  'Severe Headache (सिरदर्द)',
-  'Abdominal Cramps (पेट दर्द)',
-  'Eye Redness / Itching (आंखें लाल होना)',
-  'Foot / Hand Swelling (सूजन)',
-  'Extreme Weakness (कमजोरी)'
+  'High Fever',
+  'Loose Stools / Diarrhea',
+  'Vomiting',
+  'Skin Rash / Redness',
+  'Severe Joint Pain',
+  'Cough & Cold',
+  'Shortness of Breath',
+  'Severe Headache',
+  'Abdominal Cramps',
+  'Eye Redness / Itching',
+  'Foot / Hand Swelling',
+  'Extreme Weakness'
 ];
 
 const BODY_AREAS = [
@@ -46,7 +41,7 @@ const BODY_AREAS = [
 
 export const NewCaseModal = ({ isOpen, onClose }) => {
   const { addCase } = useHealthData();
-  const { t, currentLang } = useLanguage();
+  const { t, translateText } = useLanguage();
 
   const [step, setStep] = useState(1); // 1: Patient & Symptoms, 2: Vitals, 3: Photo & Voice
 
@@ -160,16 +155,16 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-lg sm:text-xl font-extrabold text-white">
-                  {t('btnNewCase', 'Log New Patient Case File')}
+                  {t('newCaseTitle', 'Log New Patient Case File')}
                 </h3>
                 <AudioVoiceButton
-                  text="Fill patient name, age, symptoms, body temperature, blood pressure, and attach a photo of the illness."
+                  text={`${t('newCaseTitle')}. ${t('patientName')}, ${t('symptomsTitle')}, ${t('vitalsTitle')}.`}
                   size="sm"
                   className="bg-white/20 text-white border-white/30"
                 />
               </div>
               <p className="text-xs text-emerald-100 mt-0.5">
-                Step {step} of 3 • Asynchronous Doctor Store & Forward
+                {t('step', 'Step')} {step} / 3 • {t('storeAndForward', 'Asynchronous Doctor Store & Forward')}
               </p>
             </div>
           </div>
@@ -184,13 +179,13 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
         {/* Step Indicator */}
         <div className="flex border-b border-slate-200 bg-slate-50 text-xs font-bold text-slate-600">
           <div className={`flex-1 py-3 text-center border-b-2 transition-all ${step === 1 ? 'border-emerald-600 text-emerald-700 bg-white' : 'border-transparent'}`}>
-            1. Patient & Symptoms
+            1. {t('step1Patient', 'Patient & Symptoms')}
           </div>
           <div className={`flex-1 py-3 text-center border-b-2 transition-all ${step === 2 ? 'border-emerald-600 text-emerald-700 bg-white' : 'border-transparent'}`}>
-            2. Vitals & Measurements
+            2. {t('step2Vitals', 'Vitals & Measurements')}
           </div>
           <div className={`flex-1 py-3 text-center border-b-2 transition-all ${step === 3 ? 'border-emerald-600 text-emerald-700 bg-white' : 'border-transparent'}`}>
-            3. Photo & Voice Note
+            3. {t('step3Media', 'Photo & Voice Note')}
           </div>
         </div>
 
@@ -203,7 +198,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                    {t('name', 'Patient Full Name')} *
+                    {t('patientName', 'Patient Full Name')} *
                   </label>
                   <input
                     type="text"
@@ -241,24 +236,24 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                       onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
                       className="w-full px-2 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white"
                     >
-                      <option value="Female">Female (महिला)</option>
-                      <option value="Male">Male (पुरुष)</option>
-                      <option value="Child/Infant">Child / Infant (शिशु)</option>
-                      <option value="Other">Other</option>
+                      <option value="Female">{translateText('Female')}</option>
+                      <option value="Male">{translateText('Male')}</option>
+                      <option value="Child/Infant">{translateText('Child')}</option>
+                      <option value="Other">{translateText('Other')}</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                    {t('village', 'Village / Gram Panchayat')} *
+                    {t('villageLabel', 'Village / Gram Panchayat')} *
                   </label>
                   <select
                     value={formData.village}
                     onChange={(e) => setFormData({ ...formData, village: e.target.value })}
                     className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white font-medium"
                   >
-                    <option value="Rampur Cluster">Rampur Cluster (Kalyanpur Block)</option>
+                    <option value="Rampur Cluster">Rampur Cluster</option>
                     <option value="Balanagar West">Balanagar West</option>
                     <option value="Devigarh Tribal Hamlet">Devigarh Tribal Hamlet</option>
                     <option value="Shivpuri Gram">Shivpuri Gram</option>
@@ -282,7 +277,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
               {/* Body Area Selector */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                  Select Primary Affected Body Area:
+                  {t('bodyArea', 'Select Primary Affected Body Area')}:
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {BODY_AREAS.map((area) => (
@@ -297,7 +292,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                       }`}
                     >
                       <span className="text-base">{area.icon}</span>
-                      <span className="truncate">{area.label}</span>
+                      <span className="truncate">{translateText(area.label)}</span>
                     </button>
                   ))}
                 </div>
@@ -306,7 +301,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
               {/* Symptom Chips Selector */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                  Tap All Reported Symptoms ({formData.selectedSymptoms.length} selected):
+                  {t('selectSymptoms', 'Tap All Reported Symptoms')} ({formData.selectedSymptoms.length} {t('selected', 'selected')}):
                 </label>
                 <div className="flex flex-wrap gap-1.5">
                   {COMMON_SYMPTOMS.map((sym) => {
@@ -323,7 +318,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                         }`}
                       >
                         {isSelected ? '✓ ' : '+ '}
-                        {sym}
+                        {translateText(sym)}
                       </button>
                     );
                   })}
@@ -334,7 +329,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                     type="text"
                     value={formData.customSymptom}
                     onChange={(e) => setFormData({ ...formData, customSymptom: e.target.value })}
-                    placeholder="Type other symptom and press Add..."
+                    placeholder={t('otherSymptom', 'Type other symptom and press Add...')}
                     className="flex-1 px-3 py-1.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                   <button
@@ -342,7 +337,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                     onClick={handleAddCustomSymptom}
                     className="px-3 py-1.5 bg-slate-800 text-white rounded-xl text-xs font-bold hover:bg-slate-900"
                   >
-                    Add
+                    {t('add', 'Add')}
                   </button>
                 </div>
               </div>
@@ -355,10 +350,10 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
               <div className="bg-emerald-50 border border-emerald-200 p-3 rounded-2xl flex items-center justify-between text-xs text-emerald-900">
                 <div className="flex items-center gap-2">
                   <Thermometer className="w-4 h-4 text-emerald-600" />
-                  <span>Vitals recorded help AI triage and assist PHC Doctor with diagnostic accuracy.</span>
+                  <span>{t('vitalsNote', 'Vitals recorded help AI triage and assist PHC Doctor with diagnostic accuracy.')}</span>
                 </div>
                 <AudioVoiceButton
-                  text="Record temperature, blood pressure, pulse rate and oxygen level. Red flags indicate emergency."
+                  text={`${t('vitalsTitle')}. ${t('temp')}, ${t('bp')}, ${t('pulse')}, ${t('spO2')}.`}
                   size="sm"
                 />
               </div>
@@ -369,7 +364,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                 <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2">
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-bold text-slate-700 uppercase">
-                      🌡️ Body Temp (°F)
+                      🌡️ {t('temp', 'Body Temp (°F)')}
                     </label>
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
                       formData.temperature >= 102
@@ -378,7 +373,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                         ? 'bg-amber-100 text-amber-700'
                         : 'bg-emerald-100 text-emerald-700'
                     }`}>
-                      {formData.temperature}°F ({formData.temperature >= 100.4 ? 'Fever' : 'Normal'})
+                      {formData.temperature}°F ({formData.temperature >= 100.4 ? translateText('Fever') : translateText('Normal')})
                     </span>
                   </div>
                   <input
@@ -391,9 +386,9 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                     className="w-full accent-emerald-600"
                   />
                   <div className="flex justify-between text-[10px] text-slate-500 font-semibold">
-                    <span>96°F (Normal)</span>
-                    <span>100.4°F (Mild)</span>
-                    <span>104°F+ (High Danger)</span>
+                    <span>96°F ({translateText('Normal')})</span>
+                    <span>100.4°F ({translateText('Fever')})</span>
+                    <span>104°F+ (Danger)</span>
                   </div>
                 </div>
 
@@ -401,7 +396,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                 <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2">
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-bold text-slate-700 uppercase">
-                      🩺 Blood Pressure (Sys / Dia)
+                      🩺 {t('bp', 'Blood Pressure (Sys / Dia)')}
                     </label>
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
                       formData.bpSys >= 140 || formData.bpDia >= 90
@@ -413,7 +408,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <span className="text-[10px] font-semibold text-slate-500">Systolic (Top)</span>
+                      <span className="text-[10px] font-semibold text-slate-500">{t('systolic', 'Systolic (Top)')}</span>
                       <input
                         type="number"
                         value={formData.bpSys}
@@ -422,7 +417,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                       />
                     </div>
                     <div>
-                      <span className="text-[10px] font-semibold text-slate-500">Diastolic (Bottom)</span>
+                      <span className="text-[10px] font-semibold text-slate-500">{t('diastolic', 'Diastolic (Bottom)')}</span>
                       <input
                         type="number"
                         value={formData.bpDia}
@@ -437,10 +432,10 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                 <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2">
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-bold text-slate-700 uppercase">
-                      💓 Pulse Rate (BPM)
+                      💓 {t('pulse', 'Pulse Rate (BPM)')}
                     </label>
                     <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
-                      {formData.pulse} bpm
+                      {formData.pulse} {t('bpm', 'bpm')}
                     </span>
                   </div>
                   <input
@@ -452,7 +447,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                     className="w-full accent-emerald-600"
                   />
                   <div className="flex justify-between text-[10px] text-slate-500 font-semibold">
-                    <span>60 Normal</span>
+                    <span>60 {translateText('Normal')}</span>
                     <span>100 Fast</span>
                     <span>140+ Tachycardia</span>
                   </div>
@@ -462,7 +457,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                 <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2">
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-bold text-slate-700 uppercase">
-                      🫁 Oxygen Saturation (SpO2)
+                      🫁 {t('spO2', 'Oxygen Saturation (SpO2)')}
                     </label>
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
                       formData.spO2 < 94 ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'
@@ -479,8 +474,8 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                     className="w-full accent-emerald-600"
                   />
                   <div className="flex justify-between text-[10px] text-slate-500 font-semibold">
-                    <span>&lt;92% (Hypoxia Danger)</span>
-                    <span>95-100% (Healthy)</span>
+                    <span>&lt;92% (Danger)</span>
+                    <span>95-100% ({translateText('Normal')})</span>
                   </div>
                 </div>
               </div>
@@ -488,8 +483,8 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
               {/* Calculated Triage Preview */}
               <div className="p-3.5 rounded-2xl border border-slate-200 bg-white shadow-sm flex items-center justify-between">
                 <div>
-                  <span className="text-xs text-slate-500 font-bold uppercase">Automated AI Triage Assessment:</span>
-                  <p className="text-xs text-slate-600">Based on submitted vitals & symptom criteria.</p>
+                  <span className="text-xs text-slate-500 font-bold uppercase">{t('triageCalculation', 'Automated AI Triage Assessment')}:</span>
+                  <p className="text-xs text-slate-600">{t('vitalsNote', 'Based on submitted vitals & symptom criteria.')}</p>
                 </div>
                 <span className={`px-3 py-1.5 rounded-xl font-extrabold text-xs uppercase tracking-wider ${
                   calculateTriage() === 'Emergency'
@@ -498,7 +493,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                     ? 'bg-amber-500 text-white'
                     : 'bg-emerald-600 text-white'
                 }`}>
-                  {calculateTriage()} Priority
+                  {translateText(calculateTriage())}
                 </span>
               </div>
             </div>
@@ -512,10 +507,10 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <label className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                      📷 Medical Photo Attachment (Rash, Throat, Wound, Eye)
+                      📷 {t('attachPhoto', 'Medical Photo Attachment (Rash, Throat, Wound, Eye)')}
                     </label>
                     <p className="text-xs text-slate-500">
-                      Take a photo with phone camera or pick a sample demonstration photo below.
+                      {t('photoDesc', 'Take a photo with phone camera or pick a sample demonstration photo below.')}
                     </p>
                   </div>
                   <Camera className="w-5 h-5 text-emerald-600" />
@@ -543,7 +538,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                       alt="Rash"
                       className="w-full h-16 object-cover rounded-lg mb-1"
                     />
-                    <span className="text-[10px] font-bold text-slate-700">Skin Rash</span>
+                    <span className="text-[10px] font-bold text-slate-700">{translateText('Skin Rash')}</span>
                   </button>
 
                   <button
@@ -566,7 +561,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                       alt="Foot Swelling"
                       className="w-full h-16 object-cover rounded-lg mb-1"
                     />
-                    <span className="text-[10px] font-bold text-slate-700">Foot Swelling</span>
+                    <span className="text-[10px] font-bold text-slate-700">{translateText('Foot / Hand Swelling')}</span>
                   </button>
 
                   <button
@@ -589,7 +584,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                       alt="Red Eye"
                       className="w-full h-16 object-cover rounded-lg mb-1"
                     />
-                    <span className="text-[10px] font-bold text-slate-700">Eye Redness</span>
+                    <span className="text-[10px] font-bold text-slate-700">{translateText('Eye Redness')}</span>
                   </button>
 
                   <button
@@ -618,13 +613,13 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
 
                 {formData.photoUrl && (
                   <div className="flex items-center justify-between bg-emerald-50 border border-emerald-200 p-2 rounded-xl text-xs text-emerald-900">
-                    <span className="font-semibold">Selected: {formData.photoLabel}</span>
+                    <span className="font-semibold">{t('selected', 'Selected')}: {translateText(formData.photoLabel)}</span>
                     <button
                       type="button"
                       onClick={() => setFormData({ ...formData, photoUrl: '', photoLabel: '' })}
                       className="text-rose-600 font-bold hover:underline"
                     >
-                      Remove
+                      {t('remove', 'Remove')}
                     </button>
                   </div>
                 )}
@@ -635,10 +630,10 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <label className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                      🎙️ Vernacular Voice Recording (For Illiterate Patients)
+                      🎙️ {t('recordVoice', 'Vernacular Voice Recording')}
                     </label>
                     <p className="text-xs text-slate-500">
-                      Record symptoms in mother tongue — doctor can listen to the audio playback.
+                      {t('recordVoiceDesc', 'Record symptoms in mother tongue — doctor can listen to the audio playback.')}
                     </p>
                   </div>
                   <Mic className="w-5 h-5 text-emerald-600" />
@@ -669,13 +664,13 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                     <div>
                       <p className="text-xs font-bold text-slate-800">
                         {formData.isRecordingVoice
-                          ? '🔴 Recording Audio in Progress...'
+                          ? '🔴 ' + t('recordingVoice', 'Recording Audio in Progress...')
                           : formData.hasVoiceNote
-                          ? '✅ Audio Symptom Note Saved (0:32)'
-                          : 'Tap mic button to record voice explanation'}
+                          ? '✅ ' + t('voiceSaved', 'Audio Symptom Note Saved (0:32)')
+                          : t('recordVoicePrompt', 'Tap mic button to record voice explanation')}
                       </p>
                       <p className="text-[11px] text-slate-500">
-                        Works completely offline in remote tribal areas.
+                        {t('offlineAudioNote', 'Works completely offline in remote tribal areas.')}
                       </p>
                     </div>
                   </div>
@@ -683,7 +678,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                   {formData.hasVoiceNote && (
                     <AudioVoiceButton
                       text="Patient voice note: Sudden fever with severe joint pain and redness after village harvest."
-                      label="Play Recording"
+                      label={t('playRecording', 'Play Recording')}
                       size="sm"
                     />
                   )}
@@ -701,7 +696,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                 className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-bold text-slate-700 hover:bg-slate-100 transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
-                Previous Step
+                {t('previousStep', 'Previous Step')}
               </button>
             ) : (
               <button
@@ -725,7 +720,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                 }}
                 className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shadow-md shadow-emerald-600/30"
               >
-                Next Step
+                {t('nextStep', 'Next Step')}
                 <ArrowRight className="w-4 h-4" />
               </button>
             ) : (
@@ -734,7 +729,7 @@ export const NewCaseModal = ({ isOpen, onClose }) => {
                 className="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-6 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition-all shadow-lg shadow-emerald-600/40"
               >
                 <CheckCircle2 className="w-4 h-4" />
-                Submit Case File to Doctor
+                {t('submitCase', 'Submit Case File to Doctor')}
               </button>
             )}
           </div>

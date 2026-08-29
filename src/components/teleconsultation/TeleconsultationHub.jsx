@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import {
-  Stethoscope,
   PlusCircle,
   Clock,
   FileCheck,
   AlertTriangle,
-  HeartPulse,
   Sparkles,
   Users,
-  Search,
-  CheckCircle2,
-  Volume2
+  Search
 } from 'lucide-react';
 import { useHealthData } from '../../context/HealthDataContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -56,7 +52,7 @@ export const TeleconsultationHub = () => {
         <div className="relative z-10 max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-rose-100 text-xs font-bold border border-white/20">
             <Sparkles className="w-3.5 h-3.5 text-rose-200" />
-            <span>Store & Forward Rural Teleconsultation • 100% Offline Compatible</span>
+            <span>{t('storeAndForward', 'Store & Forward Rural Teleconsultation • 100% Offline Compatible')}</span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -64,7 +60,7 @@ export const TeleconsultationHub = () => {
               {t('teleHeader', 'Asynchronous Teleconsultation')}
             </h2>
             <AudioVoiceButton
-              text={`${t('teleHeader')}. ${t('teleSubheader')}. Tap the button to log a new case with symptoms and vitals.`}
+              text={`${t('teleHeader')}. ${t('teleSubheader')}.`}
               size="lg"
               className="!bg-white !text-brand-deep !border-white shrink-0"
             />
@@ -88,13 +84,13 @@ export const TeleconsultationHub = () => {
                 onClick={() => setViewMode('patient')}
                 className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs border ${viewMode === 'patient' ? 'bg-brand-primary text-white border-rose-300 shadow-sm' : 'bg-transparent text-rose-100 border-transparent hover:bg-white/10'}`}
               >
-                👤 Patient View
+                👤 {t('patientView', 'Patient View')}
               </button>
               <button
                 onClick={() => setViewMode('doctor')}
                 className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs border ${viewMode === 'doctor' ? 'bg-brand-primary text-white border-rose-300 shadow-sm' : 'bg-transparent text-rose-100 border-transparent hover:bg-white/10'}`}
               >
-                🩺 Doctor Queue ({pendingReview})
+                🩺 {t('doctorQueue', 'Doctor Queue')} ({pendingReview})
               </button>
             </div>
           </div>
@@ -105,10 +101,10 @@ export const TeleconsultationHub = () => {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-        <StatCard title="Total Registered Cases" value={totalCases} subtitle="Cases logged across PHC villages" icon={Users} color="rose" />
-        <StatCard title="Prescriptions Issued" value={prescriptionsIssued} subtitle="Digital signed slips ready" icon={FileCheck} color="rose" />
-        <StatCard title="Pending Clinical Review" value={pendingReview} subtitle="Awaiting doctor evaluation" icon={Clock} color="amber" />
-        <StatCard title="Emergency Triaged" value={emergencyCount} subtitle="Immediate clinical priority" icon={AlertTriangle} color="rose" />
+        <StatCard title={t('totalCases', 'Total Registered Cases')} value={totalCases} subtitle={t('villageLabel', 'Cases logged across PHC villages')} icon={Users} color="rose" />
+        <StatCard title={t('prescriptionsIssued', 'Prescriptions Issued')} value={prescriptionsIssued} subtitle={t('rxReady', 'Digital signed slips ready')} icon={FileCheck} color="rose" />
+        <StatCard title={t('pendingReview', 'Pending Clinical Review')} value={pendingReview} subtitle={t('awaitingDoctor', 'Awaiting doctor evaluation')} icon={Clock} color="amber" />
+        <StatCard title={t('emergencyTriaged', 'Emergency Triaged')} value={emergencyCount} subtitle={t('immediatePriority', 'Immediate clinical priority')} icon={AlertTriangle} color="rose" />
       </div>
 
       {viewMode === 'doctor' ? (
@@ -118,7 +114,7 @@ export const TeleconsultationHub = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-cream-border shadow-sm">
             <div className="flex items-center gap-2">
               <h3 className="text-base sm:text-lg font-extrabold text-text-dark">{t('myCases', 'Community Case History')} ({filteredCases.length})</h3>
-              <AudioVoiceButton text="Showing case files logged for your village. Tap View Prescription to see doctor instructions." size="sm" />
+              <AudioVoiceButton text={`${t('myCases', 'Community Case History')}. ${t('viewRx', 'Tap View Prescription to see doctor instructions.')}`} size="sm" />
             </div>
 
             <div className="relative w-full sm:w-72">
@@ -127,7 +123,7 @@ export const TeleconsultationHub = () => {
                 type="text"
                 value={filterQuery}
                 onChange={(e) => setFilterQuery(e.target.value)}
-                placeholder="Search patient, symptom or village..."
+                placeholder={t('searchPlaceholder', 'Search patient, symptom or village...')}
                 className="w-full pl-9 pr-3 py-2 rounded-xl border border-cream-border text-xs focus:outline-none focus:ring-2 focus:ring-brand-primary bg-cream-panel"
               />
             </div>

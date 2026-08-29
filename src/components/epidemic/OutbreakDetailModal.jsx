@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import {
   X,
-  Activity,
-  AlertTriangle,
   Droplets,
   Users,
   Send,
   CheckCircle2,
   Sparkles,
-  PhoneCall,
   ShieldAlert,
   TrendingUp,
   Truck,
@@ -20,7 +17,7 @@ import { AudioVoiceButton } from '../common/AudioVoiceButton';
 
 export const OutbreakDetailModal = ({ cluster, isOpen, onClose }) => {
   const { triggerOutbreakAction } = useHealthData();
-  const { t } = useLanguage();
+  const { t, translateText } = useLanguage();
 
   const [dispatchedKit, setDispatchedKit] = useState(false);
   const [deployedTeam, setDeployedTeam] = useState(false);
@@ -62,16 +59,16 @@ export const OutbreakDetailModal = ({ cluster, isOpen, onClose }) => {
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-lg sm:text-xl font-extrabold text-white">
-                  {cluster.villageName} — Outbreak Early-Warning Dossier
+                  {cluster.villageName} — {t('outbreakDossierTitle', 'Outbreak Early-Warning Dossier')}
                 </h3>
                 <AudioVoiceButton
-                  text={`Emergency epidemic dossier for ${cluster.villageName}. Suspected ${cluster.suspectedDisease}. 7-day surge is ${cluster.spikePercentage}. Public health action plan recommended.`}
+                  text={`${cluster.villageName}. ${t('outbreakDossierTitle')}. ${translateText(cluster.suspectedDisease)}. ${cluster.spikePercentage}.`}
                   size="sm"
                   className="bg-white/20 text-white border-white/30"
                 />
               </div>
               <p className="text-xs text-white/80 mt-0.5">
-                {cluster.block} • Population: {cluster.population.toLocaleString()} • Risk: {cluster.riskLevel}
+                {cluster.block} • {t('population', 'Population')}: {cluster.population.toLocaleString()} • {t('triageLevel', 'Risk')}: {translateText(cluster.riskLevel)}
               </p>
             </div>
           </div>
@@ -89,20 +86,20 @@ export const OutbreakDetailModal = ({ cluster, isOpen, onClose }) => {
           {/* Key Outbreak Metrics Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs">
             <div>
-              <span className="text-slate-500 font-semibold block">Dominant Symptom</span>
-              <strong className="text-slate-900 text-sm block truncate">{cluster.primarySymptom}</strong>
+              <span className="text-slate-500 font-semibold block">{t('symptomSurge', 'Dominant Symptom')}</span>
+              <strong className="text-slate-900 text-sm block truncate">{translateText(cluster.primarySymptom)}</strong>
             </div>
             <div>
-              <span className="text-slate-500 font-semibold block">Suspected Cause</span>
-              <strong className="text-rose-700 text-sm block">{cluster.suspectedDisease}</strong>
+              <span className="text-slate-500 font-semibold block">{t('suspectedDisease', 'Suspected Cause')}</span>
+              <strong className="text-rose-700 text-sm block">{translateText(cluster.suspectedDisease)}</strong>
             </div>
             <div>
-              <span className="text-slate-500 font-semibold block">7-Day Spike</span>
-              <strong className="text-rose-600 text-sm block">{cluster.spikePercentage} Surge</strong>
+              <span className="text-slate-500 font-semibold block">{t('casesThisWeek', '7-Day Spike')}</span>
+              <strong className="text-rose-600 text-sm block">{cluster.spikePercentage} {t('spike', 'Surge')}</strong>
             </div>
             <div>
-              <span className="text-slate-500 font-semibold block">Water Source Status</span>
-              <strong className="text-amber-800 text-xs block truncate">{cluster.waterSourceStatus}</strong>
+              <span className="text-slate-500 font-semibold block">{t('waterStatus', 'Water Source Status')}</span>
+              <strong className="text-amber-800 text-xs block truncate">{translateText(cluster.waterSourceStatus)}</strong>
             </div>
           </div>
 
@@ -112,11 +109,11 @@ export const OutbreakDetailModal = ({ cluster, isOpen, onClose }) => {
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-rose-600" />
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">
-                  Daily Symptom Surge vs Historical Safe Baseline (Last 5 Days)
+                  {t('dailySurgeVsSafe', 'Daily Symptom Surge vs Historical Safe Baseline (Last 5 Days)')}
                 </h4>
               </div>
               <span className="text-[11px] font-semibold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">
-                Anomaly Score: {cluster.anomalyScore}/100
+                {t('anomalyScore', 'Anomaly Score')}: {cluster.anomalyScore}/100
               </span>
             </div>
 
@@ -145,7 +142,7 @@ export const OutbreakDetailModal = ({ cluster, isOpen, onClose }) => {
                         title={`Recorded Cases: ${d.cases}`}
                       ></div>
                     </div>
-                    <span className="text-[10px] font-bold text-slate-600">{d.day} ({d.cases})</span>
+                    <span className="text-[10px] font-bold text-slate-600">{translateText(d.day)} ({d.cases})</span>
                   </div>
                 );
               })}
@@ -154,11 +151,11 @@ export const OutbreakDetailModal = ({ cluster, isOpen, onClose }) => {
             <div className="flex items-center justify-center gap-6 text-xs text-slate-600 pt-1 font-medium">
               <span className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded bg-slate-300"></span>
-                Normal Baseline (~{cluster.baselineCases} cases)
+                {t('baselineCases', 'Normal Baseline')} (~{cluster.baselineCases} {t('casesCount', 'cases')})
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded bg-rose-600"></span>
-                Reported Incident Spike ({cluster.casesThisWeek} cases)
+                {t('reportedSpike', 'Reported Incident Spike')} ({cluster.casesThisWeek} {t('casesCount', 'cases')})
               </span>
             </div>
           </div>
@@ -167,7 +164,7 @@ export const OutbreakDetailModal = ({ cluster, isOpen, onClose }) => {
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
               <Sparkles className="w-4 h-4 text-emerald-600" />
-              Rapid Public Health Interventions (Zero-Delay Actions)
+              {t('rapidInterventions', 'Rapid Public Health Interventions (Zero-Delay Actions)')}
             </h4>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -176,10 +173,10 @@ export const OutbreakDetailModal = ({ cluster, isOpen, onClose }) => {
                 <div>
                   <div className="flex items-center gap-2 text-sky-700 font-bold text-xs">
                     <Droplets className="w-4 h-4" />
-                    <span>Water & Testing Kits</span>
+                    <span>{t('waterKits', 'Water & Testing Kits')}</span>
                   </div>
                   <p className="text-[11px] text-slate-500 mt-1">
-                    Send chlorine purification tablets, ORS crates & water bacteriology testing kits to village handpump sites.
+                    {t('dispatchKitsDesc', 'Send chlorine purification tablets, ORS crates & water bacteriology testing kits to village handpump sites.')}
                   </p>
                 </div>
 
@@ -196,12 +193,12 @@ export const OutbreakDetailModal = ({ cluster, isOpen, onClose }) => {
                   {dispatchedKit ? (
                     <>
                       <CheckCircle2 className="w-3.5 h-3.5" />
-                      Kits Dispatched ✓
+                      {t('kitsDispatched', 'Kits Dispatched ✓')}
                     </>
                   ) : (
                     <>
                       <Truck className="w-3.5 h-3.5" />
-                      Dispatch Kits Now
+                      {t('dispatchKitsNow', 'Dispatch Kits Now')}
                     </>
                   )}
                 </button>
@@ -212,10 +209,10 @@ export const OutbreakDetailModal = ({ cluster, isOpen, onClose }) => {
                 <div>
                   <div className="flex items-center gap-2 text-emerald-700 font-bold text-xs">
                     <Users className="w-4 h-4" />
-                    <span>Deploy Mobile Clinic</span>
+                    <span>{t('deployClinic', 'Deploy Mobile Clinic')}</span>
                   </div>
                   <p className="text-[11px] text-slate-500 mt-1">
-                    Mobilize PHC Doctor, 2 Nurses, and diagnostic rapid test kits (NS1/Malaria/Glucose) to {cluster.villageName}.
+                    {t('deployClinicDesc', 'Mobilize PHC Doctor, 2 Nurses, and diagnostic rapid test kits to village.')}
                   </p>
                 </div>
 
@@ -232,12 +229,12 @@ export const OutbreakDetailModal = ({ cluster, isOpen, onClose }) => {
                   {deployedTeam ? (
                     <>
                       <CheckCircle2 className="w-3.5 h-3.5" />
-                      Team Deployed ✓
+                      {t('teamDeployed', 'Team Deployed ✓')}
                     </>
                   ) : (
                     <>
                       <Users className="w-3.5 h-3.5" />
-                      Deploy Medical Team
+                      {t('deployTeamNow', 'Deploy Medical Team')}
                     </>
                   )}
                 </button>
@@ -248,10 +245,10 @@ export const OutbreakDetailModal = ({ cluster, isOpen, onClose }) => {
                 <div>
                   <div className="flex items-center gap-2 text-amber-700 font-bold text-xs">
                     <MessageSquare className="w-4 h-4" />
-                    <span>Broadcast SMS Warning</span>
+                    <span>{t('broadcastSMS', 'Broadcast SMS Warning')}</span>
                   </div>
                   <p className="text-[11px] text-slate-500 mt-1">
-                    Send vernacular SMS & Voice Call advisory to all {cluster.population} residents: "Boil drinking water, drink ORS".
+                    {t('broadcastSMSDesc', 'Send vernacular SMS & Voice Call advisory to all residents: Boil drinking water, drink ORS.')}
                   </p>
                 </div>
 
@@ -268,12 +265,12 @@ export const OutbreakDetailModal = ({ cluster, isOpen, onClose }) => {
                   {broadcastSent ? (
                     <>
                       <CheckCircle2 className="w-3.5 h-3.5" />
-                      SMS Broadcasted ✓
+                      {t('smsBroadcasted', 'SMS Broadcasted ✓')}
                     </>
                   ) : (
                     <>
                       <Send className="w-3.5 h-3.5" />
-                      Broadcast SMS Alert
+                      {t('broadcastAlert', 'Broadcast SMS Alert')}
                     </>
                   )}
                 </button>
@@ -285,7 +282,7 @@ export const OutbreakDetailModal = ({ cluster, isOpen, onClose }) => {
         {/* Modal Footer */}
         <div className="bg-slate-50 p-4 border-t border-slate-200 flex items-center justify-between">
           <span className="text-xs text-slate-500 font-medium">
-            Active Health Teams on Field: <strong>{cluster.activeTeams}</strong>
+            {t('activeTeams', 'Active Health Teams on Field')}: <strong>{cluster.activeTeams}</strong>
           </span>
           <button
             onClick={onClose}

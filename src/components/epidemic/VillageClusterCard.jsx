@@ -1,20 +1,14 @@
 import React from 'react';
 import {
-  Activity,
-  AlertTriangle,
   Droplets,
-  Users,
-  ShieldCheck,
-  TrendingUp,
   ArrowRight,
-  Sparkles,
   MapPin
 } from 'lucide-react';
 import { AudioVoiceButton } from '../common/AudioVoiceButton';
 import { useLanguage } from '../../context/LanguageContext';
 
 export const VillageClusterCard = ({ cluster, onSelect }) => {
-  const { t } = useLanguage();
+  const { t, translateText } = useLanguage();
 
   const isEmergency = cluster.riskLevel === 'Emergency';
   const isAlert = cluster.riskLevel === 'Alert';
@@ -28,7 +22,7 @@ export const VillageClusterCard = ({ cluster, onSelect }) => {
     ? 'bg-amber-500 text-white'
     : 'bg-emerald-600 text-white';
 
-  const audioSummary = `Village ${cluster.villageName}. Status: ${cluster.riskLevel}. Primary symptom spike: ${cluster.primarySymptom}. ${cluster.casesThisWeek} cases recorded compared to baseline of ${cluster.baselineCases}. Suspected: ${cluster.suspectedDisease}. Recommended action: ${cluster.recommendedAction}`;
+  const audioSummary = `${cluster.villageName}: ${translateText(cluster.riskLevel)}. ${translateText(cluster.primarySymptom)}. ${cluster.casesThisWeek} ${t('casesCount', 'cases')}.`;
 
   return (
     <div
@@ -52,19 +46,19 @@ export const VillageClusterCard = ({ cluster, onSelect }) => {
             </div>
             <p className="text-xs text-slate-500 font-medium flex items-center gap-1 mt-0.5">
               <MapPin className="w-3 h-3 text-slate-400" />
-              {cluster.block} • Pop: {cluster.population.toLocaleString()}
+              {cluster.block} • {t('population', 'Pop')}: {cluster.population.toLocaleString()}
             </p>
           </div>
 
           <span className={`px-2.5 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider ${riskBadgeColor}`}>
-            {cluster.riskLevel}
+            {translateText(cluster.riskLevel)}
           </span>
         </div>
 
         {/* Anomaly Score Bar */}
         <div className="mt-4 bg-slate-50 p-3 rounded-2xl border border-slate-100 space-y-1.5">
           <div className="flex items-center justify-between text-xs font-bold">
-            <span className="text-slate-600">Outbreak Anomaly Index:</span>
+            <span className="text-slate-600">{t('anomalyScore', 'Outbreak Anomaly Index')}:</span>
             <span className={isEmergency ? 'text-rose-600 font-black' : 'text-slate-800'}>
               {cluster.anomalyScore}/100
             </span>
@@ -90,23 +84,23 @@ export const VillageClusterCard = ({ cluster, onSelect }) => {
         <div className="mt-4 space-y-2">
           <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-              🚨 Dominant Symptom Surge:
+              🚨 {t('symptomSurge', 'Dominant Symptom Surge')}:
             </span>
             <p className="text-xs font-extrabold text-slate-900 mt-0.5">
-              {cluster.primarySymptom}
+              {translateText(cluster.primarySymptom)}
             </p>
           </div>
 
           <div className="flex items-center justify-between text-xs pt-1">
-            <span className="text-slate-500">Suspected Pathogen:</span>
-            <span className="font-bold text-slate-800">{cluster.suspectedDisease}</span>
+            <span className="text-slate-500">{t('suspectedDisease', 'Suspected Pathogen')}:</span>
+            <span className="font-bold text-slate-800">{translateText(cluster.suspectedDisease)}</span>
           </div>
         </div>
 
         {/* Cases vs Baseline Comparison */}
         <div className="mt-4 grid grid-cols-2 gap-2 text-center text-xs">
           <div className="p-2.5 rounded-xl bg-rose-50 border border-rose-100">
-            <span className="text-[10px] font-semibold text-rose-600 block">7-Day Cases</span>
+            <span className="text-[10px] font-semibold text-rose-600 block">{t('casesThisWeek', '7-Day Cases')}</span>
             <strong className="text-base font-extrabold text-rose-900">
               {cluster.casesThisWeek}
             </strong>
@@ -114,11 +108,11 @@ export const VillageClusterCard = ({ cluster, onSelect }) => {
           </div>
 
           <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-            <span className="text-[10px] font-semibold text-slate-500 block">Normal Baseline</span>
+            <span className="text-[10px] font-semibold text-slate-500 block">{t('baselineCases', 'Normal Baseline')}</span>
             <strong className="text-base font-extrabold text-slate-800">
               {cluster.baselineCases}
             </strong>
-            <span className="text-[10px] text-slate-400 block">Expected Cases</span>
+            <span className="text-[10px] text-slate-400 block">{t('expectedCases', 'Expected Cases')}</span>
           </div>
         </div>
       </div>
@@ -127,11 +121,11 @@ export const VillageClusterCard = ({ cluster, onSelect }) => {
       <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
         <div className="flex items-center gap-1.5 text-xs text-slate-500">
           <Droplets className="w-3.5 h-3.5 text-sky-500" />
-          <span className="truncate max-w-[170px] text-[11px]">{cluster.waterSourceStatus}</span>
+          <span className="truncate max-w-[170px] text-[11px]">{translateText(cluster.waterSourceStatus)}</span>
         </div>
 
         <span className="flex items-center gap-1 text-xs font-bold text-emerald-700 group-hover:translate-x-0.5 transition-transform">
-          <span>Action Dossier</span>
+          <span>{t('actionDossier', 'Action Dossier')}</span>
           <ArrowRight className="w-3.5 h-3.5" />
         </span>
       </div>

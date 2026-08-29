@@ -4,14 +4,8 @@ import {
   AlertTriangle,
   Radio,
   ShieldCheck,
-  Droplets,
   Search,
-  Filter,
-  Sparkles,
-  MapPin,
-  TrendingUp,
-  Flame,
-  Volume2
+  Flame
 } from 'lucide-react';
 import { useHealthData } from '../../context/HealthDataContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -26,7 +20,7 @@ export const EpidemicRadar = () => {
     selectedClusterDetail,
     setSelectedClusterDetail,
   } = useHealthData();
-  const { t } = useLanguage();
+  const { t, translateText } = useLanguage();
 
   const [filterRisk, setFilterRisk] = useState('all'); // all | Emergency | Alert | Watch | Safe
   const [searchQuery, setSearchQuery] = useState('');
@@ -53,7 +47,7 @@ export const EpidemicRadar = () => {
         <div className="relative z-10 max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/20 text-rose-200 text-xs font-bold border border-rose-400/30">
             <span className="w-2 h-2 rounded-full bg-rose-400 animate-ping"></span>
-            <span>Real-Time Syndromic Outbreak Surveillance • AI Anomaly Detection</span>
+            <span>{t('surveillanceTagline', 'Real-Time Syndromic Outbreak Surveillance • AI Anomaly Detection')}</span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -61,7 +55,7 @@ export const EpidemicRadar = () => {
               {t('epidemicHeader', 'Epidemic Early-Warning Radar')}
             </h2>
             <AudioVoiceButton
-              text={`${t('epidemicHeader')}. ${t('epidemicSubheader')}. High alert currently detected in Rampur cluster for acute watery diarrhea surge.`}
+              text={`${t('epidemicHeader')}. ${t('epidemicSubheader')}.`}
               size="lg"
               className="bg-white/20 text-white border-white/30"
             />
@@ -77,11 +71,11 @@ export const EpidemicRadar = () => {
           <div className="pt-2 flex flex-wrap items-center gap-3 text-xs">
             <div className="bg-rose-900/60 backdrop-blur-md border border-rose-500/40 px-3.5 py-2 rounded-2xl flex items-center gap-2">
               <Flame className="w-4 h-4 text-rose-400 animate-bounce" />
-              <span><strong>Hotspot:</strong> Rampur Cluster (+950% Diarrhea Spike)</span>
+              <span><strong>{t('hotspot', 'Hotspot')}:</strong> Rampur Cluster (+950% {translateText('Diarrhea')} {t('spike', 'Spike')})</span>
             </div>
             <div className="bg-orange-900/60 backdrop-blur-md border border-orange-500/40 px-3.5 py-2 rounded-2xl flex items-center gap-2">
               <Radio className="w-4 h-4 text-orange-400 animate-pulse" />
-              <span><strong>Warning:</strong> Balanagar (+440% Dengue/Chikungunya Fever)</span>
+              <span><strong>{t('warning', 'Warning')}:</strong> Balanagar (+440% {translateText('High Fever')} {t('spike', 'Spike')})</span>
             </div>
           </div>
         </div>
@@ -98,30 +92,30 @@ export const EpidemicRadar = () => {
       {/* Metric Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         <StatCard
-          title="Monitored Village Clusters"
+          title={t('monitoredClusters', 'Monitored Village Clusters')}
           value={totalVillages}
-          subtitle="Real-time geo-tagged health surveillance"
+          subtitle={t('villageLabel', 'Real-time geo-tagged health surveillance')}
           icon={Radio}
           color="indigo"
         />
         <StatCard
-          title="Active Outbreak Hazards"
+          title={t('activeHazards', 'Active Outbreak Hazards')}
           value={emergencyVillages}
-          subtitle="Immediate containment protocols active"
+          subtitle={t('immediatePriority', 'Immediate containment protocols active')}
           icon={AlertTriangle}
           color="rose"
         />
         <StatCard
-          title="Clusters Under Watch"
+          title={t('underWatch', 'Clusters Under Watch')}
           value={activeAlerts}
-          subtitle="Symptom anomaly detected"
+          subtitle={t('anomalySpikeIn', 'Symptom anomaly detected')}
           icon={Activity}
           color="amber"
         />
         <StatCard
-          title="Normal Baseline Hamlets"
+          title={t('safeBaseline', 'Normal Baseline Hamlets')}
           value={safeVillages}
-          subtitle="Routine epidemiological baseline"
+          subtitle={t('verified', 'Routine epidemiological baseline')}
           icon={ShieldCheck}
           color="emerald"
         />
@@ -131,10 +125,10 @@ export const EpidemicRadar = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200">
         <div className="flex items-center gap-2">
           <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
-            Village Syndromic Clusters ({filteredClusters.length})
+            {t('villageSyndromic', 'Village Syndromic Clusters')} ({filteredClusters.length})
           </h3>
           <AudioVoiceButton
-            text="Tap on any village cluster card to inspect the full anomaly trend curve and dispatch public health intervention teams."
+            text={`${t('villageSyndromic')}. ${t('viewDossier', 'Tap on any village cluster card to inspect the full anomaly trend curve.')}`}
             size="sm"
           />
         </div>
@@ -146,7 +140,7 @@ export const EpidemicRadar = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search village or disease..."
+              placeholder={t('searchVillagePlaceholder', 'Search village or disease...')}
               className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50/70"
             />
           </div>
@@ -156,11 +150,11 @@ export const EpidemicRadar = () => {
             onChange={(e) => setFilterRisk(e.target.value)}
             className="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 bg-white"
           >
-            <option value="all">All Risk Levels</option>
-            <option value="Emergency">🔴 Emergency Hazard Only</option>
-            <option value="Alert">🟠 Alert Only</option>
-            <option value="Watch">🟡 Under Watch</option>
-            <option value="Safe">🟢 Safe Baseline</option>
+            <option value="all">{t('allRiskLevels', 'All Risk Levels')}</option>
+            <option value="Emergency">🔴 {translateText('Emergency')} {t('hazardOnly', 'Hazard Only')}</option>
+            <option value="Alert">🟠 {translateText('Alert')} {t('only', 'Only')}</option>
+            <option value="Watch">🟡 {t('underWatch', 'Under Watch')}</option>
+            <option value="Safe">🟢 {t('safeBaseline', 'Safe Baseline')}</option>
           </select>
         </div>
       </div>

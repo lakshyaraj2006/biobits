@@ -1,118 +1,490 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { LANGUAGES, TRANSLATIONS } from '../translations/translations';
 import { speakText, stopSpeech } from '../utils/speechUtils';
 
 const LanguageContext = createContext();
 
-/*
- * The prototype contains a mixture of translated t() labels and legacy
- * literal English UI labels. Exact dictionary matches handle complete
- * sentences; this fallback glossary handles common standalone UI words and
- * short labels that are not yet keys in translations.js. It deliberately
- * leaves product names, abbreviations, numbers and medical codes intact.
- */
-const UI_WORDS = {
+// Dynamic phrases and common medical / UI glossaries across all 7 supported languages
+const DYNAMIC_GLOSSARY = {
   hi: {
-    home:'होम', coordination:'समन्वय', network:'नेटवर्क', healthcare:'स्वास्थ्य सेवा', health:'स्वास्थ्य', rural:'ग्रामीण', citizen:'नागरिक', patient:'मरीज', patients:'मरीज', doctor:'डॉक्टर', doctors:'डॉक्टर', worker:'कार्यकर्ता', officer:'अधिकारी', emergency:'आपातकाल', alert:'चेतावनी', alerts:'चेतावनियां', warning:'चेतावनी', online:'ऑनलाइन', offline:'ऑफ़लाइन', synced:'सिंक किया गया', sync:'सिंक', menu:'मेनू', close:'बंद करें', open:'खोलें', save:'सहेजें', cancel:'रद्द करें', search:'खोजें', view:'देखें', submit:'जमा करें', send:'भेजें', request:'अनुरोध', requested:'अनुरोध किया गया', match:'मिलान', new:'नया', case:'केस', cases:'केस', file:'फाइल', history:'इतिहास', details:'विवरण', status:'स्थिति', available:'उपलब्ध', unavailable:'अनुपलब्ध', confirmed:'पुष्ट', pending:'लंबित', completed:'पूरा', complete:'पूरा करें', required:'आवश्यक', blood:'रक्त', group:'समूह', bank:'बैंक', banks:'बैंक', donor:'दाता', donors:'दाता', village:'गांव', cluster:'क्षेत्र', location:'स्थान', distance:'दूरी', time:'समय', today:'आज', tomorrow:'कल', now:'अभी', morning:'सुबह', evening:'शाम', health:'स्वास्थ्य', medical:'चिकित्सा', medicine:'दवा', medicines:'दवाएं', prescription:'पर्चा', symptoms:'लक्षण', symptom:'लक्षण', temperature:'तापमान', pressure:'दबाव', oxygen:'ऑक्सीजन', fever:'बुखार', water:'पानी', testing:'जांच', test:'जांच', kit:'किट', kits:'किट', child:'बच्चा', children:'बच्चे', maternal:'मातृ', pregnancy:'गर्भावस्था', pregnant:'गर्भवती', mother:'माता', mothers:'माताएं', vaccine:'टीका', vaccines:'टीके', immunization:'टीकाकरण', reminder:'अनुस्मारक', reminders:'अनुस्मारक', growth:'विकास', monitor:'निगरानी', monitoring:'निगरानी', radar:'राडार', outbreak:'प्रकोप', epidemic:'महामारी', critical:'गंभीर', urgent:'अति-आवश्यक', routine:'सामान्य', attention:'ध्यान', safe:'सुरक्षित', normal:'सामान्य', danger:'खतरा', warning:'चेतावनी', response:'प्रतिक्रिया', protocol:'प्रोटोकॉल', community:'समुदाय', official:'आधिकारिक', government:'सरकारी', local:'स्थानीय', verified:'सत्यापित', information:'जानकारी', language:'भाषा', audio:'ऑडियो', listen:'सुनें', menu:'मेनू', role:'भूमिका', name:'नाम', age:'उम्र', gender:'लिंग', phone:'मोबाइल नंबर', mobile:'मोबाइल', number:'संख्या', online:'ऑनलाइन', active:'सक्रिय', inactive:'निष्क्रिय', loading:'लोड हो रहा है', checking:'जांच हो रही है', success:'सफल', failed:'विफल', error:'त्रुटि', retry:'फिर प्रयास करें', yes:'हां', no:'नहीं', and:'और', or:'या', with:'के साथ', from:'से', to:'तक', for:'के लिए', in:'में', at:'पर', of:'का', the:'', a:'', an:'', your:'आपका', my:'मेरा', our:'हमारा', you:'आप', we:'हम', ask:'पूछें', question:'सवाल', questions:'सवाल', help:'मदद', support:'सहायता', emergency:'आपातकाल', call:'कॉल करें', immediately:'तुरंत', report:'रिपोर्ट', reported:'रिपोर्ट किया गया', read:'पढ़ें', write:'लिखें', create:'बनाएं', update:'अपडेट करें', delete:'हटाएं', select:'चुनें', selected:'चयनित', choose:'चुनें', back:'वापस', next:'आगे', previous:'पिछला', continue:'जारी रखें', finish:'समाप्त करें', dashboard:'डैशबोर्ड', coordination:'समन्वय', access:'पहुंच', public:'सार्वजनिक', private:'निजी', privacy:'गोपनीयता', protected:'सुरक्षित', direct:'सीधा', digital:'डिजिटल', central:'केंद्रीय', server:'सर्वर', data:'डेटा', live:'लाइव', latest:'नवीनतम', first:'पहला', second:'दूसरा', primary:'प्राथमिक', secondary:'द्वितीयक', maternal:'मातृ', child:'शिशु', saathi:'साथी'
+    // Triage & Status
+    'Emergency': 'आपातकालीन',
+    'Urgent': 'अति-आवश्यक',
+    'Routine': 'सामान्य',
+    'pending': 'समीक्षा बाकी',
+    'reviewed': 'समीक्षा पूर्ण',
+    'Safe': 'सुरक्षित',
+    'Watch': 'निगरानी में',
+    'Alert': 'चेतावनी',
+    'High': 'उच्च',
+    'Medium': 'मध्यम',
+    'Normal': 'सामान्य',
+    'Overdue': 'छूट गया',
+    'Due Today': 'आज का समय',
+    'Completed': 'पूर्ण',
+
+    // Symptoms
+    'High Fever (3 Days)': 'तेज बुखार (3 दिन)',
+    'Joint Pain': 'जोड़ों का दर्द',
+    'Red Skin Rashes': 'त्वचा पर लाल दाने',
+    'Extreme Weakness': 'अत्यधिक कमजोरी',
+    'Severe Watery Diarrhea (6 episodes)': 'गंभीर पानी जैसे दस्त (6 बार)',
+    'Vomiting': 'उल्टी',
+    'Dry Tongue': 'सूखी जीभ',
+    'Mild Cramps': 'हल्के मरोड़ / दर्द',
+    'Bilateral Pedal Edema (Foot swelling)': 'पैरों में सूजन (एडिमा)',
+    'Morning Headache': 'सुबह का सिरदर्द',
+    'Fatigue': 'थकान व सुस्ती',
+    'Skin Rash / Redness (त्वचा पर दाने)': 'त्वचा पर लाल दाने / खुजली',
+    'High Fever (तेज बुखार)': 'तेज बुखार',
+    'Loose Stools / Diarrhea (दस्त)': 'पानी जैसे पतले दस्त',
+    'Vomiting (उल्टी)': 'उल्टी / जी मिचलाना',
+    'Severe Joint Pain (जोड़ों का दर्द)': 'जोड़ों में गंभीर दर्द',
+    'Cough & Cold (खांसी व जुकाम)': 'खांसी व जुकाम',
+    'Shortness of Breath (सांस लेने में तकलीफ)': 'सांस लेने में तकलीफ',
+    'Severe Headache (सिरदर्द)': 'तेज सिरदर्द',
+    'Abdominal Cramps (पेट दर्द)': 'पेट दर्द व मरोड़',
+    'Eye Redness / Itching (आंखें लाल होना)': 'आंखें लाल होना व खुजली',
+    'Foot / Hand Swelling (सूजन)': 'हाथ-पैरों में सूजन',
+    'Extreme Weakness (कमजोरी)': 'अत्यधिक कमजोरी व चक्कर',
+
+    // Body Areas
+    'Whole Body / Fever': 'पूरा शरीर / बुखार',
+    'Stomach & Gut': 'पेट व पाचन तंत्र',
+    'Skin & Limbs': 'त्वचा व हाथ-पैर',
+    'Chest & Breathing': 'छाती व सांस',
+    'Head, Eyes, Throat': 'सिर, आंखें व गला',
+    'Maternal / Pregnancy': 'मातृ / गर्भावस्था',
+
+    // Common Phrases
+    'Male': 'पुरुष',
+    'Female': 'महिला',
+    'Other': 'अन्य',
+    'Years': 'वर्ष',
+    'Yrs': 'वर्ष',
+    'Months': 'महीने',
+    'Weeks': 'सप्ताह',
+    'Days': 'दिन',
+    'Beds': 'बेड',
+    'Beds Available': 'बेड उपलब्ध',
+    'Government-linked': 'सरकारी मान्यता प्राप्त',
+    'Sahay Checked': 'सहाय द्वारा जाँचा गया',
+    'Community Verified': 'समुदाय सत्यापित',
+    'Recently Confirmed': 'हाल ही में पुष्ट',
+    'Emergency Capable': 'आपातकाल सक्षम',
+    'Confirmed 4 min ago': '4 मिनट पहले पुष्ट',
+    'Confirmed 22 min ago': '22 मिनट पहले पुष्ट',
+    'Updated 2 hours ago': '2 घंटे पहले अपडेट',
+    'Confirmed 10 min ago (e-RaktKosh Direct API)': '10 मिनट पहले पुष्ट (e-RaktKosh लाइव API)',
+    'Checked 1 hour ago': '1 घंटे पहले जाँचा गया',
+    'Available Now': 'अभी उपलब्ध',
+    'Available (Evening Only)': 'उपलब्ध (केवल शाम)',
+    'Rampur Sub-District Hospital': 'रामपुर उप-जिला अस्पताल',
+    'Kalyanpur Community Health Centre (CHC)': 'कल्याणपुर सामुदायिक स्वास्थ्य केंद्र (CHC)',
+    'MGM Central Hospital': 'MGM सेंट्रल अस्पताल',
+    'Rampur Sub-District Blood Bank': 'रामपुर उप-जिला रक्त बैंक',
+    'Kalyanpur CHC Storage Facility': 'कल्याणपुर CHC रक्त भंडारण',
   },
+
   bn: {
-    home:'হোম', coordination:'সমন্বয়', network:'নেটওয়ার্ক', healthcare:'স্বাস্থ্য পরিষেবা', health:'স্বাস্থ্য', rural:'গ্রামীণ', citizen:'নাগরিক', patient:'রোগী', patients:'রোগীরা', doctor:'ডাক্তার', doctors:'ডাক্তাররা', worker:'কর্মী', officer:'কর্মকর্তা', emergency:'জরুরি অবস্থা', alert:'সতর্কতা', alerts:'সতর্কতাগুলি', warning:'সতর্কবার্তা', online:'অনলাইন', offline:'অফলাইন', synced:'সিঙ্ক হয়েছে', sync:'সিঙ্ক', menu:'মেনু', close:'বন্ধ করুন', open:'খুলুন', save:'সংরক্ষণ করুন', cancel:'বাতিল করুন', search:'খুঁজুন', view:'দেখুন', submit:'জমা দিন', send:'পাঠান', request:'অনুরোধ', requested:'অনুরোধ করা হয়েছে', match:'মিল', new:'নতুন', case:'কেস', cases:'কেসগুলি', file:'ফাইল', history:'ইতিহাস', details:'বিবরণ', status:'অবস্থা', available:'উপলব্ধ', unavailable:'অনুপলব্ধ', confirmed:'নিশ্চিত', pending:'অপেক্ষমাণ', completed:'সম্পন্ন', complete:'সম্পন্ন করুন', required:'প্রয়োজনীয়', blood:'রক্ত', group:'গ্রুপ', bank:'ব্যাঙ্ক', banks:'ব্যাঙ্কগুলি', donor:'দাতা', donors:'দাতারা', village:'গ্রাম', cluster:'এলাকা', location:'অবস্থান', distance:'দূরত্ব', time:'সময়', today:'আজ', tomorrow:'আগামীকাল', now:'এখন', morning:'সকাল', evening:'সন্ধ্যা', medical:'চিকিৎসা', medicine:'ওষুধ', medicines:'ওষুধগুলি', prescription:'প্রেসক্রিপশন', symptoms:'উপসর্গ', symptom:'উপসর্গ', temperature:'তাপমাত্রা', pressure:'চাপ', oxygen:'অক্সিজেন', fever:'জ্বর', water:'জল', testing:'পরীক্ষা', test:'পরীক্ষা', kit:'কিট', kits:'কিটগুলি', child:'শিশু', children:'শিশুরা', maternal:'মাতৃ', pregnancy:'গর্ভাবস্থা', pregnant:'গর্ভবতী', mother:'মা', mothers:'মায়েরা', vaccine:'টিকা', vaccines:'টিকাগুলি', immunization:'টিকাকরণ', reminder:'অনুস্মারক', reminders:'অনুস্মারকগুলি', growth:'বৃদ্ধি', monitor:'নজরদারি', monitoring:'নজরদারি', radar:'রাডার', outbreak:'প্রাদুর্ভাব', epidemic:'মহামারী', critical:'সংকটজনক', urgent:'জরুরি', routine:'সাধারণ', attention:'মনোযোগ', safe:'নিরাপদ', normal:'স্বাভাবিক', danger:'বিপদ', response:'প্রতিক্রিয়া', protocol:'প্রোটোকল', community:'সম্প্রদায়', official:'সরকারি', government:'সরকারি', local:'স্থানীয়', verified:'যাচাইকৃত', information:'তথ্য', language:'ভাষা', audio:'অডিও', listen:'শুনুন', role:'ভূমিকা', name:'নাম', age:'বয়স', gender:'লিঙ্গ', phone:'মোবাইল নম্বর', mobile:'মোবাইল', number:'নম্বর', active:'সক্রিয়', inactive:'নিষ্ক্রিয়', loading:'লোড হচ্ছে', checking:'পরীক্ষা করা হচ্ছে', success:'সফল', failed:'ব্যর্থ', error:'ত্রুটি', retry:'আবার চেষ্টা করুন', yes:'হ্যাঁ', no:'না', and:'এবং', or:'অথবা', with:'সহ', from:'থেকে', to:'পর্যন্ত', for:'জন্য', in:'মধ্যে', at:'এ', of:'এর', the:'', a:'', an:'', your:'আপনার', my:'আমার', our:'আমাদের', you:'আপনি', we:'আমরা', ask:'জিজ্ঞাসা করুন', question:'প্রশ্ন', questions:'প্রশ্নগুলি', help:'সাহায্য', support:'সহায়তা', call:'কল করুন', immediately:'অবিলম্বে', report:'রিপোর্ট', reported:'রিপোর্ট করা হয়েছে', read:'পড়ুন', write:'লিখুন', create:'তৈরি করুন', update:'আপডেট করুন', delete:'মুছে ফেলুন', select:'নির্বাচন করুন', selected:'নির্বাচিত', choose:'বেছে নিন', back:'ফিরে যান', next:'পরবর্তী', previous:'পূর্ববর্তী', continue:'চালিয়ে যান', finish:'শেষ করুন', dashboard:'ড্যাশবোর্ড', access:'অ্যাক্সেস', public:'সর্বজনীন', private:'ব্যক্তিগত', privacy:'গোপনীয়তা', protected:'সুরক্ষিত', direct:'সরাসরি', digital:'ডিজিটাল', central:'কেন্দ্রীয়', server:'সার্ভার', data:'ডেটা', live:'লাইভ', latest:'সর্বশেষ', first:'প্রথম', second:'দ্বিতীয়', primary:'প্রাথমিক', secondary:'দ্বিতীয়', saathi:'সাথী'
+    // Triage & Status
+    'Emergency': 'জরুরি অবস্থা',
+    'Urgent': 'বিশেষ প্রয়োজনীয়',
+    'Routine': 'সাধারণ',
+    'pending': 'অপেক্ষমাণ',
+    'reviewed': 'সম্পন্ন',
+    'Safe': 'নিরাপদ',
+    'Watch': 'নজরদারিতে',
+    'Alert': 'সতর্কতা',
+    'High': 'উচ্চ',
+    'Medium': 'মাঝারি',
+    'Normal': 'স্বাভাবিক',
+    'Overdue': 'দেরি হয়ে গেছে',
+    'Due Today': 'আজকে প্রযোজ্য',
+    'Completed': 'সম্পন্ন',
+
+    // Symptoms
+    'High Fever (3 Days)': 'তীব্র জ্বর (৩ দিন)',
+    'Joint Pain': 'গাঁটে ব্যথা',
+    'Red Skin Rashes': 'ত্বকে লাল ফুসকুড়ি',
+    'Extreme Weakness': 'চরম দুর্বলতা',
+    'Severe Watery Diarrhea (6 episodes)': 'তীব্র পাতলা পায়খানা (৬ বার)',
+    'Vomiting': 'বমি',
+    'Dry Tongue': 'শুকনো জিভ',
+    'Mild Cramps': 'হালকা পেট মোচড়ানো',
+    'Bilateral Pedal Edema (Foot swelling)': 'পায়ে ফোলাভাব',
+    'Morning Headache': 'সকালে মাথা ব্যথা',
+    'Fatigue': 'ক্লান্তিভাব',
+    'Skin Rash / Redness (ত্বचा पर दाने)': 'ত্বকে ফুসকুড়ি বা লালচে ভাব',
+    'High Fever (तेज बुखार)': 'তীব্র জ্বর',
+    'Loose Stools / Diarrhea (दस्त)': 'পাতলা পায়খানা বা ডায়রিয়া',
+    'Vomiting (उल्टी)': 'বমি ভাব বা বমি',
+    'Severe Joint Pain (जोड़ों का दर्द)': 'তীব্র গাঁটে ব্যথা',
+    'Cough & Cold (खांसी व जुकाम)': 'কাশি ও সর্দি',
+    'Shortness of Breath (सांस लेने में तकलीफ)': 'শ্বাসকষ্ট',
+    'Severe Headache (सिरदर्द)': 'তীব্র মাথা ব্যথা',
+    'Abdominal Cramps (पेट दर्द)': 'পেট ব্যথা ও মোচড়',
+    'Eye Redness / Itching (आंखें लाल होना)': 'চোখ লাল হওয়া ও চুলকানি',
+    'Foot / Hand Swelling (सूजन)': 'হাত-পা ফোলা',
+    'Extreme Weakness (कमजोरी)': 'চরম দুর্বলতা',
+
+    // Body Areas
+    'Whole Body / Fever': 'পুরো শরীর / জ্বর',
+    'Stomach & Gut': 'পেট ও পরিপাকতন্ত্র',
+    'Skin & Limbs': 'ত্বক ও হাত-পা',
+    'Chest & Breathing': 'বুক ও শ্বাসপ্রশ্বাস',
+    'Head, Eyes, Throat': 'মাথা, চোখ ও গলা',
+    'Maternal / Pregnancy': 'মাতৃ / গর্ভাবস্থা',
+
+    // Common Phrases
+    'Male': 'পুরুষ',
+    'Female': 'মহিলা',
+    'Other': 'অন্যান্য',
+    'Years': 'বছর',
+    'Yrs': 'বছর',
+    'Months': 'মাস',
+    'Weeks': 'সপ্তাহ',
+    'Days': 'দিন',
+    'Beds': 'বেড',
+    'Beds Available': 'বেড উপলব্ধ',
+    'Government-linked': 'সরকারি অনুমোদনপ্রাপ্ত',
+    'Sahay Checked': 'সহায় দ্বারা পরীক্ষিত',
+    'Community Verified': 'সামাজিক স্তরে যাচাইকৃত',
+    'Recently Confirmed': 'সম্প্রতি নিশ্চিত',
+    'Emergency Capable': 'জরুরি চিকিৎসা সক্ষম',
+    'Confirmed 4 min ago': '৪ মিনিট আগে নিশ্চিত',
+    'Confirmed 22 min ago': '২২ মিনিট আগে নিশ্চিত',
+    'Updated 2 hours ago': '২ ঘণ্টা আগে আপডেট',
+    'Confirmed 10 min ago (e-RaktKosh Direct API)': '১০ মিনিট আগে নিশ্চিত (e-RaktKosh লাইভ API)',
+    'Checked 1 hour ago': '১ ঘণ্টা আগে পরীক্ষিত',
+    'Available Now': 'এখন উপলব্ধ',
+    'Available (Evening Only)': 'উপলব্ধ (শুধু সন্ধ্যায়)',
+    'Rampur Sub-District Hospital': 'রামপুর মহকুমা হাসপাতাল',
+    'Kalyanpur Community Health Centre (CHC)': 'কল্যাণপুর ব্লক প্রাথমিক স্বাস্থ্য কেন্দ্র (CHC)',
+    'MGM Central Hospital': 'এমজিএম সেন্ট্রাল হাসপাতাল',
+    'Rampur Sub-District Blood Bank': 'রামপুর মহকুমা ব্লাড ব্যাঙ্ক',
+    'Kalyanpur CHC Storage Facility': 'কল্যাণপুর সিএইচসি রক্ত মজুত',
+  },
+
+  or: {
+    // Triage & Status
+    'Emergency': 'ଜରୁରୀକାଳୀନ',
+    'Urgent': 'ଅତ୍ୟାବଶ୍ୟକ',
+    'Routine': 'ସାଧାରଣ',
+    'pending': 'ଯାଞ୍ଚ ବାକି',
+    'reviewed': 'ସମ୍ପୂର୍ଣ୍ଣ',
+    'Safe': 'ସୁରକ୍ଷିତ',
+    'Watch': 'ନିରୀକ୍ଷଣରେ',
+    'Alert': 'ସତର୍କତା',
+    'High': 'ଉଚ୍ଚ',
+    'Medium': 'ମଧ୍ୟମ',
+    'Normal': 'ସାଧାରଣ',
+    'Overdue': 'ଡେରି ହୋଇଛି',
+    'Due Today': 'ଆଜି ଦେୟ',
+    'Completed': 'ସମ୍ପୂର୍ଣ୍ଣ',
+
+    // Symptoms
+    'High Fever (3 Days)': 'ପ୍ରବଳ ଜ୍ୱର (୩ ଦିନ)',
+    'Joint Pain': 'ଗଣ୍ଠି ବିନ୍ଧା',
+    'Red Skin Rashes': 'ଚର୍ମରେ ନାଲି ଦାଗ',
+    'Extreme Weakness': 'ଅତ୍ୟଧିକ ଦୁର୍ବଳତା',
+    'Severe Watery Diarrhea (6 episodes)': 'ତୀବ୍ର ଝାଡ଼ା (୬ ଥର)',
+    'Vomiting': 'ବାନ୍ତି',
+    'Dry Tongue': 'ଶୁଖିଲା ଜିଭ',
+    'Mild Cramps': 'ପେଟ କାମୁଡ଼ିବା',
+    'Bilateral Pedal Edema (Foot swelling)': 'ଗୋଡ଼ ଫୁଲିବା',
+    'Morning Headache': 'ସକାଳ ମୁଣ୍ଡବିନ୍ଧା',
+    'Fatigue': 'କ୍ଲାନ୍ତି',
+    'Skin Rash / Redness (त्वचा पर दाने)': 'ଚର୍ମରେ ନାଲି ଦାଗ ଓ କୁଣ୍ଡେଇ ହେବା',
+    'High Fever (तेज बुखार)': 'ପ୍ରବଳ ଜ୍ୱର',
+    'Loose Stools / Diarrhea (दस्त)': 'ପତଳା ଝାଡ଼ା କିମ୍ବା ହଇଜା',
+    'Vomiting (उल्टी)': 'ବାନ୍ତି ହେବା',
+    'Severe Joint Pain (जोड़ों का दर्द)': 'ପ୍ରବଳ ଗଣ୍ଠି ବିନ୍ଧା',
+    'Cough & Cold (खांसी व जुकाम)': 'କାଶ ଓ ଥଣ୍ଡା',
+    'Shortness of Breath (सांस लेने में तकलीफ)': 'ଶ୍ୱାସକ୍ରିୟାରେ କଷ୍ଟ',
+    'Severe Headache (सिरदर्द)': 'ପ୍ରବଳ ମୁଣ୍ଡ ବିନ୍ଧା',
+    'Abdominal Cramps (पेट दर्द)': 'ପେଟ ବିନ୍ଧା ଓ କାମୁଡ଼ିବା',
+    'Eye Redness / Itching (आंखें लाल होना)': 'ଆଖି ନାଲି ପଡ଼ିବା ଓ କୁଣ୍ଡେଇ ହେବା',
+    'Foot / Hand Swelling (सूजन)': 'ହାତ-ଗୋଡ଼ ଫୁଲିବା',
+    'Extreme Weakness (कमजोरी)': 'ଅତ୍ୟଧିକ ଦୁର୍ବଳତା',
+
+    // Body Areas
+    'Whole Body / Fever': 'ସମ୍ପୂର୍ଣ୍ଣ ଶରୀର / ଜ୍ୱର',
+    'Stomach & Gut': 'ପେଟ ଓ ହଜମ ତନ୍ତ୍ର',
+    'Skin & Limbs': 'ଚର୍ମ ଓ ହାତଗୋଡ଼',
+    'Chest & Breathing': 'ଛାତି ଓ ଶ୍ୱାସକ୍ରିୟା',
+    'Head, Eyes, Throat': 'ମୁଣ୍ଡ, ଆଖି ଓ ଗଳା',
+    'Maternal / Pregnancy': 'ମାତୃ / ଗର୍ଭାବସ୍ଥା',
+
+    // Common Phrases
+    'Male': 'ପୁରୁଷ',
+    'Female': 'ମହିଳା',
+    'Other': 'ଅନ୍ୟାନ୍ୟ',
+    'Years': 'ବର୍ଷ',
+    'Yrs': 'ବର୍ଷ',
+    'Months': 'ମାସ',
+    'Weeks': 'ସପ୍ତାହ',
+    'Days': 'ଦିନ',
+    'Beds': 'ବେଡ୍',
+    'Beds Available': 'ବେଡ୍ ଉପଲବ୍ଧ',
+    'Government-linked': 'ସରକାରୀ ସ୍ୱୀକୃତିପ୍ରାପ୍ତ',
+    'Sahay Checked': 'ସହାୟ ଯାଞ୍ଚିତ',
+    'Community Verified': 'ସମାଜ ସ୍ତରରେ ଯାଞ୍ଚିତ',
+    'Recently Confirmed': 'ନିକଟରେ ନିଶ୍ଚିତ',
+    'Emergency Capable': 'ଜରୁରୀ ଚିକିତ୍ସା ସକ୍ଷମ',
+    'Confirmed 4 min ago': '୪ ମିନିଟ୍ ପୂର୍ବେ ନିଶ୍ଚିତ',
+    'Confirmed 22 min ago': '୨୨ ମିନିଟ୍ ପୂର୍ବେ ନିଶ୍ଚିତ',
+    'Updated 2 hours ago': '୨ ଘଣ୍ଟା ପୂର୍ବେ ଅପଡେଟ୍',
+    'Confirmed 10 min ago (e-RaktKosh Direct API)': '୧୦ ମିନିଟ୍ ପୂର୍ବେ ନିଶ୍ଚିତ (e-RaktKosh API)',
+    'Checked 1 hour ago': '୧ ଘଣ୍ଟା ପୂର୍ବେ ଯାଞ୍ଚ ହୋଇଛି',
+    'Available Now': 'ବର୍ତ୍ତମାନ ଉପଲବ୍ଧ',
+    'Available (Evening Only)': 'ଉପଲବ୍ଧ (କେବଳ ସନ୍ଧ୍ୟାରେ)',
+    'Rampur Sub-District Hospital': 'ରାମପୁର ଉପଖଣ୍ଡ ଡାକ୍ତରଖାନା',
+    'Kalyanpur Community Health Centre (CHC)': 'କଲ୍ୟାଣପୁର ଗୋଷ୍ଠୀ ସ୍ୱାସ୍ଥ୍ୟ କେନ୍ଦ୍ର (CHC)',
+    'MGM Central Hospital': 'ଏମଜିଏମ୍ ସେଣ୍ଟ୍ରାଲ୍ ଡାକ୍ତରଖାନା',
+    'Rampur Sub-District Blood Bank': 'ରାମପୁର ରକ୍ତ ଭଣ୍ଡାର',
+    'Kalyanpur CHC Storage Facility': 'କଲ୍ୟାଣପୁର ରକ୍ତ ସଂରକ୍ଷଣ କେନ୍ଦ୍ର',
+  },
+
+  te: {
+    // Triage & Status
+    'Emergency': 'అత్యవసరం',
+    'Urgent': 'త్వరిత శ్రద్ధ',
+    'Routine': 'సాధారణం',
+    'pending': 'సమీక్షలో ఉంది',
+    'reviewed': 'పూర్తయింది',
+    'Safe': 'సురక్షితం',
+    'Watch': 'పర్యవేక్షణలో',
+    'Alert': 'హెచ్చరిక',
+    'High': 'అధికం',
+    'Medium': 'మధ్యస్థం',
+    'Normal': 'సాధారణం',
+    'Overdue': 'గడువు దాటినది',
+    'Due Today': 'ఈరోజు ఇవ్వాల్సినది',
+    'Completed': 'పూర్తయింది',
+
+    // Symptoms
+    'High Fever (3 Days)': 'తీవ్రమైన జ్వరం (3 రోజులు)',
+    'Joint Pain': 'కీళ్ల నొప్పులు',
+    'Red Skin Rashes': 'చర్మంపై ఎర్రటి దద్దుర్లు',
+    'Extreme Weakness': 'తీవ్ర నీరసం',
+    'Severe Watery Diarrhea (6 episodes)': 'తీవ్ర విరేచనాలు (6 సార్లు)',
+    'Vomiting': 'వాంతులు',
+    'Dry Tongue': 'ఎండిన నాలుక',
+    'Mild Cramps': 'కడుపులో నొప్పితో కూడిన తిమ్మిరి',
+    'Bilateral Pedal Edema (Foot swelling)': 'పాదాల వాపు',
+    'Morning Headache': 'ఉదయం తలనొప్పి',
+    'Fatigue': 'అలసట',
+    'Skin Rash / Redness (त्वचा पर दाने)': 'చర్మంపై ఎర్రటి దద్దుర్లు & దురద',
+    'High Fever (तेज बुखार)': 'తీవ్రమైన జ్వరం',
+    'Loose Stools / Diarrhea (दस्त)': 'విరేచనాలు / డయేరియా',
+    'Vomiting (उल्टी)': 'వాంతులు / వికారం',
+    'Severe Joint Pain (जोड़ों का दर्द)': 'తీవ్రమైన కీళ్ల నొప్పులు',
+    'Cough & Cold (खांसी व जुकाम)': 'దగ్గు & జలుబు',
+    'Shortness of Breath (सांस लेने में तकलीफ)': 'శ్వాస తీసుకోవడంలో ఇబ్బంది',
+    'Severe Headache (सिरदर्द)': 'తీవ్రమైన తలనొప్పి',
+    'Abdominal Cramps (पेट दर्द)': 'కడుపు నొప్పి & తిమ్మిరి',
+    'Eye Redness / Itching (आंखें लाल होना)': 'కళ్ళు ఎర్రబడటం & దురద',
+    'Foot / Hand Swelling (सूजन)': 'కాళ్ళు చేతుల వాపు',
+    'Extreme Weakness (कमजोरी)': 'తీవ్రమైన నీరసం',
+
+    // Body Areas
+    'Whole Body / Fever': 'మొత్తం శరీరం / జ్వరం',
+    'Stomach & Gut': 'కడుపు & జీర్ణవ్యవస్థ',
+    'Skin & Limbs': 'చర్మం & కాళ్ళు చేతులు',
+    'Chest & Breathing': 'ఛాతీ & శ్వాసక్రియ',
+    'Head, Eyes, Throat': 'తల, కళ్ళు & గొంతు',
+    'Maternal / Pregnancy': 'మాతృ / గర్భధారణ',
+
+    // Common Phrases
+    'Male': 'పురుషుడు',
+    'Female': 'స్త్రీ',
+    'Other': 'ఇతర',
+    'Years': 'సంవత్సరాలు',
+    'Yrs': 'సంవత్సరాలు',
+    'Months': 'నెలలు',
+    'Weeks': 'వారాలు',
+    'Days': 'రోజులు',
+    'Beds': 'బెడ్లు',
+    'Beds Available': 'బెడ్లు అందుబాటులో ఉన్నాయి',
+    'Government-linked': 'ప్రభుత్వ గుర్తింపు పొందినది',
+    'Sahay Checked': 'సహాయ్ పరిశీలించినది',
+    'Community Verified': 'సమాజం ధృవీకరించినది',
+    'Recently Confirmed': 'ఇటీవల నిర్ధారించబడింది',
+    'Emergency Capable': 'అత్యవసర చికిత్స సౌలభ్యం',
+    'Confirmed 4 min ago': '4 నిమిషాల క్రితం ధృవీకరించబడింది',
+    'Confirmed 22 min ago': '22 నిమిషాల క్రితం ధృవీకరించబడింది',
+    'Updated 2 hours ago': '2 గంటల క్రితం నవీకరించబడింది',
+    'Confirmed 10 min ago (e-RaktKosh Direct API)': '10 నిమిషాల క్రితం (e-RaktKosh లైవ్ API)',
+    'Checked 1 hour ago': '1 గంట క్రితం తనిఖీ చేయబడింది',
+    'Available Now': 'ఇప్పుడు అందుబాటులో ఉంది',
+    'Available (Evening Only)': 'సాయంత్రం మాత్రమే అందుబాటులో ఉంది',
+    'Rampur Sub-District Hospital': 'రాంపూర్ సబ్-డిస్ట్రిక్ట్ ఆసుపత్రి',
+    'Kalyanpur Community Health Centre (CHC)': 'కళ్యాణ్‌పూర్ కమ్యూనిటీ హెల్త్ సెంటర్ (CHC)',
+    'MGM Central Hospital': 'MGM సెంట్రల్ ఆసుపత్రి',
+    'Rampur Sub-District Blood Bank': 'రాంపూర్ బ్లడ్ బ్యాంక్',
+    'Kalyanpur CHC Storage Facility': 'కళ్యాణ్‌పూర్ రక్త నిల్వ కేంద్రం',
+  },
+
+  ta: {
+    // Triage & Status
+    'Emergency': 'அவசரம்',
+    'Urgent': 'முக்கியமானது',
+    'Routine': 'வழக்கமானது',
+    'pending': 'பரிசீலனையில்',
+    'reviewed': 'முடிக்கப்பட்டது',
+    'Safe': 'பாதுகாப்பானது',
+    'Watch': 'கண்காணிப்பில்',
+    'Alert': 'எச்சரிக்கை',
+    'High': 'அதிகம்',
+    'Medium': 'நடுத்தரம்',
+    'Normal': 'சாதாரணமானது',
+    'Overdue': 'தாமதமானது',
+    'Due Today': 'இன்று செலுத்த வேண்டியது',
+    'Completed': 'முடிக்கப்பட்டது',
+
+    // Symptoms
+    'High Fever (3 Days)': 'கடுமையான காய்ச்சல் (3 நாட்கள்)',
+    'Joint Pain': 'மூட்டு வலி',
+    'Red Skin Rashes': 'தோலில் சிவப்பு தடிப்புகள்',
+    'Extreme Weakness': 'கடுமையான சோர்வு',
+    'Severe Watery Diarrhea (6 episodes)': 'கடுமையான வயிற்றுப்போக்கு (6 முறை)',
+    'Vomiting': 'வாந்தி',
+    'Dry Tongue': 'வறண்ட நாக்கு',
+    'Mild Cramps': 'வயிற்றுப் பிடிப்பு',
+    'Bilateral Pedal Edema (Foot swelling)': 'கால் வீக்கம்',
+    'Morning Headache': 'காலை தலைவலி',
+    'Fatigue': 'களைப்பு',
+    'Skin Rash / Redness (त्वचा पर दाने)': 'தோல் தடிப்பு மற்றும் அரிப்பு',
+    'High Fever (तेज बुखार)': 'கடுமையான காய்ச்சல்',
+    'Loose Stools / Diarrhea (दस्त)': 'வயிற்றுப்போக்கு / பேதி',
+    'Vomiting (उल्टी)': 'வாந்தி / குமட்டல்',
+    'Severe Joint Pain (जोड़ों का दर्द)': 'கடுமையான மூட்டு வலி',
+    'Cough & Cold (खांसी व जुकाम)': 'இருமல் மற்றும் சளி',
+    'Shortness of Breath (सांस लेने में तकलीफ)': 'மூச்சுத்திணறல்',
+    'Severe Headache (सिरदर्द)': 'கடுமையான தலைவலி',
+    'Abdominal Cramps (पेट दर्द)': 'வயிற்று வலி மற்றும் பிடிப்பு',
+    'Eye Redness / Itching (आंखें लाल होना)': 'கண் சிவத்தல் மற்றும் அரிப்பு',
+    'Foot / Hand Swelling (सूजन)': 'கை-கால் வீக்கம்',
+    'Extreme Weakness (कमजोरी)': 'கடுமையான உடல் பலவீனம்',
+
+    // Body Areas
+    'Whole Body / Fever': 'முழு உடல் / காய்ச்சல்',
+    'Stomach & Gut': 'வயிறு மற்றும் செரிமானம்',
+    'Skin & Limbs': 'தோல் மற்றும் கைகால்கள்',
+    'Chest & Breathing': 'மார்பு மற்றும் சுவாசம்',
+    'Head, Eyes, Throat': 'தலை, கண்கள் மற்றும் தொண்டை',
+    'Maternal / Pregnancy': 'தாய்மை / கர்ப்பம்',
+
+    // Common Phrases
+    'Male': 'ஆண்',
+    'Female': 'பெண்',
+    'Other': 'மற்றவை',
+    'Years': 'வயது',
+    'Yrs': 'வயது',
+    'Months': 'மாதங்கள்',
+    'Weeks': 'வாரங்கள்',
+    'Days': 'நாட்கள்',
+    'Beds': 'படுக்கைகள்',
+    'Beds Available': 'படுக்கைகள் உள்ளன',
+    'Government-linked': 'அரசு அங்கீகாரம் பெற்றது',
+    'Sahay Checked': 'சஹாய் சோதித்தது',
+    'Community Verified': 'சமூக அளவில் சரிபார்க்கப்பட்டது',
+    'Recently Confirmed': 'சமீபத்தில் உறுதி செய்யப்பட்டது',
+    'Emergency Capable': 'அவசர சிகிச்சை வசதி கொண்டது',
+    'Confirmed 4 min ago': '4 நிமிடங்களுக்கு முன் உறுதி செய்யப்பட்டது',
+    'Confirmed 22 min ago': '22 நிமிடங்களுக்கு முன் உறுதி செய்யப்பட்டது',
+    'Updated 2 hours ago': '2 மணி நேரத்திற்கு முன் புதுப்பிக்கப்பட்டது',
+    'Confirmed 10 min ago (e-RaktKosh Direct API)': '10 நிமிடங்களுக்கு முன் (e-RaktKosh நேரடி API)',
+    'Checked 1 hour ago': '1 மணி நேரத்திற்கு முன் சரிபார்க்கப்பட்டது',
+    'Available Now': 'இப்போது கிடைக்கிறது',
+    'Available (Evening Only)': 'கிடைக்கிறது (மாலை மட்டும்)',
+    'Rampur Sub-District Hospital': 'ராம்பூர் வட்டார மருத்துவமனை',
+    'Kalyanpur Community Health Centre (CHC)': 'கல்யாண்பூர் சமூக சுகாதார மையம் (CHC)',
+    'MGM Central Hospital': 'எம்ஜிஎம் மத்திய மருத்துவமனை',
+    'Rampur Sub-District Blood Bank': 'ராம்பூர் இரத்த வங்கி',
+    'Kalyanpur CHC Storage Facility': 'கல்யாண்பூர் இரத்த சேமிப்பு மையம்',
+  },
+
+  mr: {
+    // Triage & Status
+    'Emergency': 'तातडीचे',
+    'Urgent': 'अति-महत्वाचे',
+    'Routine': 'नियमित',
+    'pending': 'तपासणी बाकी',
+    'reviewed': 'पूर्ण झाले',
+    'Safe': 'सुरक्षित',
+    'Watch': 'निगराणीखाली',
+    'Alert': 'इशारा',
+    'High': 'उच्च',
+    'Medium': 'मध्यम',
+    'Normal': 'सामान्य',
+    'Overdue': 'चुकलेली लस',
+    'Due Today': 'आजची देय तारीख',
+    'Completed': 'पूर्ण झाले',
+
+    // Symptoms
+    'High Fever (3 Days)': 'तीव्र ताप (3 दिवस)',
+    'Joint Pain': 'सांधेदुखी',
+    'Red Skin Rashes': 'त्वचेवर लाल पुरळ',
+    'Extreme Weakness': 'अति अशक्तपणा',
+    'Severe Watery Diarrhea (6 episodes)': 'तीव्र जुलाब (6 वेळा)',
+    'Vomiting': 'उलट्या',
+    'Dry Tongue': 'कोरडी जीभ',
+    'Mild Cramps': 'पोटात मुरडा',
+    'Bilateral Pedal Edema (Foot swelling)': 'पायांवर सूज',
+    'Morning Headache': 'सकाळचे डोकेदुखी',
+    'Fatigue': 'थकवा',
+    'Skin Rash / Redness (त्वचा पर दाने)': 'त्वचेवर लाल पुरळ व खाज',
+    'High Fever (तेज बुखार)': 'तीव्र ताप',
+    'Loose Stools / Diarrhea (दस्त)': 'पातळ जुलाब / डायरिया',
+    'Vomiting (उल्टी)': 'उलट्या / मळमळ',
+    'Severe Joint Pain (जोड़ों का दर्द)': 'तीव्र सांधेदुखी',
+    'Cough & Cold (खांसी व जुकाम)': 'खोकला व सर्दी',
+    'Shortness of Breath (सांस लेने में तकलीफ)': 'श्वास घेण्यास त्रास',
+    'Severe Headache (सिरदर्द)': 'तीव्र डोकेदुखी',
+    'Abdominal Cramps (पेट दर्द)': 'पोटदुखी व मुरडा',
+    'Eye Redness / Itching (आंखें लाल होना)': 'डोळे लाल होणे व खाज',
+    'Foot / Hand Swelling (सूजन)': 'हात-पायांवर सूज',
+    'Extreme Weakness (कमजोरी)': 'अति अशक्तपणा व चक्कर',
+
+    // Body Areas
+    'Whole Body / Fever': 'संपूर्ण शरीर / ताप',
+    'Stomach & Gut': 'पोट व पचनसंस्था',
+    'Skin & Limbs': 'त्वचा व हातपाय',
+    'Chest & Breathing': 'छाती व श्वसन',
+    'Head, Eyes, Throat': 'डोके, डोळे व घसा',
+    'Maternal / Pregnancy': 'माता / गरोदरपण',
+
+    // Common Phrases
+    'Male': 'पुरुष',
+    'Female': 'स्त्री',
+    'Other': 'इतर',
+    'Years': 'वर्षे',
+    'Yrs': 'वर्षे',
+    'Months': 'महिने',
+    'Weeks': 'आठवडे',
+    'Days': 'दिवस',
+    'Beds': 'बेड्स',
+    'Beds Available': 'बेड्स उपलब्ध',
+    'Government-linked': 'शासकीय मान्यताप्राप्त',
+    'Sahay Checked': 'सहाय द्वारे तपासलेले',
+    'Community Verified': 'स्थानिक स्तरावर प्रमाणित',
+    'Recently Confirmed': 'नुकतेच निश्चित केलेले',
+    'Emergency Capable': 'तातडीच्या उपचारासाठी सक्षम',
+    'Confirmed 4 min ago': '4 मिनिटांपूर्वी निश्चित',
+    'Confirmed 22 min ago': '22 मिनिटांपूर्वी निश्चित',
+    'Updated 2 hours ago': '2 तासांपूर्वी अद्यतनित',
+    'Confirmed 10 min ago (e-RaktKosh Direct API)': '10 मिनिटांपूर्वी निश्चित (e-RaktKosh API)',
+    'Checked 1 hour ago': '1 तासापूर्वी तपासले',
+    'Available Now': 'आता उपलब्ध',
+    'Available (Evening Only)': 'उपलब्ध (फक्त संध्याकाळी)',
+    'Rampur Sub-District Hospital': 'रामपूर उपजिल्हा रुग्णालय',
+    'Kalyanpur Community Health Centre (CHC)': 'कल्याणपूर ग्रामीण रुग्णालय (CHC)',
+    'MGM Central Hospital': 'एमजीएम सेंट्रल रुग्णालय',
+    'Rampur Sub-District Blood Bank': 'रामपूर रक्तपेढी',
+    'Kalyanpur CHC Storage Facility': 'कल्याणपूर रक्त साठवण केंद्र',
   }
-};
-
-const PROTECTED = /^(Sahay|AI|SIH|PS\s*\d+|PHC|ANC|UIP|WHO|SMS|SpO2|BPM|e-RaktKosh|API|24\/7|108|112|[A-Z]{2,})$/;
-
-const translateUnknownText = (text, lang) => {
-  if (!text || lang === 'en') return text;
-  const words = UI_WORDS[lang];
-  if (!words) return text;
-
-  // Prefer phrase-level replacements for common UI phrases before word-level fallback.
-  const phrases = lang === 'hi' ? {
-    'Open Radar':'राडार खोलें', 'Listen in audio':'ऑडियो में सुनें', 'Search & Coordinate Blood':'रक्त खोजें और समन्वय करें', 'Blood Coordination':'रक्त समन्वय', 'Search Verified Blood Bank Inventories':'सत्यापित रक्त बैंक भंडार खोजें', 'Required Blood Group':'आवश्यक रक्त समूह', 'Request Match':'मिलान का अनुरोध करें', 'Match Requested Successfully':'मिलान का अनुरोध सफलतापूर्वक भेजा गया', 'New Search':'नई खोज', 'Checking e-RaktKosh Registry...':'e-RaktKosh रजिस्ट्री की जांच हो रही है...', 'Sahay Integrated Blood Network':'सहाय एकीकृत रक्त नेटवर्क', 'Rural Healthcare Coordination Network':'ग्रामीण स्वास्थ्य समन्वय नेटवर्क', 'OUTBREAK WATCH':'प्रकोप निगरानी', 'Online & Synced':'ऑनलाइन और सिंक किया गया', 'Rural Citizen':'ग्रामीण नागरिक'
-  } : {
-    'Open Radar':'রাডার খুলুন', 'Listen in audio':'অডিওতে শুনুন', 'Search & Coordinate Blood':'রক্ত খুঁজুন ও সমন্বয় করুন', 'Blood Coordination':'রক্ত সমন্বয়', 'Search Verified Blood Bank Inventories':'যাচাইকৃত রক্ত ব্যাঙ্কের মজুত খুঁজুন', 'Required Blood Group':'প্রয়োজনীয় রক্তের গ্রুপ', 'Request Match':'মিলের জন্য অনুরোধ করুন', 'Match Requested Successfully':'মিলের অনুরোধ সফল হয়েছে', 'New Search':'নতুন অনুসন্ধান', 'Checking e-RaktKosh Registry...':'e-RaktKosh রেজিস্ট্রি পরীক্ষা করা হচ্ছে...', 'Sahay Integrated Blood Network':'সহায় সমন্বিত রক্ত নেটওয়ার্ক', 'Rural Healthcare Coordination Network':'গ্রামীণ স্বাস্থ্য সমন্বয় নেটওয়ার্ক', 'OUTBREAK WATCH':'প্রাদুর্ভাব নজরদারি', 'Online & Synced':'অনলাইন ও সিঙ্ক হয়েছে', 'Rural Citizen':'গ্রামীণ নাগরিক'
-  };
-  let result = text;
-  Object.entries(phrases).forEach(([from, to]) => { result = result.replace(new RegExp(from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), to); });
-  if (result !== text) return result;
-
-  return text.replace(/\b[A-Za-z][A-Za-z'-]*\b/g, (token) => {
-    if (PROTECTED.test(token)) return token;
-    const key = token.toLowerCase();
-    return Object.prototype.hasOwnProperty.call(words, key) ? words[key] : token;
-  });
-};
-
-const translateRenderedUi = (lang) => {
-  if (typeof document === 'undefined') return () => {};
-  const source = TRANSLATIONS.en || {};
-  const target = TRANSLATIONS[lang] || source;
-  if (lang === 'en') return () => {};
-
-  const dictionary = new Map();
-  Object.keys(source).forEach((key) => {
-    const english = source[key];
-    const localized = target[key];
-    if (typeof english === 'string' && typeof localized === 'string' && english && localized && english !== localized) {
-      dictionary.set(english.trim(), localized);
-    }
-  });
-
-  const translateTextValue = (value) => {
-    const trimmed = value.trim();
-    if (!trimmed) return value;
-    if (dictionary.has(trimmed)) return dictionary.get(trimmed);
-    return translateUnknownText(trimmed, lang);
-  };
-
-  const translateNode = (node) => {
-    if (!node || node.nodeType !== Node.TEXT_NODE) return;
-    const parent = node.parentElement;
-    if (!parent) return;
-    const tag = parent.tagName;
-    if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT' || tag === 'TEXTAREA') return;
-    const original = node.nodeValue || '';
-    const localized = translateTextValue(original);
-    if (localized === original.trim() || !localized) return;
-    const leading = original.match(/^\s*/)?.[0] || '';
-    const trailing = original.match(/\s*$/)?.[0] || '';
-    node.nodeValue = `${leading}${localized}${trailing}`;
-  };
-
-  const translateElementAttributes = (element) => {
-    if (!element || element.nodeType !== Node.ELEMENT_NODE) return;
-    ['placeholder', 'title', 'aria-label'].forEach((attribute) => {
-      const value = element.getAttribute(attribute);
-      if (!value) return;
-      const trimmed = value.trim();
-      const localized = dictionary.get(trimmed) || translateUnknownText(trimmed, lang);
-      if (localized && localized !== trimmed) element.setAttribute(attribute, localized);
-    });
-  };
-
-  const translateTree = (root) => {
-    if (!root) return;
-    if (root.nodeType === Node.TEXT_NODE) { translateNode(root); return; }
-    if (root.nodeType !== Node.ELEMENT_NODE && root !== document.body) return;
-    translateElementAttributes(root);
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-    const nodes = [];
-    let current;
-    while ((current = walker.nextNode())) nodes.push(current);
-    nodes.forEach(translateNode);
-  };
-
-  translateTree(document.body);
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      mutation.addedNodes.forEach((node) => translateTree(node));
-      if (mutation.type === 'characterData') translateNode(mutation.target);
-      if (mutation.type === 'attributes') translateElementAttributes(mutation.target);
-    });
-  });
-  observer.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['placeholder', 'title', 'aria-label'] });
-  return () => observer.disconnect();
 };
 
 export const LanguageProvider = ({ children }) => {
@@ -121,24 +493,90 @@ export const LanguageProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem('biobits_lang', currentLang);
-    if (typeof document !== 'undefined') document.documentElement.lang = currentLang;
-    return translateRenderedUi(currentLang);
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = currentLang;
+    }
   }, [currentLang]);
 
+  // Robust translation resolver
   const t = (key, fallback = '') => {
-    const langDict = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
-    return langDict[key] || TRANSLATIONS.en[key] || fallback || translateUnknownText(key, currentLang) || key;
+    if (!key) return fallback || '';
+    
+    // 1. Direct dictionary match in active language
+    const langDict = TRANSLATIONS[currentLang];
+    if (langDict && typeof langDict[key] === 'string') {
+      return langDict[key];
+    }
+
+    // 2. Direct match in English dictionary
+    const enDict = TRANSLATIONS.en;
+    if (currentLang === 'en' && enDict && typeof enDict[key] === 'string') {
+      return enDict[key];
+    }
+
+    // 3. Check dynamic phrase glossary for current language
+    const glossary = DYNAMIC_GLOSSARY[currentLang];
+    if (glossary && typeof glossary[key] === 'string') {
+      return glossary[key];
+    }
+
+    // 4. If key is in English dictionary, see if that English text maps in glossary
+    if (enDict && enDict[key] && glossary && glossary[enDict[key]]) {
+      return glossary[enDict[key]];
+    }
+
+    // 5. Return fallback if provided, or English dictionary string, or key itself
+    return fallback || (enDict && enDict[key]) || key;
+  };
+
+  // Helper for dynamic strings (symptoms, vitals, names, triage, status)
+  const translateText = (text) => {
+    if (!text || currentLang === 'en') return text;
+    const glossary = DYNAMIC_GLOSSARY[currentLang];
+    if (!glossary) return text;
+    if (glossary[text]) return glossary[text];
+
+    // Check partial phrase match
+    let translated = text;
+    Object.keys(glossary).forEach((k) => {
+      if (translated.includes(k)) {
+        translated = translated.replaceAll(k, glossary[k]);
+      }
+    });
+    return translated;
   };
 
   const speak = (text) => {
     setIsAudioPlaying(true);
-    speakText(text, currentLang, () => setIsAudioPlaying(true), () => setIsAudioPlaying(false));
+    speakText(
+      text,
+      currentLang,
+      () => setIsAudioPlaying(true),
+      () => setIsAudioPlaying(false)
+    );
   };
 
-  const stop = () => { stopSpeech(); setIsAudioPlaying(false); };
+  const stop = () => {
+    stopSpeech();
+    setIsAudioPlaying(false);
+  };
+
+  const value = useMemo(
+    () => ({
+      currentLang,
+      setLanguage: setCurrentLang,
+      languages: LANGUAGES,
+      t,
+      translateText,
+      speak,
+      stopSpeech: stop,
+      isAudioPlaying,
+    }),
+    [currentLang, isAudioPlaying]
+  );
 
   return (
-    <LanguageContext.Provider value={{ currentLang, setLanguage: setCurrentLang, languages: LANGUAGES, t, speak, stopSpeech: stop, isAudioPlaying }}>
+    <LanguageContext.Provider value={value}>
       {children}
     </LanguageContext.Provider>
   );

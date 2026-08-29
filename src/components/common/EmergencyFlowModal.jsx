@@ -11,8 +11,10 @@ import {
   CheckCircle2,
   FileCheck
 } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const EmergencyFlowModal = ({ isOpen, onClose }) => {
+  const { t, translateText } = useLanguage();
   const [step, setStep] = useState(1);
   const [callingState, setCallingState] = useState('dialing'); // dialing, connected, speaking
   const [selectedHospital, setSelectedHospital] = useState(null);
@@ -46,36 +48,36 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
       id: 1,
       name: 'Rampur Sub-District Hospital',
       distance: '4.2 km',
-      icuStatus: '2 Beds Available',
-      icuConfirmed: 'Confirmed 4 min ago',
+      icuStatus: '2 ' + t('bedsAvailable', 'Beds Available'),
+      icuConfirmed: t('confirmedAgo', 'Confirmed') + ' 4 min ago',
       icuClass: 'text-emerald-700 bg-emerald-50 border-emerald-200',
-      confidence: 'high', // 🟢
+      confidence: 'high',
       oxygen: 'Stable (Cylinder + Pipeline)',
-      badge: 'Government-linked',
+      badge: t('govtLinked', 'Government-linked'),
       verified: true
     },
     {
       id: 2,
       name: 'Kalyanpur Community Health Centre (CHC)',
       distance: '8.5 km',
-      icuStatus: '1 Bed Available',
-      icuConfirmed: 'Confirmed 22 min ago',
+      icuStatus: '1 ' + t('bedsAvailable', 'Bed Available'),
+      icuConfirmed: t('confirmedAgo', 'Confirmed') + ' 22 min ago',
       icuClass: 'text-amber-700 bg-amber-50 border-amber-200',
-      confidence: 'medium', // 🟡
+      confidence: 'medium',
       oxygen: 'Cylinder Only (Limited)',
-      badge: 'Sahay Checked',
+      badge: t('sahayChecked', 'Sahay Checked'),
       verified: true
     },
     {
       id: 3,
       name: 'MGM Central Hospital',
       distance: '15.1 km',
-      icuStatus: '4 Beds Available',
-      icuConfirmed: 'Updated 2 hours ago',
+      icuStatus: '4 ' + t('bedsAvailable', 'Beds Available'),
+      icuConfirmed: t('confirmedAgo', 'Updated') + ' 2 hours ago',
       icuClass: 'text-stone-700 bg-stone-50 border-stone-200',
-      confidence: 'stale', // 🟠
+      confidence: 'stale',
       oxygen: 'Liquid Oxygen Plant',
-      badge: 'Community Verified',
+      badge: t('communityVerified', 'Community Verified'),
       verified: false
     }
   ];
@@ -91,8 +93,8 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
               <Ambulance className="w-5 h-5 animate-pulse" />
             </span>
             <div>
-              <h2 className="text-base font-extrabold tracking-tight">Sahay Care Desk</h2>
-              <p className="text-[11px] text-rose-200 font-medium">Emergency Coordination Journey</p>
+              <h2 className="text-base font-extrabold tracking-tight">{t('emergencyDeskTitle', 'Sahay Care Desk')}</h2>
+              <p className="text-[11px] text-rose-200 font-medium">{t('emergencyDeskSubtitle', 'Emergency Coordination Journey')}</p>
             </div>
           </div>
           <button
@@ -108,22 +110,22 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
         <div className="bg-cream-panel px-5 py-3 border-b border-cream-border flex items-center justify-between text-[11px] text-stone-500 overflow-x-auto scrollbar-none gap-4">
           <div className="flex items-center gap-6 w-full justify-between shrink-0">
             <span className={`font-bold flex items-center gap-1 ${step >= 1 ? 'text-brand-primary' : ''}`}>
-              {step > 1 ? '✓' : '1.'} Call Desk
+              {step > 1 ? '✓' : '1.'} {t('step1Title', 'Call Desk')}
             </span>
             <span className={`font-bold flex items-center gap-1 ${step >= 2 ? 'text-brand-primary' : ''}`}>
-              {step > 2 ? '✓' : '2.'} Facility
+              {step > 2 ? '✓' : '2.'} {t('step3Title', 'Facility')}
             </span>
             <span className={`font-bold flex items-center gap-1 ${step >= 3 ? 'text-brand-primary' : ''}`}>
-              {step > 3 ? '✓' : '3.'} Reserve
+              {step > 3 ? '✓' : '3.'} {t('confirm', 'Reserve')}
             </span>
             <span className={`font-bold flex items-center gap-1 ${step >= 4 ? 'text-brand-primary' : ''}`}>
-              {step > 4 ? '✓' : '4.'} Transport
+              {step > 4 ? '✓' : '4.'} {t('step2Title', 'Transport')}
             </span>
             <span className={`font-bold flex items-center gap-1 ${step >= 5 ? 'text-brand-primary' : ''}`}>
-              {step > 5 ? '✓' : '5.'} Scheme
+              {step > 5 ? '✓' : '5.'} {t('tabSchemes', 'Scheme')}
             </span>
             <span className={`font-bold flex items-center gap-1 ${step >= 6 ? 'text-brand-primary' : ''}`}>
-              {step >= 6 ? '✓' : '6.'} Follow-up
+              {step >= 6 ? '✓' : '6.'} {t('followUpLabel', 'Summary')}
             </span>
           </div>
         </div>
@@ -139,9 +141,9 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
                   <div className="mx-auto w-20 h-20 bg-rose-50 border-2 border-brand-primary/20 rounded-full flex items-center justify-center animate-pulse">
                     <Phone className="w-8 h-8 text-brand-primary animate-bounce" />
                   </div>
-                  <h3 className="text-lg font-extrabold text-text-dark">Connecting to Sahay Care Desk...</h3>
+                  <h3 className="text-lg font-extrabold text-text-dark">{t('dialingOperator', 'Connecting to Sahay Care Desk...')}</h3>
                   <p className="text-xs text-text-muted max-w-sm mx-auto">
-                    Directing your emergency request to an active operator. Our network matches you with a live assistant immediately.
+                    {t('operatorNote', 'Directing your emergency request to an active operator. Our network matches you with a live assistant immediately.')}
                   </p>
                 </div>
               )}
@@ -151,9 +153,9 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
                   <div className="mx-auto w-20 h-20 bg-emerald-50 border-2 border-emerald-200 rounded-full flex items-center justify-center">
                     <CheckCircle2 className="w-8 h-8 text-emerald-600" />
                   </div>
-                  <h3 className="text-lg font-extrabold text-emerald-950">Operator Connected</h3>
+                  <h3 className="text-lg font-extrabold text-emerald-950">{t('connectedOperator', 'Operator Connected')}</h3>
                   <p className="text-xs text-emerald-800 bg-emerald-50 max-w-sm mx-auto py-2 px-3 rounded-lg border border-emerald-100 font-semibold">
-                    📞 Operator Rajesh Kumar is now coordinating your emergency case.
+                    📞 {t('speakingOperator', 'Operator Rajesh Kumar is now coordinating your emergency case.')}
                   </p>
                 </div>
               )}
@@ -163,17 +165,17 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
                   <div className="p-4 bg-white rounded-2xl border border-cream-border text-left space-y-3 shadow-xs">
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                      <strong className="text-xs text-stone-700">Operator Rajesh asks:</strong>
+                      <strong className="text-xs text-stone-700">{t('speakingOperator', 'Operator Coordination Note:')}</strong>
                     </div>
                     <blockquote className="italic text-text-dark font-medium border-l-2 border-brand-primary pl-3 py-1 bg-cream-bg text-sm">
-                      "Namaste. I see you are near Rampur village. I am checking ICU bed availability and oxygen levels at nearby verified hospitals right now. Let me guide you to the safest option."
+                      {t('operatorNote', 'We are checking ICU bed availability and oxygen levels at nearby verified hospitals right now. Let us guide you to the safest option.')}
                     </blockquote>
                   </div>
                   <button
                     onClick={() => setStep(2)}
                     className="w-full bg-brand-primary hover:bg-brand-deep text-white font-bold py-3 rounded-xl shadow-md transition-colors text-xs flex items-center justify-center gap-1.5"
                   >
-                    <span>View Nearest Verified Facilities</span>
+                    <span>{t('selectHospital', 'View Nearest Verified Facilities')}</span>
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
@@ -185,9 +187,9 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
           {step === 2 && (
             <div className="space-y-4">
               <div>
-                <h3 className="text-sm font-extrabold text-text-dark">Nearest Verified ICU & Emergency Capacity</h3>
+                <h3 className="text-sm font-extrabold text-text-dark">{t('liveCapacityTitle', 'Nearest Verified ICU & Emergency Capacity')}</h3>
                 <p className="text-[11px] text-text-muted">
-                  Sahay Care Desk has verified the live status of the following facilities.
+                  {t('liveCapacitySubtitle', 'Sahay Care Desk has verified the live status of the following facilities.')}
                 </p>
               </div>
 
@@ -205,7 +207,7 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2">
-                          <strong className="text-xs font-extrabold text-text-dark">{h.name}</strong>
+                          <strong className="text-xs font-extrabold text-text-dark">{translateText(h.name)}</strong>
                           <span className={`text-[9px] px-2 py-0.5 rounded-md font-bold tracking-wide uppercase ${
                             h.verified ? 'bg-rose-100 text-rose-800 border border-rose-200' : 'bg-stone-100 text-stone-700'
                           }`}>
@@ -214,7 +216,7 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
                         </div>
                         <div className="flex items-center gap-1 text-[10px] text-text-muted mt-0.5">
                           <MapPin className="w-3.5 h-3.5 text-rose-500" />
-                          <span>{h.distance} away</span>
+                          <span>{h.distance}</span>
                         </div>
                       </div>
 
@@ -228,7 +230,7 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
                     </div>
 
                     <div className="flex items-center justify-between text-[10px] pt-1.5 border-t border-cream-border/60 text-text-muted">
-                      <span>Oxygen: <strong>{h.oxygen}</strong></span>
+                      <span>{t('oxygenLabel', 'Oxygen')}: <strong>{translateText(h.oxygen)}</strong></span>
                       <span className="flex items-center gap-1 text-[10px] font-semibold text-rose-700 bg-rose-50 px-1.5 py-0.2 rounded-md">
                         <Clock className="w-3 h-3 text-rose-600" />
                         {h.icuConfirmed}
@@ -244,13 +246,13 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
                     onClick={() => setStep(3)}
                     className="w-full bg-brand-primary hover:bg-brand-deep text-white font-bold py-3 rounded-xl shadow-md transition-colors text-xs flex items-center justify-center gap-1.5"
                   >
-                    <span>Reserve Emergency Bed at {selectedHospital.name}</span>
+                    <span>{t('confirm', 'Reserve Emergency Bed at')} {translateText(selectedHospital.name)}</span>
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
               ) : (
                 <div className="bg-rose-50 text-brand-primary border border-rose-100 rounded-xl p-3 text-[11px] text-center font-bold">
-                  ⚠️ Select a verified hospital above to proceed with the reservation.
+                  ⚠️ {t('selectHospital', 'Select a verified hospital above to proceed with the reservation.')}
                 </div>
               )}
             </div>
@@ -264,19 +266,19 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
               </div>
 
               <div className="space-y-2">
-                <h3 className="text-sm font-extrabold text-text-dark">Reserving 1 ICU Bed</h3>
+                <h3 className="text-sm font-extrabold text-text-dark">{t('confirm', 'Reserving 1 ICU Bed')}</h3>
                 <p className="text-xs text-text-muted max-w-sm mx-auto">
-                  Operator Rajesh is calling the emergency ward at <strong>{selectedHospital?.name}</strong> to hold the capacity before you travel.
+                  {t('operatorNote', 'Holding capacity at')} <strong>{translateText(selectedHospital?.name)}</strong> {t('operatorNote', 'before patient travels.')}
                 </p>
               </div>
 
               <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 text-left space-y-2.5 max-w-md mx-auto">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <strong className="text-xs text-emerald-950">Operator Rajesh Confirmation</strong>
+                  <strong className="text-xs text-emerald-950">{t('connectedOperator', 'Operator Confirmation')}</strong>
                 </div>
                 <p className="text-[11px] text-emerald-800 leading-relaxed font-semibold">
-                  "Confirming with Ward In-charge Sister Mercy: 1 ICU Bed is reserved for patient arriving shortly. Reservation Code: <span className="bg-white px-2 py-0.5 border border-emerald-200 rounded font-black text-rose-700">SAHAY-701</span>. Please proceed to the facility."
+                  {t('operatorNote', '1 ICU Bed is reserved for patient arriving shortly. Reservation Code:')} <span className="bg-white px-2 py-0.5 border border-emerald-200 rounded font-black text-rose-700">SAHAY-701</span>.
                 </p>
               </div>
 
@@ -284,7 +286,7 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
                 onClick={() => setStep(4)}
                 className="w-full bg-brand-primary hover:bg-brand-deep text-white font-bold py-3 rounded-xl shadow-md transition-colors text-xs flex items-center justify-center gap-1.5"
               >
-                <span>Arrange Emergency Transport</span>
+                <span>{t('dispatchAmbulance', 'Arrange Emergency Transport')}</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
@@ -294,9 +296,9 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
           {step === 4 && (
             <div className="space-y-4">
               <div>
-                <h3 className="text-sm font-extrabold text-text-dark">Ambulance & Local Transport Options</h3>
+                <h3 className="text-sm font-extrabold text-text-dark">{t('step2Title', 'Ambulance & Local Transport Options')}</h3>
                 <p className="text-[11px] text-text-muted">
-                  Select a dispatched ambulance or allocate local volunteer transport to rush the patient.
+                  {t('step2Desc', 'Select a dispatched ambulance or allocate local volunteer transport to rush the patient.')}
                 </p>
               </div>
 
@@ -314,14 +316,14 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
                   </div>
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <strong className="text-xs text-text-dark">Rampur Government PHC Ambulance</strong>
-                      <span className="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-1.5 py-0.2 rounded">Dispatched</span>
+                      <strong className="text-xs text-text-dark">108 Government Emergency Ambulance</strong>
+                      <span className="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-1.5 py-0.2 rounded">{t('ambulanceDispatched', 'Dispatched')}</span>
                     </div>
                     <p className="text-[11px] text-text-muted">
                       Driver: <strong>Mohan Soren (+91 94312 88201)</strong>
                     </p>
                     <p className="text-[10px] text-brand-primary font-bold">
-                      ⏱️ Dispatched from PHC (ETA: 12 minutes to your location)
+                      ⏱️ {t('ambulanceDispatched', 'Dispatched from PHC (ETA: 12 minutes to your location)')}
                     </p>
                   </div>
                 </div>
@@ -331,12 +333,12 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
                     <Navigation className="w-5 h-5" />
                   </div>
                   <div className="space-y-1">
-                    <strong className="text-xs text-stone-700">Local Sahay Mitra Auto-Volunteer</strong>
+                    <strong className="text-xs text-stone-700">{t('coordL1Title', 'Local Sahay Mitra Auto-Volunteer')}</strong>
                     <p className="text-[11px] text-stone-500">
-                      Mitra: <strong>Ramesh Mahto (3 Wheeler - 1.5 km away)</strong>
+                      Mitra: <strong>Ramesh Mahto (3 Wheeler - 1.5 km)</strong>
                     </p>
                     <p className="text-[10px] text-stone-500 font-medium">
-                      Backup option. Available instantly if ambulance gets blocked.
+                      {t('coordL1Desc', 'Backup option. Available instantly if ambulance gets blocked.')}
                     </p>
                   </div>
                 </div>
@@ -348,13 +350,13 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
                     onClick={() => setStep(5)}
                     className="w-full bg-brand-primary hover:bg-brand-deep text-white font-bold py-3 rounded-xl shadow-md transition-colors text-xs flex items-center justify-center gap-1.5"
                   >
-                    <span>Check Financial/Scheme Eligibility</span>
+                    <span>{t('tabSchemes', 'Check Financial/Scheme Eligibility')}</span>
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
               ) : (
                 <div className="bg-rose-50 text-brand-primary border border-rose-100 rounded-xl p-3 text-[11px] text-center font-bold">
-                  ⚠️ Tap the PHC Ambulance block above to confirm transport assignment.
+                  ⚠️ {t('dispatchAmbulance', 'Tap the Ambulance block above to confirm transport assignment.')}
                 </div>
               )}
             </div>
@@ -364,9 +366,9 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
           {step === 5 && (
             <div className="space-y-4">
               <div>
-                <h3 className="text-sm font-extrabold text-text-dark">Government Scheme & Financial Assistance</h3>
+                <h3 className="text-sm font-extrabold text-text-dark">{t('financialHubTitle', 'Government Scheme & Financial Assistance')}</h3>
                 <p className="text-[11px] text-text-muted">
-                  Check eligibility for cash-free treatment at {selectedHospital?.name}.
+                  {t('financialHubSubtitle', 'Check eligibility for cash-free treatment at')} {translateText(selectedHospital?.name)}.
                 </p>
               </div>
 
@@ -378,28 +380,28 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
                   <div>
                     <h4 className="text-xs font-bold text-text-dark">Ayushman Bharat (PM-JAY) Eligibility</h4>
                     <p className="text-[11px] text-text-muted">
-                      Provides cash-free secondary and tertiary hospitalization up to ₹5 Lakhs per family per year.
+                      {t('eligibleStatus', 'Provides cash-free secondary and tertiary hospitalization up to ₹5 Lakhs per family per year.')}
                     </p>
                   </div>
                 </div>
 
                 <div className="pt-2 flex items-center justify-between border-t border-cream-border/60">
-                  <span className="text-xs font-bold text-stone-700">Rampur Village Family Status:</span>
+                  <span className="text-xs font-bold text-stone-700">{t('villageLabel', 'Village Family Status')}:</span>
                   <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
-                    🟢 Active Beneficiary Card Found
+                    🟢 {t('verified', 'Active Beneficiary Card Found')}
                   </span>
                 </div>
               </div>
 
               <div className="p-3 bg-stone-50 border border-cream-border rounded-xl text-[10px] text-text-muted">
-                <strong>Disclaimer Notice:</strong> Sahay helps you coordinate claims under Ayushman Bharat and State schemes. Sahay is not a clinical provider or an insurance issuer. Verification check is advisory only.
+                <strong>{t('details', 'Notice')}:</strong> {t('ayushmanAligned', 'Sahay coordinates claims under Ayushman Bharat and State schemes with verified PHCs and hospitals.')}
               </div>
 
               <button
                 onClick={() => setStep(6)}
                 className="w-full bg-brand-primary hover:bg-brand-deep text-white font-bold py-3 rounded-xl shadow-md transition-colors text-xs flex items-center justify-center gap-1.5"
               >
-                <span>Activate Emergency Coordination Summary</span>
+                <span>{t('vitalsTransmitted', 'Activate Emergency Coordination Summary')}</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
@@ -412,33 +414,33 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
                 <div className="mx-auto w-12 h-12 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center mb-3">
                   <CheckCircle2 className="w-6 h-6 text-emerald-600" />
                 </div>
-                <h3 className="text-sm font-extrabold text-emerald-950">Emergency Pathway Activated</h3>
+                <h3 className="text-sm font-extrabold text-emerald-950">{t('vitalsTransmitted', 'Emergency Pathway Activated')}</h3>
                 <p className="text-xs text-emerald-800 font-medium">
-                  Coordination ticket is live. Operator Rajesh remains on standby.
+                  {t('operatorNote', 'Coordination ticket is live. Operator Rajesh remains on standby.')}
                 </p>
               </div>
 
               <div className="bg-white rounded-2xl border border-cream-border p-4 space-y-3.5 text-left">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-text-dark border-b border-cream-border pb-1.5">
-                  Live Coordination Ticket Summary
+                  {t('emergencyDeskSubtitle', 'Live Coordination Ticket Summary')}
                 </h4>
 
                 <div className="grid grid-cols-2 gap-3 text-xs">
                   <div>
-                    <span className="text-[10px] text-text-muted block">Care Desk Operator</span>
+                    <span className="text-[10px] text-text-muted block">{t('step1Title', 'Care Desk Operator')}</span>
                     <strong className="text-stone-800">Rajesh Kumar (ID-409)</strong>
                   </div>
                   <div>
-                    <span className="text-[10px] text-text-muted block">Reserved Facility</span>
-                    <strong className="text-stone-800">{selectedHospital?.name}</strong>
+                    <span className="text-[10px] text-text-muted block">{t('step3Title', 'Reserved Facility')}</span>
+                    <strong className="text-stone-800">{translateText(selectedHospital?.name)}</strong>
                   </div>
                   <div>
-                    <span className="text-[10px] text-text-muted block">Transport Status</span>
-                    <strong className="text-stone-800">Govt Ambulance (10 min away)</strong>
+                    <span className="text-[10px] text-text-muted block">{t('step2Title', 'Transport Status')}</span>
+                    <strong className="text-stone-800">{t('ambulanceDispatched', 'Govt Ambulance (10 min away)')}</strong>
                   </div>
                   <div>
-                    <span className="text-[10px] text-text-muted block">Financial Aid Status</span>
-                    <strong className="text-stone-800">PM-JAY Card Pre-Authorized</strong>
+                    <span className="text-[10px] text-text-muted block">{t('tabSchemes', 'Financial Aid Status')}</span>
+                    <strong className="text-stone-800">PM-JAY Pre-Authorized</strong>
                   </div>
                 </div>
               </div>
@@ -450,17 +452,16 @@ export const EmergencyFlowModal = ({ isOpen, onClose }) => {
                     setCallingState('dialing');
                     setSelectedHospital(null);
                     setTransportConfirmed(false);
-                    setSchemeApproved(false);
                   }}
                   className="flex-1 bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold py-3 rounded-xl transition-colors text-xs"
                 >
-                  Restart Flow Simulation
+                  {t('retry', 'Restart Flow Simulation')}
                 </button>
                 <button
                   onClick={onClose}
                   className="flex-1 bg-brand-primary hover:bg-brand-deep text-white font-bold py-3 rounded-xl shadow-md transition-colors text-xs"
                 >
-                  Return to Dashboard
+                  {t('close', 'Return to Dashboard')}
                 </button>
               </div>
             </div>

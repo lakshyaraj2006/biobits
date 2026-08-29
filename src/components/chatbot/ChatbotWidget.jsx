@@ -1,10 +1,12 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Bot } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const ChatbotWidget = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   if (location.pathname === '/chatbot') return null; // Don't show floating button if already on chatbot route
 
@@ -13,7 +15,7 @@ export const ChatbotWidget = () => {
       <button
         onClick={() => navigate('/chatbot')}
         className="group flex items-center gap-2.5 bg-gradient-to-r from-brand-primary to-brand-deep hover:from-brand-deep hover:to-stone-900 text-white p-3 sm:px-4 sm:py-3 rounded-full shadow-2xl shadow-rose-950/40 hover:scale-105 active:scale-95 transition-all ring-4 ring-rose-400/20"
-        title="Open AI Health Assistant"
+        title={t('chatTitle', 'Open AI Health Assistant')}
         aria-label="Open Sahay Saathi"
       >
         <div className="relative">
@@ -22,10 +24,10 @@ export const ChatbotWidget = () => {
         </div>
         <div className="hidden sm:block text-left">
           <span className="text-xs font-extrabold block leading-tight">
-            Sahay Saathi AI
+            {t('navChatbot', 'Sahay Saathi AI')}
           </span>
           <span className="text-[10px] text-rose-200 block font-medium">
-            24/7 Health Assistant
+            {t('botSub', '24/7 Health Assistant')}
           </span>
         </div>
       </button>

@@ -4,11 +4,7 @@ import {
   MessageSquare,
   PhoneCall,
   Send,
-  CheckCircle2,
-  Sparkles,
-  Volume2,
-  Calendar,
-  Heart
+  CheckCircle2
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { AudioVoiceButton } from '../common/AudioVoiceButton';
@@ -23,8 +19,8 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
   const isMother = Boolean(recipient.lmpDate);
 
   const smsText = isMother
-    ? `Namaste ${recipient.name} ji! Your ANC-3 Pregnancy Checkup is due on 30-Aug at Rampur Sub-Centre. Please carry your MCP Card and take your daily Iron tablet after dinner. - ASHA Health Team, BioBits.`
-    : `Namaste ${recipient.motherName} ji! Baby ${recipient.name}'s Pentavalent-3 & Rotavirus-3 vaccine is due today at Rampur Anganwadi. Vaccines protect your baby from 5 deadly diseases. - BioBits Health Mission.`;
+    ? `Namaste ${recipient.name} ji! Your ANC-3 Pregnancy Checkup is due on 30-Aug at Rampur Sub-Centre. Please carry your MCP Card and take your daily Iron tablet after dinner. - ASHA Health Team, Sahay.`
+    : `Namaste ${recipient.motherName} ji! Baby ${recipient.name}'s Pentavalent-3 & Rotavirus-3 vaccine is due today at Rampur Anganwadi. Vaccines protect your baby from 5 deadly diseases. - Sahay Health Mission.`;
 
   const voiceCallScript = isMother
     ? `Namaste ${recipient.name} ji, this is an automated reminder from your village Primary Health Centre. Your upcoming prenatal health checkup is due this week. Please visit your ASHA worker for blood pressure and hemoglobin testing.`
@@ -50,10 +46,10 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
             </div>
             <div>
               <h3 className="font-extrabold text-base sm:text-lg text-white">
-                Dispatch Vernacular Health Reminder
+                {t('dispatchReminderTitle', 'Dispatch Vernacular Health Reminder')}
               </h3>
               <p className="text-xs text-rose-200 mt-0.5">
-                To: {recipient.name} ({recipient.phone || '+91 98765 43210'})
+                {t('to', 'To')}: {recipient.name} ({recipient.phone || '+91 98765 43210'})
               </p>
             </div>
           </div>
@@ -71,7 +67,7 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
           {/* Channel Selector */}
           <div>
             <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-2">
-              Select Reminder Delivery Channel:
+              {t('selectDeliveryChannel', 'Select Reminder Delivery Channel')}:
             </label>
             <div className="grid grid-cols-3 gap-2">
               <button
@@ -83,7 +79,7 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
                     : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
                 }`}
               >
-                <span>💬 Vernacular SMS</span>
+                <span>💬 {t('vernacularSMS', 'Vernacular SMS')}</span>
               </button>
 
               <button
@@ -107,7 +103,7 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
                     : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
                 }`}
               >
-                <span>📞 Automated IVR Call</span>
+                <span>📞 {t('ivrCall', 'Automated IVR Call')}</span>
               </button>
             </div>
           </div>
@@ -115,10 +111,10 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
           {/* Simulated Message Preview Phone Mockup */}
           <div className="bg-slate-100 p-4 rounded-2xl border border-slate-200 space-y-3">
             <div className="flex items-center justify-between text-xs text-slate-500 font-semibold border-b border-slate-200 pb-2">
-              <span>Preview: {channel.toUpperCase()} Message</span>
+              <span>{t('previewMessage', 'Preview Message')} ({channel.toUpperCase()})</span>
               <AudioVoiceButton
                 text={channel === 'call' ? voiceCallScript : smsText}
-                label="Listen Audio"
+                label={t('audioHelp', 'Listen Audio')}
                 size="sm"
               />
             </div>
@@ -127,19 +123,19 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
               <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
                 <div className="flex items-center gap-2 text-brand-deep font-bold text-xs">
                   <PhoneCall className="w-4 h-4 text-brand-primary animate-bounce" />
-                  <span>Automated Voice Call (Dialing +91 {recipient.phone?.slice(-10)})</span>
+                  <span>{t('dialingOperator', 'Automated Voice Call')} (Dialing +91 {recipient.phone?.slice(-10)})</span>
                 </div>
                 <p className="text-xs text-slate-700 font-medium leading-relaxed italic bg-rose-50/60 p-2.5 rounded-lg border border-rose-100">
                   "{voiceCallScript}"
                 </p>
                 <span className="text-[10px] text-slate-500 block">
-                  Plays in patient's selected local dialect (Hindi / Bengali / Odia / Telugu / Tamil / Marathi).
+                  {t('vernacularSupportNote', 'Plays in patients selected local dialect (Hindi / Bengali / Odia / Telugu / Tamil / Marathi).')}
                 </span>
               </div>
             ) : (
               <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm space-y-2">
                 <div className="flex items-center justify-between text-[11px] font-bold text-brand-deep">
-                  <span>From: NHM-BioBits Health</span>
+                  <span>From: NHM-Sahay Health</span>
                   <span className="text-[10px] text-slate-400">Just Now</span>
                 </div>
                 <p className="text-xs text-slate-800 font-medium leading-relaxed">
@@ -156,7 +152,7 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
           {isSent && (
             <div className="p-3 rounded-xl bg-rose-100 border border-rose-300 text-brand-deep text-xs font-bold flex items-center gap-2 animate-bounce">
               <CheckCircle2 className="w-4 h-4 text-brand-primary" />
-              <span>Reminder dispatched successfully to {recipient.phone}!</span>
+              <span>{t('reminderDispatchedSuccess', 'Reminder dispatched successfully to')} {recipient.phone}!</span>
             </div>
           )}
         </div>
@@ -176,7 +172,7 @@ export const ReminderSimulatorModal = ({ recipient, isOpen, onClose }) => {
             className="flex items-center gap-1.5 bg-gradient-to-r from-brand-primary to-brand-deep text-white px-5 py-2.5 rounded-xl text-xs font-extrabold shadow-md shadow-rose-900/20 hover:opacity-95 transition-opacity"
           >
             <Send className="w-3.5 h-3.5" />
-            <span>{isSent ? 'Sending...' : 'Send Reminder Now'}</span>
+            <span>{isSent ? t('syncing', 'Sending...') : t('sendReminderNow', 'Send Reminder Now')}</span>
           </button>
         </div>
       </div>

@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import {
   Stethoscope,
-  Filter,
   Search,
   CheckCircle2,
   Clock,
-  AlertTriangle,
-  FileText,
-  UserCheck,
-  MapPin,
-  Sparkles
+  MapPin
 } from 'lucide-react';
 import { useHealthData } from '../../context/HealthDataContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -17,7 +12,7 @@ import { AudioVoiceButton } from '../common/AudioVoiceButton';
 
 export const DoctorQueueView = ({ onSelectCaseForRx }) => {
   const { cases } = useHealthData();
-  const { t } = useLanguage();
+  const { t, translateText } = useLanguage();
 
   const [filterPriority, setFilterPriority] = useState('all'); // all | Emergency | Urgent | Routine
   const [filterStatus, setFilterStatus] = useState('all'); // all | pending | reviewed
@@ -50,22 +45,22 @@ export const DoctorQueueView = ({ onSelectCaseForRx }) => {
               {t('doctorQueue', 'PHC Doctor Clinical Consultation Queue')}
             </h3>
             <AudioVoiceButton
-              text="Doctor clinical triage queue. Emergency cases are marked in red at top of queue."
+              text={`${t('doctorQueue')}. ${t('immediatePriority')}.`}
               size="sm"
             />
           </div>
           <p className="text-xs text-slate-500 mt-1">
-            Review patient case files asynchronously, evaluate photos & vitals, and issue signed e-prescriptions.
+            {t('teleSubheader', 'Review patient case files asynchronously, evaluate photos & vitals, and issue signed e-prescriptions.')}
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-xl text-xs font-bold text-rose-800 flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
-            <span>{emergencyCount} Emergency Pending</span>
+            <span>{emergencyCount} {t('emergencyTriaged', 'Emergency Pending')}</span>
           </div>
           <div className="bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl text-xs font-bold text-amber-800">
-            <span>{pendingCount} Awaiting Review</span>
+            <span>{pendingCount} {t('pendingReview', 'Awaiting Review')}</span>
           </div>
         </div>
       </div>
@@ -78,7 +73,7 @@ export const DoctorQueueView = ({ onSelectCaseForRx }) => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by patient name, village, or Case ID..."
+            placeholder={t('searchPlaceholder', 'Search by patient name, village, or Case ID...')}
             className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50/50"
           />
         </div>
@@ -89,10 +84,10 @@ export const DoctorQueueView = ({ onSelectCaseForRx }) => {
             onChange={(e) => setFilterPriority(e.target.value)}
             className="px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 bg-white focus:outline-none"
           >
-            <option value="all">All Triage Priorities</option>
-            <option value="Emergency">🔴 Emergency Only</option>
-            <option value="Urgent">🟡 Urgent Only</option>
-            <option value="Routine">🟢 Routine Only</option>
+            <option value="all">{t('triageLevel', 'All Triage Priorities')}</option>
+            <option value="Emergency">🔴 {translateText('Emergency')}</option>
+            <option value="Urgent">🟡 {translateText('Urgent')}</option>
+            <option value="Routine">🟢 {translateText('Routine')}</option>
           </select>
 
           <select
@@ -100,9 +95,9 @@ export const DoctorQueueView = ({ onSelectCaseForRx }) => {
             onChange={(e) => setFilterStatus(e.target.value)}
             className="px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 bg-white focus:outline-none"
           >
-            <option value="all">All Status</option>
-            <option value="pending">⏳ Pending Review</option>
-            <option value="reviewed">✓ Rx Issued</option>
+            <option value="all">{t('status', 'All Status')}</option>
+            <option value="pending">⏳ {t('pendingReview', 'Pending Review')}</option>
+            <option value="reviewed">✓ {t('rxIssued', 'Rx Issued')}</option>
           </select>
         </div>
       </div>
@@ -112,13 +107,13 @@ export const DoctorQueueView = ({ onSelectCaseForRx }) => {
         <table className="w-full text-left border-collapse text-xs">
           <thead>
             <tr className="bg-slate-100/80 text-slate-700 font-bold uppercase tracking-wider text-[11px] border-b border-slate-200">
-              <th className="py-3 px-4">Case ID & Patient</th>
-              <th className="py-3 px-4">Triage Risk</th>
-              <th className="py-3 px-4">Village</th>
-              <th className="py-3 px-4">Key Vitals</th>
-              <th className="py-3 px-4">Chief Symptoms</th>
-              <th className="py-3 px-4">Status</th>
-              <th className="py-3 px-4 text-right">Clinical Action</th>
+              <th className="py-3 px-4">{t('patientName', 'Case ID & Patient')}</th>
+              <th className="py-3 px-4">{t('triageLevel', 'Triage Risk')}</th>
+              <th className="py-3 px-4">{t('villageLabel', 'Village')}</th>
+              <th className="py-3 px-4">{t('vitalsTitle', 'Key Vitals')}</th>
+              <th className="py-3 px-4">{t('symptomsTitle', 'Chief Symptoms')}</th>
+              <th className="py-3 px-4">{t('status', 'Status')}</th>
+              <th className="py-3 px-4 text-right">{t('actions', 'Clinical Action')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 font-medium">
@@ -147,7 +142,7 @@ export const DoctorQueueView = ({ onSelectCaseForRx }) => {
                       )}
                       <div>
                         <strong className="text-slate-900 block font-bold text-xs">{c.patientName}</strong>
-                        <span className="text-[10px] text-slate-500">{c.id} • {c.age}y/{c.gender}</span>
+                        <span className="text-[10px] text-slate-500">{c.id} • {c.age}y/{translateText(c.gender)}</span>
                       </div>
                     </div>
                   </td>
@@ -160,7 +155,7 @@ export const DoctorQueueView = ({ onSelectCaseForRx }) => {
                         ? 'bg-amber-500 text-white'
                         : 'bg-emerald-600 text-white'
                     }`}>
-                      {c.triageLevel}
+                      {translateText(c.triageLevel)}
                     </span>
                   </td>
 
@@ -174,18 +169,18 @@ export const DoctorQueueView = ({ onSelectCaseForRx }) => {
                   <td className="py-3.5 px-4">
                     <div className="space-y-0.5 text-[11px]">
                       <span className={`block font-semibold ${c.vitals.temperature >= 101 ? 'text-rose-600 font-bold' : 'text-slate-700'}`}>
-                        Temp: {c.vitals.temperature}°F
+                        {t('temp', 'Temp')}: {c.vitals.temperature}°F
                       </span>
                       <span className="text-slate-500 block">
-                        BP: {c.vitals.bpSys}/{c.vitals.bpDia} • SpO2: {c.vitals.spO2}%
+                        {t('bp', 'BP')}: {c.vitals.bpSys}/{c.vitals.bpDia} • {t('spO2', 'SpO2')}: {c.vitals.spO2}%
                       </span>
                     </div>
                   </td>
 
                   <td className="py-3.5 px-4 max-w-xs">
-                    <div className="truncate text-slate-700 font-semibold" title={c.symptoms.join(', ')}>
-                      {c.symptoms.slice(0, 2).join(', ')}
-                      {c.symptoms.length > 2 && ` +${c.symptoms.length - 2} more`}
+                    <div className="truncate text-slate-700 font-semibold" title={c.symptoms.map(s => translateText(s)).join(', ')}>
+                      {c.symptoms.slice(0, 2).map(s => translateText(s)).join(', ')}
+                      {c.symptoms.length > 2 && ` +${c.symptoms.length - 2}`}
                     </div>
                   </td>
 
@@ -193,12 +188,12 @@ export const DoctorQueueView = ({ onSelectCaseForRx }) => {
                     {isReviewed ? (
                       <span className="inline-flex items-center gap-1 text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
                         <CheckCircle2 className="w-3 h-3" />
-                        Rx Issued
+                        {t('rxIssued', 'Rx Issued')}
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 text-amber-800 font-semibold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
                         <Clock className="w-3 h-3" />
-                        Pending
+                        {t('pendingReview', 'Pending')}
                       </span>
                     )}
                   </td>
@@ -212,7 +207,7 @@ export const DoctorQueueView = ({ onSelectCaseForRx }) => {
                           : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/30'
                       }`}
                     >
-                      {isReviewed ? 'View / Edit Rx' : 'Write Rx →'}
+                      {isReviewed ? t('viewEditRx', 'View / Edit Rx') : `${t('writeRx', 'Write Rx')} →`}
                     </button>
                   </td>
                 </tr>

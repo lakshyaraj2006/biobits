@@ -23,7 +23,7 @@ export const OfflineStatusBar = () => {
               <ShieldCheck className="w-5 h-5 text-sky-400 shrink-0 mt-0.5" />
             )}
             <div className="flex-1 text-xs sm:text-sm font-medium">
-              {syncToast.message}
+              {t('syncSuccess', syncToast.message)}
             </div>
             <button
               onClick={clearSyncToast}
@@ -43,10 +43,10 @@ export const OfflineStatusBar = () => {
             </span>
             <div>
               <span className="font-extrabold text-amber-950 block sm:inline">
-                You're offline.
+                {t('offlineMode', 'Offline Mode Active')}
               </span>
               <span className="text-amber-800 font-medium sm:ml-1 text-xs">
-                Saved family information and emergency guidance remain available. We'll reconnect automatically when the network returns.
+                {t('offlineManagerSubtitle', 'Local storage cache active. All case entries and emergency guidance remain accessible.')}
               </span>
             </div>
           </div>
@@ -67,7 +67,7 @@ export const OfflineStatusBar = () => {
               className="flex items-center gap-1.5 bg-amber-800 hover:bg-amber-900 text-white px-3 py-1 rounded-lg text-xs font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
-              <span>{isSyncing ? 'Syncing...' : t('syncNow', 'Sync to PHC Server')}</span>
+              <span>{isSyncing ? t('syncing', 'Syncing...') : t('syncNow', 'Sync to PHC Server')}</span>
             </button>
           </div>
         </div>

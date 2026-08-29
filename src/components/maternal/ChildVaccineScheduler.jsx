@@ -1,15 +1,6 @@
 import React from 'react';
 import {
-  ShieldCheck,
-  Calendar,
-  CheckCircle2,
-  Clock,
-  AlertTriangle,
-  Send,
-  Sparkles,
-  Baby,
-  HeartPulse,
-  Info
+  Send
 } from 'lucide-react';
 import { useHealthData } from '../../context/HealthDataContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -17,7 +8,7 @@ import { AudioVoiceButton } from '../common/AudioVoiceButton';
 
 export const ChildVaccineScheduler = ({ onOpenReminder }) => {
   const { childVaccinations, updateVaccineStatus } = useHealthData();
-  const { t } = useLanguage();
+  const { t, translateText } = useLanguage();
 
   return (
     <div className="space-y-6">
@@ -27,7 +18,7 @@ export const ChildVaccineScheduler = ({ onOpenReminder }) => {
         const hasOverdue = child.vaccines.some((v) => v.status === 'overdue');
         const dueToday = child.vaccines.filter((v) => v.status === 'due');
 
-        const audioSummary = `Child immunization card for ${child.name}, mother ${child.motherName}, village ${child.village}. ${completedCount} of ${totalCount} vaccine doses completed. Weight: ${child.weightKg} kg. ${hasOverdue ? 'Alert: Measles vaccine is overdue!' : 'Vaccines are on schedule.'}`;
+        const audioSummary = `${child.name}, ${child.motherName}. ${completedCount} / ${totalCount} ${t('vaccinesCompleted', 'vaccines completed')}. ${child.weightKg} kg.`;
 
         return (
           <div
@@ -52,12 +43,12 @@ export const ChildVaccineScheduler = ({ onOpenReminder }) => {
                     <AudioVoiceButton text={audioSummary} size="sm" />
                     {hasOverdue && (
                       <span className="bg-rose-100 text-rose-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-rose-200 animate-pulse">
-                        ⚠️ VACCINE OVERDUE
+                        ⚠️ {t('vaccineOverdue', 'VACCINE OVERDUE')}
                       </span>
                     )}
                   </div>
                   <p className="text-xs text-slate-500 font-medium mt-0.5">
-                    Mother: <strong>{child.motherName}</strong> • DOB: {child.dob} • {child.village}
+                    {t('motherLabel', 'Mother')}: <strong>{child.motherName}</strong> • {t('dob', 'DOB')}: {child.dob} • {child.village}
                   </p>
                 </div>
               </div>
@@ -69,7 +60,7 @@ export const ChildVaccineScheduler = ({ onOpenReminder }) => {
                   className="flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-brand-deep border border-rose-200 px-3.5 py-2 rounded-xl text-xs font-bold transition-colors shadow-xs"
                 >
                   <Send className="w-3.5 h-3.5 text-brand-primary" />
-                  <span>Send Vaccine SMS / Call</span>
+                  <span>{t('sendReminder', 'Send Vaccine SMS / Call')}</span>
                 </button>
               </div>
             </div>
@@ -77,7 +68,7 @@ export const ChildVaccineScheduler = ({ onOpenReminder }) => {
             {/* Immunization Progress & Growth Badge */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs">
               <div>
-                <span className="text-slate-500 font-semibold block">Universal Immunization Progress</span>
+                <span className="text-slate-500 font-semibold block">{t('uipProgress', 'Universal Immunization Progress')}</span>
                 <div className="flex items-center gap-2 mt-1">
                   <div className="flex-1 h-2 rounded-full bg-slate-200 overflow-hidden">
                     <div
@@ -87,28 +78,28 @@ export const ChildVaccineScheduler = ({ onOpenReminder }) => {
                   </div>
                   <span className="font-bold text-slate-800">{completedCount}/{totalCount}</span>
                 </div>
-                <span className="text-[10px] text-slate-500 font-medium">UIP Full Immunization Goal</span>
+                <span className="text-[10px] text-slate-500 font-medium">{t('uipGoal', 'UIP Full Immunization Goal')}</span>
               </div>
 
               <div>
-                <span className="text-slate-500 font-semibold block">Child Growth & Weight</span>
+                <span className="text-slate-500 font-semibold block">{t('growthWeight', 'Child Growth & Weight')}</span>
                 <strong className="text-slate-900 text-sm">{child.weightKg} kg • {child.heightCm} cm</strong>
-                <span className="text-[10px] text-emerald-700 block font-semibold">{child.growthStatus}</span>
+                <span className="text-[10px] text-emerald-700 block font-semibold">{translateText(child.growthStatus)}</span>
               </div>
 
               <div>
-                <span className="text-slate-500 font-semibold block">Immediate Action</span>
+                <span className="text-slate-500 font-semibold block">{t('immediateAction', 'Immediate Action')}</span>
                 {hasOverdue ? (
                   <strong className="text-rose-700 text-xs block">
-                    Immediate MR-1 & Vit A Dose Needed at Anganwadi!
+                    {t('overdueActionNeeded', 'Immediate MR-1 & Vit A Dose Needed at Anganwadi!')}
                   </strong>
                 ) : dueToday.length > 0 ? (
                   <strong className="text-amber-700 text-xs block">
-                    {dueToday.length} Dose(s) scheduled for this week.
+                    {dueToday.length} {t('dosesScheduled', 'Dose(s) scheduled for this week.')}
                   </strong>
                 ) : (
                   <strong className="text-emerald-700 text-xs block">
-                    All age-appropriate doses completed on time.
+                    {t('allDosesCompleted', 'All age-appropriate doses completed on time.')}
                   </strong>
                 )}
               </div>
@@ -118,10 +109,10 @@ export const ChildVaccineScheduler = ({ onOpenReminder }) => {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                  Universal Immunization Schedule (Birth to 5 Years):
+                  {t('uipScheduleTitle', 'Universal Immunization Schedule (Birth to 5 Years)')}:
                 </span>
                 <span className="text-xs text-slate-500 font-semibold">
-                  Tap status to toggle dose completion
+                  {t('tapToToggle', 'Tap status to toggle dose completion')}
                 </span>
               </div>
 
@@ -158,22 +149,22 @@ export const ChildVaccineScheduler = ({ onOpenReminder }) => {
                               ? 'bg-amber-500 text-white'
                               : 'bg-slate-200 text-slate-700'
                           }`}>
-                            {vac.status}
+                            {translateText(vac.status)}
                           </span>
                         </div>
 
                         <p className="text-[11px] text-slate-500 font-semibold mt-1">
-                          ⏰ Age Milestone: <strong>{vac.timing}</strong>
+                          ⏰ {t('ageMilestone', 'Age Milestone')}: <strong>{translateText(vac.timing)}</strong>
                         </p>
                         <p className="text-[10px] text-slate-600 mt-0.5 leading-snug">
-                          🛡️ Prevents: {vac.prevents}
+                          🛡️ {t('prevents', 'Prevents')}: {translateText(vac.prevents)}
                         </p>
                       </div>
 
                       {/* Interactive Dose Toggle Button */}
                       <div className="mt-3 pt-2 border-t border-slate-200/60 flex items-center justify-between">
                         <span className="text-[10px] text-slate-400">
-                          {isDone ? `Administered: ${vac.date}` : `Target: ${vac.date}`}
+                          {isDone ? `${t('administered', 'Administered')}: ${vac.date}` : `${t('target', 'Target')}: ${vac.date}`}
                         </span>
 
                         <button
@@ -191,7 +182,7 @@ export const ChildVaccineScheduler = ({ onOpenReminder }) => {
                               : 'bg-slate-800 text-white hover:bg-slate-900 shadow-sm'
                           }`}
                         >
-                          {isDone ? '✓ Administered' : 'Mark Given +'}
+                          {isDone ? `✓ ${t('administered', 'Administered')}` : `+ ${t('markGiven', 'Mark Given')}`}
                         </button>
                       </div>
                     </div>

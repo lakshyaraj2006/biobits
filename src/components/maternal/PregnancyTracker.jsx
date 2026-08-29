@@ -1,16 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Heart,
-  Calendar,
   CheckCircle2,
   Clock,
-  AlertTriangle,
   Send,
-  Pill,
-  ShieldAlert,
-  User,
-  Sparkles,
-  ChevronRight
+  ShieldAlert
 } from 'lucide-react';
 import { useHealthData } from '../../context/HealthDataContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -18,7 +11,7 @@ import { AudioVoiceButton } from '../common/AudioVoiceButton';
 
 export const PregnancyTracker = ({ onOpenReminder }) => {
   const { pregnantMothers } = useHealthData();
-  const { t } = useLanguage();
+  const { t, translateText } = useLanguage();
 
   return (
     <div className="space-y-6">
@@ -26,7 +19,7 @@ export const PregnancyTracker = ({ onOpenReminder }) => {
         const completedVisits = mother.ancVisits.filter((v) => v.status === 'completed').length;
         const ifaPercentage = Math.min(100, Math.round((mother.ifaTabletsConsumed / mother.ifaTabletsTarget) * 100));
 
-        const audioSummary = `Pregnant mother ${mother.name}, age ${mother.age}, village ${mother.village}. Gestational age: ${mother.gestationalWeeks} weeks, ${mother.trimester}. Expected delivery date: ${mother.eddDate}. ${mother.highRisk ? 'High risk alert: ' + mother.riskReason : 'Healthy pregnancy progress.'} ${completedVisits} of 4 ANC visits completed.`;
+        const audioSummary = `${mother.name}, ${mother.gestationalWeeks} ${t('weeks', 'weeks')}, ${translateText(mother.trimester)}. ${mother.highRisk ? t('highRiskFlag', 'High Risk') + ': ' + translateText(mother.riskReason) : t('pregnancyProgress', 'Healthy pregnancy progress.')}`;
 
         return (
           <div
@@ -52,12 +45,12 @@ export const PregnancyTracker = ({ onOpenReminder }) => {
                     {mother.highRisk && (
                       <span className="bg-rose-100 text-rose-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-rose-200 flex items-center gap-1 animate-pulse">
                         <ShieldAlert className="w-3 h-3 text-rose-600" />
-                        HIGH RISK PREGNANCY
+                        {t('highRiskFlag', 'HIGH RISK PREGNANCY')}
                       </span>
                     )}
                   </div>
                   <p className="text-xs text-slate-500 font-medium mt-0.5">
-                    Wife of {mother.husbandName} • {mother.village} • {mother.phone}
+                    {t('wifeOf', 'Wife of')} {mother.husbandName} • {mother.village} • {mother.phone}
                   </p>
                 </div>
               </div>
@@ -69,7 +62,7 @@ export const PregnancyTracker = ({ onOpenReminder }) => {
                   className="flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-brand-deep border border-rose-200 px-3.5 py-2 rounded-xl text-xs font-bold transition-colors shadow-xs"
                 >
                   <Send className="w-3.5 h-3.5 text-brand-primary" />
-                  <span>Send Vernacular Reminder</span>
+                  <span>{t('sendReminder', 'Send Vernacular Reminder')}</span>
                 </button>
               </div>
             </div>
@@ -77,28 +70,28 @@ export const PregnancyTracker = ({ onOpenReminder }) => {
             {/* Gestational Age & High Risk Reason */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs">
               <div>
-                <span className="text-slate-500 font-semibold block">Pregnancy Progress</span>
-                <strong className="text-slate-900 text-sm">{mother.gestationalWeeks} Weeks ({mother.trimester})</strong>
-                <span className="text-[10px] text-slate-400 block">EDD: {mother.eddDate}</span>
+                <span className="text-slate-500 font-semibold block">{t('gestationalProgress', 'Pregnancy Progress')}</span>
+                <strong className="text-slate-900 text-sm">{mother.gestationalWeeks} {t('weeks', 'Weeks')} ({translateText(mother.trimester)})</strong>
+                <span className="text-[10px] text-slate-400 block">{t('eddLabel', 'EDD')}: {mother.eddDate}</span>
               </div>
 
               <div>
-                <span className="text-slate-500 font-semibold block">IFA Iron Tablets Tracker</span>
+                <span className="text-slate-500 font-semibold block">{t('ifaTracker', 'IFA Iron Tablets Tracker')}</span>
                 <div className="flex items-center gap-2 mt-1">
                   <div className="flex-1 h-2 rounded-full bg-slate-200 overflow-hidden">
                     <div className="h-full bg-emerald-600 rounded-full" style={{ width: `${ifaPercentage}%` }}></div>
                   </div>
                   <span className="font-bold text-slate-800 text-[11px]">{mother.ifaTabletsConsumed}/{mother.ifaTabletsTarget}</span>
                 </div>
-                <span className="text-[10px] text-emerald-700 font-semibold">Goal: 180 Tablets (Anemia Prevention)</span>
+                <span className="text-[10px] text-emerald-700 font-semibold">{t('ifaGoal', 'Goal: 180 Tablets (Anemia Prevention)')}</span>
               </div>
 
               <div>
-                <span className="text-slate-500 font-semibold block">Clinical Risk Status</span>
+                <span className="text-slate-500 font-semibold block">{t('clinicalRiskStatus', 'Clinical Risk Status')}</span>
                 {mother.highRisk ? (
-                  <strong className="text-rose-700 text-xs block leading-tight">{mother.riskReason}</strong>
+                  <strong className="text-rose-700 text-xs block leading-tight">{translateText(mother.riskReason)}</strong>
                 ) : (
-                  <strong className="text-emerald-700 text-xs block">Normal & Healthy Baseline</strong>
+                  <strong className="text-emerald-700 text-xs block">{t('healthyBaseline', 'Normal & Healthy Baseline')}</strong>
                 )}
               </div>
             </div>
@@ -107,10 +100,10 @@ export const PregnancyTracker = ({ onOpenReminder }) => {
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                  4 Mandatory ANC Prenatal Checkups (National Health Mission):
+                  {t('fourMandatoryAnc', '4 Mandatory ANC Prenatal Checkups (National Health Mission)')}:
                 </span>
                 <span className="text-xs font-bold text-emerald-700">
-                  {completedVisits}/4 Completed
+                  {completedVisits}/4 {t('completed', 'Completed')}
                 </span>
               </div>
 
@@ -130,12 +123,12 @@ export const PregnancyTracker = ({ onOpenReminder }) => {
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1.5">
-                        <span className="font-bold text-xs">{v.visit}</span>
+                        <span className="font-bold text-xs">{translateText(v.visit)}</span>
                         {isDone ? (
                           <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                         ) : isDue ? (
                           <span className="bg-amber-500 text-white text-[9px] font-extrabold px-1.5 py-0.2 rounded-full animate-pulse">
-                            DUE
+                            {t('due', 'DUE')}
                           </span>
                         ) : (
                           <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -143,13 +136,13 @@ export const PregnancyTracker = ({ onOpenReminder }) => {
                       </div>
 
                       <p className="text-[11px] text-slate-600">
-                        Date: <strong>{v.date}</strong>
+                        {t('date', 'Date')}: <strong>{v.date}</strong>
                       </p>
 
                       {isDone && (
                         <div className="mt-2 pt-2 border-t border-emerald-200/60 text-[10px] text-emerald-800 space-y-0.5 font-medium">
-                          <p>Weight: {v.weight} kg • BP: {v.bp}</p>
-                          <p>Hb Level: <strong>{v.hb} g/dL</strong></p>
+                          <p>{t('weight', 'Weight')}: {v.weight} kg • {t('bp', 'BP')}: {v.bp}</p>
+                          <p>{t('hbLevel', 'Hb Level')}: <strong>{v.hb} g/dL</strong></p>
                         </div>
                       )}
                     </div>
@@ -160,7 +153,7 @@ export const PregnancyTracker = ({ onOpenReminder }) => {
 
             {/* Pregnancy Vaccines */}
             <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-100 text-xs">
-              <span className="text-slate-500 font-semibold">Tetanus-Diphtheria (Td) Injections:</span>
+              <span className="text-slate-500 font-semibold">{t('tdInjections', 'Tetanus-Diphtheria (Td) Injections')}:</span>
               {mother.vaccines?.map((vac, vi) => (
                 <span
                   key={vi}
@@ -171,7 +164,7 @@ export const PregnancyTracker = ({ onOpenReminder }) => {
                   }`}
                 >
                   <CheckCircle2 className="w-3 h-3 text-emerald-700" />
-                  {vac.name} ({vac.status})
+                  {vac.name} ({translateText(vac.status)})
                 </span>
               ))}
             </div>

@@ -1,204 +1,270 @@
-// Offline Rule-Based AI Knowledge Base & Decision Trees for Rural Health & First-Aid
+// Offline Rule-Based AI Knowledge Base & Decision Trees for Rural Health & First-Aid across all 7 vernacular languages
 
-export const QUICK_PROMPTS = [
-  { label: '🔥 High Fever & Body Pain', query: 'High fever and severe body pain for 2 days' },
-  { label: '💧 Loose Stool / Diarrhea', query: 'How to make ORS at home for loose motions?' },
-  { label: '🐍 Snakebite Emergency', query: 'Someone got bitten by a snake, what to do?' },
-  { label: '🐕 Dog / Animal Bite', query: 'Dog bit on leg, what immediate first aid?' },
-  { label: '🤰 Pregnancy Danger Signs', query: 'What are the red flag danger signs in pregnancy?' },
-  { label: '👶 Baby Vaccine Schedule', query: 'Which vaccines are given at 14 weeks?' },
-  { label: '📱 How to consult doctor?', query: 'How to log a new case file for doctor consultation?' },
-  { label: '⚠️ Check Village Epidemic Alerts', query: 'Show me village outbreak alerts and water safety' },
-];
+export const getQuickPrompts = (lang = 'en') => {
+  const prompts = {
+    hi: [
+      { label: '🔥 तेज बुखार व बदन दर्द', query: 'तेज बुखार और 2 दिनों से बदन दर्द की समस्या' },
+      { label: '💧 पानी जैसे दस्त / ORS', query: 'दस्त होने पर घर पर ओआरएस घोल कैसे बनाएं?' },
+      { label: '🐍 सांप काटने का आपातकाल', query: 'सांप ने काट लिया है, तुरंत क्या करें?' },
+      { label: '🐕 कुत्ते या जानवर का काटना', query: 'कुत्ते ने पैर पर काटा है, प्राथमिक उपचार क्या है?' },
+      { label: '🤰 गर्भावस्था के खतरे के लक्षण', query: 'गर्भावस्था में कौन से खतरे के लक्षण होते हैं?' },
+      { label: '👶 शिशु टीकाकरण सारणी', query: '14 सप्ताह में शिशु को कौन से टीके लगते हैं?' },
+      { label: '📱 डॉक्टर से परामर्श कैसे लें?', query: 'डॉक्टर जांच हेतु नया केस कैसे दर्ज करें?' },
+      { label: '⚠️ गांव महामारी चेतावनी देखें', query: 'गांव में बीमारी प्रकोप और पानी की सुरक्षा स्थिति देखें' },
+    ],
+    bn: [
+      { label: '🔥 তীব্র জ্বর ও গায়ে ব্যথা', query: '২ দিন ধরে তীব্র জ্বর ও শরীরে ব্যথা' },
+      { label: '💧 পাতলা পায়খানা / ORS', query: 'পাতলা পায়খানা হলে বাড়িতে ওআরএস কীভাবে বানাবো?' },
+      { label: '🐍 সাপে কাটার জরুরি চিকিৎসা', query: 'সাপে কেটেছে, অবিলম্বে কী প্রাথমিক চিকিৎসা দরকার?' },
+      { label: '🐕 কুকুরে কামড়ানোর প্রাথমিক সেবা', query: 'কুকুর কামড়েছে, কী প্রাথমিক চিকিৎসা করতে হবে?' },
+      { label: '🤰 গর্ভাবস্থায় বিপদের লক্ষণ', query: 'গর্ভাবস্থায় বিপদের প্রধান লক্ষণগুলি কী কী?' },
+      { label: '👶 শিশুর টিকাদানের সময়সূচি', query: '১৪ সপ্তাহে শিশুকে কী কী টিকা দেওয়া হয়?' },
+      { label: '📱 ডাক্তারের পরামর্শ কীভাবে নেব?', query: 'ডাক্তারের পরামর্শের জন্য নতুন কেস কীভাবে নথিভুক্ত করব?' },
+      { label: '⚠️ গ্রামের মহামারী সতর্কতা', query: 'গ্রামে পানীয় জলের নিরাপত্তা ও রোগের প্রাদুর্ভাব দেখুন' },
+    ],
+    or: [
+      { label: '🔥 ପ୍ରବଳ ଜ୍ୱର ଓ ଦେହ ବିନ୍ଧା', query: '୨ ଦିନ ଧରି ପ୍ରବଳ ଜ୍ୱର ଓ ଶରୀରରେ ଯନ୍ତ୍ରଣା' },
+      { label: '💧 ପତଳା ଝାଡ଼ା / ORS ଘୋଳ', query: 'ଝାଡ଼ା ହେଲେ ଘରେ ORS ପାଣି କିପରି ତିଆରି କରିବେ?' },
+      { label: '🐍 ସାପ କାମୁଡ଼ା ଜରୁରୀକାଳୀନ', query: 'ସାପ କାମୁଡ଼ିଛି, ତୁରନ୍ତ କ\'ଣ କରିବାକୁ ହେବ?' },
+      { label: '🐕 କୁକୁର କାମୁଡ଼ା ପ୍ରାଥମିକ ସେବା', query: 'କୁକୁର କାମୁଡ଼ିଲେ କି ପ୍ରାଥମିକ ଚିକିତ୍ସା ଦେବେ?' },
+      { label: '🤰 ଗର୍ଭାବସ୍ଥାରେ ବିପଦ ସଙ୍କେତ', query: 'ଗର୍ଭାବସ୍ଥାରେ କେଉଁଗୁଡ଼ିକ ବିପଦର ଲକ୍ଷଣ?' },
+      { label: '👶 ଶିଶୁ ଟିକାକରଣ ତାଲିକା', query: '୧୪ ସପ୍ତାହରେ ଶିଶୁକୁ କେଉଁ ଟିକା ଦିଆଯାଏ?' },
+      { label: '📱 ଡାକ୍ତର ପରାମର୍ଶ କିପରି ନେବେ?', query: 'ଡାକ୍ତରଙ୍କ ପାଇଁ ନୂଆ କେସ୍ କିପରି ଦାଖଲ କରିବେ?' },
+      { label: '⚠️ ଗାଁରେ ମହାମାରୀ ସତର୍କତା', query: 'ଗାଁରେ ଜଳ ସୁରକ୍ଷା ଓ ରୋଗ ସତର୍କତା ଦେଖନ୍ତୁ' },
+    ],
+    te: [
+      { label: '🔥 తీవ్ర జ్వరం & ఒళ్లు నొప్పులు', query: '2 రోజులుగా తీవ్ర జ్వరం మరియు శరీర నొప్పులు' },
+      { label: '💧 విరేచనాలు / ORS ద్రావణం', query: 'విరేచనాలు అయినప్పుడు ఇంట్లో ORS ఎలా తయారు చేయాలి?' },
+      { label: '🐍 పాము కాటు అత్యవసరం', query: 'పాము కాటు వేస్తే వెంటనే చేయాల్సిన ప్రథమ చికిత్స ఏమిటి?' },
+      { label: '🐕 కుక్క కాటు ప్రథమ చికిత్స', query: 'కుక్క కాటు వేసినప్పుడు వెంటనే ఏమి చేయాలి?' },
+      { label: '🤰 గర్భధారణలో ప్రమాదకర లక్షణాలు', query: 'గర్భధారణ సమయంలో ప్రమాద సంకేతాలు ఏమిటి?' },
+      { label: '👶 పిల్లల టీకాల పట్టిక', query: '14 వారాల వయస్సులో పిల్లలకు ఏ టీకాలు వేయాలి?' },
+      { label: '📱 డాక్టర్‌తో ఎలా మాట్లాడాలి?', query: 'డాక్టర్ సలహా కోసం కొత్త కేస్ ఎలా నమోదు చేయాలి?' },
+      { label: '⚠️ గ్రామంలో వ్యాధుల హెచ్చరిక', query: 'గ్రామంలో నీటి భద్రత మరియు వ్యాధుల హెచ్చరికలను చూడండి' },
+    ],
+    ta: [
+      { label: '🔥 கடுமையான காய்ச்சல் & உடல் வலி', query: '2 நாட்களாக கடுமையான காய்ச்சல் மற்றும் உடல் வலி' },
+      { label: '💧 வயிற்றுப்போக்கு / ORS கரைசல்', query: 'வயிற்றுப்போக்கிற்கு வீட்டில் ORS தயாரிப்பது எப்படி?' },
+      { label: '🐍 பாம்பு கடி அவசர முதலுதவி', query: 'பாம்பு கடித்தால் உடனடியாக என்ன செய்ய வேண்டும்?' },
+      { label: '🐕 நாய் கடி முதலுதவி', query: 'நாய் கடித்தால் உடனடியாக செய்ய வேண்டியது என்ன?' },
+      { label: '🤰 கர்ப்பகால ஆபத்து அறிகுறிகள்', query: 'கர்ப்ப காலத்தில் உள்ள ஆபத்தான அறிகுறிகள் யாவை?' },
+      { label: '👶 குழந்தை தடுப்பூசி அட்டவணை', query: '14 வாரத்தில் குழந்தைக்கு என்ன தடுப்பூசி போட வேண்டும்?' },
+      { label: '📱 மருத்துவரை அணுகுவது எப்படி?', query: 'மருத்துவர் ஆலோசனைக்கு புதிய வழக்கை பதிவு செய்வது எப்படி?' },
+      { label: '⚠️ கிராம தொற்றுநோய் எச்சரிக்கை', query: 'கிராமத்தில் நீர் பாதுகாப்பு மற்றும் நோய் எச்சரிக்கை நிலவரம்' },
+    ],
+    mr: [
+      { label: '🔥 तीव्र ताप व अंगदुखी', query: '२ दिवसांपासून तीव्र ताप आणि अंगदुखीची समस्या' },
+      { label: '💧 जुलाब / घरगुती ORS', query: 'जुलाब झाल्यावर घरी ओआरएस द्रावण कसे बनवावे?' },
+      { label: '🐍 सर्पदंश तातडीचे उपचार', query: 'साप चावला आहे, त्वरित काय प्रथमोपचार करावेत?' },
+      { label: '🐕 कुत्रा चावल्यावर प्रथमोपचार', query: 'कुत्रा चावल्यावर लगेच कोणती काळजी घ्यावी?' },
+      { label: '🤰 गरोदरपणातील धोक्याची लक्षणे', query: 'गरोदरपणात कोणती लक्षणे दिसल्यास तातडीने डॉक्टरकडे जावे?' },
+      { label: '👶 बाल लसीकरण वेळापत्रक', query: '१४ आठवड्यांच्या बाळाला कोणत्या लसी दिल्या जातात?' },
+      { label: '📱 डॉक्टर सल्ला कसा घ्यावा?', query: 'डॉक्टरांच्या सल्ल्यासाठी नवीन केस कशी नोंदवावी?' },
+      { label: '⚠️ गावातील साथरोग इशारा', query: 'गावातील पाण्याचे नमुने व रोगाची परिस्थिती तपासा' },
+    ],
+    en: [
+      { label: '🔥 High Fever & Body Pain', query: 'High fever and severe body pain for 2 days' },
+      { label: '💧 Loose Stool / Diarrhea', query: 'How to make ORS at home for loose motions?' },
+      { label: '🐍 Snakebite Emergency', query: 'Someone got bitten by a snake, what to do?' },
+      { label: '🐕 Dog / Animal Bite', query: 'Dog bit on leg, what immediate first aid?' },
+      { label: '🤰 Pregnancy Danger Signs', query: 'What are the red flag danger signs in pregnancy?' },
+      { label: '👶 Baby Vaccine Schedule', query: 'Which vaccines are given at 14 weeks?' },
+      { label: '📱 How to consult doctor?', query: 'How to log a new case file for doctor consultation?' },
+      { label: '⚠️ Check Village Epidemic Alerts', query: 'Show me village outbreak alerts and water safety' },
+    ]
+  };
+
+  return prompts[lang] || prompts.en;
+};
+
+export const QUICK_PROMPTS = getQuickPrompts('en');
 
 export const INTENTS = [
   {
     id: 'snakebite',
-    keywords: ['snake', 'snakebite', 'saap', 'bite', 'dansa', 'serpent'],
-    title: '🚨 Snakebite Emergency First-Aid Protocol (DOs and DONTs)',
-    severity: 'EMERGENCY - Call 108 immediately',
-    content: `**CRITICAL FIRST-AID FOR SNAKEBITE:**
-
-✅ **DO IMMEDIATELY:**
-1. **Keep patient calm & completely still** — movement spreads venom faster through lymph nodes.
-2. **Immobilize the bitten limb** with a splint or stick (like a fractured bone) at or slightly below heart level.
-3. Remove tight rings, bangles, anklets, and shoes before swelling starts.
-4. Rush immediately to nearest Primary Health Centre (PHC) / Sub-District Hospital with Anti-Snake Venom (ASV).
-
-❌ **DO NOT DO (STRICTLY FORBIDDEN):**
-- ❌ Do NOT cut the wound or try to suck out venom.
-- ❌ Do NOT tie a tight tourniquet (rope/cloth) that cuts arterial blood flow — it causes gangrene & amputation!
-- ❌ Do NOT apply ice, herbs, cow dung, or electrical shocks.
-- ❌ Do NOT waste time visiting faith healers or quacks.
-
-📞 **Call 108 Ambulance right away.**`,
+    keywords: ['snake', 'snakebite', 'saap', 'bite', 'dansa', 'serpent', 'सांप', 'সাপ', 'ସାପ', 'పాము', 'பாம்பு'],
+    titles: {
+      en: '🚨 Snakebite Emergency First-Aid Protocol (DOs and DONTs)',
+      hi: '🚨 सांप काटने का आपातकालीन प्राथमिक उपचार प्रोटोकॉल',
+      bn: '🚨 সাপে কাটার জরুরি প্রাথমিক চিকিৎসা নির্দেশিকা',
+      or: '🚨 ସାପ କାମୁଡ଼ା ଜରୁରୀକାଳୀନ ପ୍ରାଥମିକ ଚିକିତ୍ସା ନିୟମ',
+      te: '🚨 పాము కాటు అత్యవసర ప్రథమ చికిత్స మార్గదర్శకాలు',
+      ta: '🚨 பாம்பு கடி அவசர முதலுதவி நெறிமுறைகள்',
+      mr: '🚨 सर्पदंश आपत्कालीन प्रथमोपचार नियमावली'
+    },
+    severities: {
+      en: 'EMERGENCY - Call 108 immediately',
+      hi: 'आपातकाल - तुरंत 108 पर कॉल करें',
+      bn: 'জরুরি অবস্থা - অবিলম্বে ১০৮ নম্বরে কল করুন',
+      or: 'ଜରୁରୀକାଳୀନ - ତୁରନ୍ତ ୧୦୮ କଲ୍ କରନ୍ତୁ',
+      te: 'అత్యవసరం - వెంటనే 108 కు కాల్ చేయండి',
+      ta: 'அவசரம் - உடனடியாக 108 ஐ அழைக்கவும்',
+      mr: 'आणीबाणी - तात्काळ १०८ वर कॉल करा'
+    },
+    content: {
+      en: `**CRITICAL FIRST-AID FOR SNAKEBITE:**\n\n✅ **DO IMMEDIATELY:**\n1. **Keep patient calm & completely still** — movement spreads venom faster.\n2. **Immobilize the bitten limb** with a splint at or below heart level.\n3. Remove rings, bangles, and shoes before swelling starts.\n4. Rush immediately to nearest PHC / Sub-District Hospital with Anti-Snake Venom (ASV).\n\n❌ **DO NOT DO:**\n- ❌ Do NOT cut the wound or try to suck venom.\n- ❌ Do NOT tie a tight tourniquet that cuts blood flow.\n- ❌ Do NOT apply ice, herbs, cow dung, or electric shocks.\n\n📞 **Call 108 Ambulance right away.**`,
+      hi: `**सांप काटने पर जीवन रक्षक प्राथमिक उपचार:**\n\n✅ **तुरंत क्या करें:**\n1. **मरीज को शांत और पूरी तरह स्थिर रखें** — हिलने-डुलने से जहर शरीर में तेजी से फैलता है।\n2. **काटे गए अंग को स्थिर करें** (जैसे टूटी हड्डी पर लकड़ी बांधी जाती है)।\n3. सूजन आने से पहले अंगूठी, चूड़ी, पायल और जूते तुरंत उतार दें।\n4. मरीज को तुरंत नजदीकी प्राथमिक स्वास्थ्य केंद्र (PHC) या अस्पताल ले जाएं जहां एंटी-स्नेक वेनम (ASV) उपलब्ध हो।\n\n❌ **क्या कतई न करें (सख्त मना):**\n- ❌ घाव पर चीरा न लगाएं और मुंह से जहर चूसने की कोशिश न करें।\n- ❌ बहुत कसकर रस्सी या पट्टी न बांधें — इससे खून का दौरा रुककर अंग काटना पड़ सकता है।\n- ❌ गोबर, चूना, जड़ी-बूटी या बर्फ न लगाएं।\n- ❌ झाड़-फूंक या तांत्रिक के चक्कर में कीमती समय बर्बाद न करें।\n\n📞 **तुरंत 108 एम्बुलेंस बुलाएं।**`,
+      bn: `**সাপে কাটার ক্ষেত্রে জীবনদায়ী জরুরি প্রাথমিক চিকিৎসা:**\n\n✅ **অবিলম্বে কী করবেন:**\n১. **রোগীকে শান্ত ও সম্পূর্ণ স্থির রাখুন** — নড়াচড়া করলে বিষ দ্রুত ছড়ায়।\n২. **কাটা অঙ্গটি কাঠের বাটি বা কাঠি দিয়ে শক্ত করে স্থির রাখুন**।\n৩. ফোলা শুরু হওয়ার আগেই আংটি, চুড়ি ও জুতো খুলে ফেলুন।\n৪. দ্রুত নিকটবর্তী হাসপাতালে নিয়ে যান যেখানে অ্যান্টি-ভেনম (ASV) আছে।\n\n❌ **কখনই যা করবেন না:**\n- ❌ ক্ষতস্থানে কোনো কাটাকাটি বা মুখ দিয়ে বিষ চোষার চেষ্টা করবেন না।\n- ❌ শক্ত করে দড়ি বা বাঁধন দেবেন না, এতে অঙ্গহানি হতে পারে।\n- ❌ গোবর, চুন বা গাছগাছড়া লাগাবেন না। ওঝার কাছে গিয়ে সময় নষ্ট করবেন না।\n\n📞 **অবিলম্বে ১০৮ নম্বরে অ্যাম্বুলেন্স ডাকুন।**`,
+      or: `**ସାପ କାମୁଡ଼ା ସମୟରେ ଜୀବନରକ୍ଷାକାରୀ ପ୍ରାଥମିକ ଚିକିତ୍ସା:**\n\n✅ **ତୁରନ୍ତ କ\'ଣ କରିବେ:**\n୧. **ରୋଗୀଙ୍କୁ ଶାନ୍ତ ଓ ସ୍ଥିର ରଖନ୍ତୁ** — ହଲଚଲ ହେଲେ ବିଷ ଶୀଘ୍ର ବ୍ୟାପିଥାଏ।\n୨. **କାମୁଡ଼ିଥିବା ଅଙ୍ଗକୁ ବାଉଁଶ କିମ୍ବା ବାଡ଼ି ସାହାଯ୍ୟରେ ସ୍ଥିର ରଖନ୍ତୁ**।\n୩. ମୁଦି, ଚୁଡ଼ି ଓ ଜୋତା ତୁରନ୍ତ ଖୋଲି ଦିଅନ୍ତୁ।\n୪. ଶୀଘ୍ର ନିକଟସ୍ଥ ସରକାରୀ ଡାକ୍ତରଖାନାକୁ ନିଅନ୍ତୁ ଯେଉଁଠି Anti-Snake Venom (ASV) ଉପଲବ୍ଧ ଅଛି।\n\n❌ **ଭୁଲରେ ବି କରନ୍ତୁ ନାହିଁ:**\n- ❌ କ୍ଷତ ସ୍ଥାନକୁ କାଟନ୍ତୁ ନାହିଁ କିମ୍ବା ବିଷ ଶୋଷିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ ନାହିଁ।\n- ❌ କଠିନ କରି ଦଉଡ଼ି ବାନ୍ଧନ୍ତୁ ନାହିଁ।\n- ❌ ଗୁଣିଆ ବା ଝଡ଼ାଫୁଙ୍କା ପଛରେ ସମୟ ନଷ୍ଟ କରନ୍ତୁ ନାହିଁ।\n\n📞 **ତୁରନ୍ତ ୧୦୮ ଆମ୍ବୁଲାନ୍ସ ଡାକନ୍ତୁ।**`,
+      te: `**పాము కాటు వేసినప్పుడు అత్యవసర ప్రథమ చికిత్స:**\n\n✅ **వెంటనే చేయవలసినవి:**\n1. **రోగిని కదలకుండా ప్రశాంతంగా ఉంచండి** — కదలడం వల్ల విషం త్వరగా వ్యాపిస్తుంది.\n2. **కాటు వేసిన భాగాన్ని కదలకుండా కట్టు కట్టండి**.\n3. ఉంగరాలు, గాజులు, బూట్లను వెంటనే తొలగించండి.\n4. యాంటీ-స్నేక్ వెనమ్ (ASV) అందుబాటులో ఉన్న సమీప ప్రభుత్వ ఆసుపత్రికి తరలించండి.\n\n❌ **ఎట్టి పరిస్థితుల్లో చేయకూడనివి:**\n- ❌ గాయాన్ని బ్లేడుతో కోయడం లేదా నోటితో విషాన్ని పీల్చడం చేయవద్దు.\n- ❌ రక్త ప్రసరణ ఆగిపోయేలా గట్టిగా తాడు కట్టవద్దు.\n- ❌ నాటు వైద్యం లేదా మంత్రాల పేరుతో సమయాన్ని వృథా చేయవద్దు.\n\n📞 **వెంటనే 108 అంబులెన్స్‌కు కాల్ చేయండి.**`,
+      ta: `**பாம்பு கடித்தால் செய்ய வேண்டிய அவசர முதலுதவி:**\n\n✅ **உடனடியாக செய்ய வேண்டியவை:**\n1. **நோயாளியை பதற்றமின்றி அசையாமல் படுக்க வைக்கவும்** — அசைந்தால் விஷம் வேகமாக பரவும்.\n2. **கடித்த பகுதியை மரக்கட்டை வைத்து அசையாமல் கட்டவும்**.\n3. வீக்கம் தொடங்கும் முன் மோதிரம், வளையல், காலணிகளை கழற்றிவிடவும்.\n4. விஷமுறிவு மருந்து (ASV) உள்ள அரசு மருத்துவமனைக்கு உடனே கொண்டு செல்லவும்.\n\n❌ **செய்யக்கூடாதவை:**\n- ❌ காயத்தை கீறவோ அல்லது வாயால் விஷத்தை உறிஞ்சவோ கூடாது.\n- ❌ ரத்த ஓட்டம் தடைபடும் வகையில் இறுக்கமாக கயிறு கட்டக்கூடாது.\n- ❌ நாட்டு வைத்தியம் அல்லது மந்திரம் போட்டு நேரத்தை வீணடிக்காதீர்கள்.\n\n📞 **உடனடியாக 108 ஆம்புலன்ஸை அழைக்கவும்.**`,
+      mr: `**सर्पदंश झाल्यावर तातडीने करावयाचे प्रथमोपचार:**\n\n✅ **लगेच काय करावे:**\n१. **रुग्णाला शांत व स्थिर ठेवा** — हालचालीमुळे विष शरीरात वेगाने पसरते.\n२. **चावलेला अवयव लाकडी पट्टीच्या साहाय्याने स्थिर करा**.\n३. सूज येण्यापूर्वी अंगठी, बांगड्या, चप्पल काढून ठेवा.\n४. ॲन्टी-स्नेक व्हेनम (ASV) उपलब्ध असलेल्या जवळच्या सरकारी रुग्णालयात त्वरित न्या.\n\n❌ **काय करू नये:**\n- ❌ जखमेवर काप मारू नका किंवा तोंडाने विष चोखण्याचा प्रयत्न करू नका.\n- ❌ अति घट्ट दोरी बांधू नका, यामुळे अवयव निकामी होऊ शकतो.\n- ❌ मांत्रिक किंवा भोंदूबाबाच्या नादी लागून वेळ वाया घालवू नका.\n\n📞 **त्वरित १०८ रुग्णवाहिका बोलवा.**`
+    },
     action: {
-      label: '🚑 Emergency Dial 108',
+      label: { en: '🚑 Emergency Dial 108', hi: '🚑 तुरंत 108 पर कॉल करें', bn: '🚑 ১০৮ নম্বরে কল করুন', or: '🚑 ୧୦୮ କଲ୍ କରନ୍ତୁ', te: '🚑 108 కు కాల్ చేయండి', ta: '🚑 108 ஐ அழைக்கவும்', mr: '🚑 १०८ वर कॉल करा' },
       type: 'call',
       value: '108'
     }
   },
   {
     id: 'diarrhea_ors',
-    keywords: ['diarrhea', 'loose motion', 'dast', 'ors', 'watery stool', 'dehydration', 'pet kharab', 'vomiting', 'jhada'],
-    title: '💧 Acute Diarrhea & Homemade Life-Saving ORS Recipe',
-    severity: 'Urgent Care - Prevent Dehydration',
-    content: `**HOW TO PREVENT DANGEROUS DEHYDRATION:**
-
-1. **Standard Govt ORS Sachet:**
-   - Dissolve entire 1 sachet (20.5g) in **1 Liter clean boiled & cooled water**.
-   - Drink small sips after every loose stool. Use within 24 hours.
-
-2. **Homemade Sugar-Salt Solution (If ORS not available):**
-   - Take **1 Liter clean boiled water**.
-   - Add **6 level teaspoons sugar** (Chini) + **1/2 level teaspoon salt** (Namak).
-   - Stir until dissolved. Taste should be no saltier than tears!
-
-3. **Zinc Supplementation:**
-   - 20mg Zinc tablet daily for 14 days for children >6 months (10mg for <6 months) to rebuild intestinal lining.
-
-⚠️ **Danger Signs requiring immediate PHC visit:**
-- Sunken eyes, skin pinch goes back very slowly (>2 seconds), extreme drowsiness, blood in stool, or inability to drink.`,
+    keywords: ['diarrhea', 'loose motion', 'dast', 'ors', 'watery stool', 'dehydration', 'pet kharab', 'vomiting', 'jhada', 'दस्त', 'পায়খানা', 'ଝାଡ଼ା', 'విరేచనాలు', 'வயிற்றுப்போக்கு', 'जुलाब'],
+    titles: {
+      en: '💧 Acute Diarrhea & Homemade Life-Saving ORS Recipe',
+      hi: '💧 पानी जैसे दस्त व घर पर जीवनरक्षक ORS घोल बनाने की विधि',
+      bn: '💧 তীব্র পাতলা পায়খানা ও ঘরোয়া ওআরএস প্রস্তুত প্রণালী',
+      or: '💧 ତୀବ୍ର ଝାଡ଼ା ଓ ଘରୋଇ ଜୀବନରକ୍ଷାକାରୀ ORS ପ୍ରସ୍ତୁତି ପ୍ରଣାଳୀ',
+      te: '💧 విరేచనాలు & ఇంట్లో జీవరక్షక ORS ద్రావణం తయారీ విధానం',
+      ta: '💧 கடுமையான வயிற்றுப்போக்கு & வீட்டிலேயே ORS தயாரிக்கும் முறை',
+      mr: '💧 तीव्र जुलाब व घरगुती जीवनरक्षक ORS द्रावण बनवण्याची पद्धत'
+    },
+    severities: {
+      en: 'Urgent Care - Prevent Dehydration',
+      hi: 'अति-आवश्यक - निर्जलीकरण (पानी की कमी) से बचाव करें',
+      bn: 'জরুরি যত্ন - জলশূন্যতা রোধ করুন',
+      or: 'ଅତ୍ୟାବଶ୍ୟକ - ଶରୀରରେ ଜଳୀୟଅଂଶ ହ୍ରାସ ରୋକନ୍ତୁ',
+      te: 'ముఖ్యమైనది - డీహైడ్రేషన్ రాకుండా చూసుకోండి',
+      ta: 'முக்கியமானது - நீர்ச்சத்து இழப்பை தடுக்கவும்',
+      mr: 'तातडीची काळजी - शरीरातील पाण्याचे प्रमाण टिकवा'
+    },
+    content: {
+      en: `**HOW TO PREVENT DANGEROUS DEHYDRATION:**\n\n1. **Standard Govt ORS Sachet:**\n   - Dissolve 1 sachet in **1 Liter clean boiled & cooled water**.\n   - Drink small sips after every loose stool. Use within 24 hours.\n\n2. **Homemade Sugar-Salt Solution (If ORS not available):**\n   - 1 Liter clean boiled water + **6 level teaspoons sugar** + **1/2 teaspoon salt**.\n\n3. **Zinc Supplementation:**\n   - 20mg Zinc tablet daily for 14 days for children >6 months to rebuild gut lining.\n\n⚠️ **Danger Signs:** Sunken eyes, skin pinch test >2 sec, extreme drowsiness -> Rush to PHC.`,
+      hi: `**दस्त में पानी की कमी (डिहाइड्रेशन) से बचाव के उपाय:**\n\n1. **सरकारी ओआरएस (ORS) पैकेट:**\n   - 1 पूरा पैकेट **1 लीटर उबले और ठंडे किए गए साफ पानी** में घोलें।\n   - हर दस्त के बाद थोड़ा-थोड़ा पिएं। इसे 24 घंटे में समाप्त करें।\n\n2. **घर पर चीनी-नमक का घोल (यदि ओआरएस न हो):**\n   - **1 लीटर साफ उबला पानी** लें।\n   - **6 चम्मच चीनी** + **आधा चम्मच नमक** मिलाएं और अच्छी तरह घोलें।\n\n3. **जिंक (Zinc) की गोली:**\n   - 6 माह से बड़े बच्चों को 20mg जिंक की गोली रोजाना 14 दिनों तक दें ताकि आंतें स्वस्थ रहें।\n\n⚠️ **खतरे के लक्षण:** धंसी हुई आंखें, त्वचा में खिंचाव न जाना, अत्यधिक बेहोशी -> तुरंत अस्पताल ले जाएं।`,
+      bn: `**মারাত্মক জলশূন্যতা প্রতিরোধের নিয়মাবলী:**\n\n১. **সরকারি ওআরএস (ORS) প্যাকেট:**\n   - ১টি পুরো প্যাকেট **১ লিটার পরিষ্কার ফুটানো ঠান্ডা জলে** গুলিয়ে নিন।\n   - প্রতিবার পাতলা পায়খানার পর অল্প অল্প করে পান করুন। ২৪ ঘণ্টার মধ্যে ব্যবহার করুন।\n\n২. **ঘরোয়া নুন-চিনির জল (ওআরএস না থাকলে):**\n   - **১ লিটার ফুটানো জল** + **৬ চামচ চিনি** + **আধ চামচ নুন** ভালো করে মেশান।\n\n৩. **জিঙ্ক ট্যাবলেট:**\n   - ৬ মাসের বেশি বয়সের শিশুদের ১৪ দিন নিয়মিত জিঙ্ক ট্যাবলেট দিন।`,
+      or: `**ଶରୀରରେ ଜଳୀୟ ଅଂଶ କମିବା ରୋକିବା ପାଇଁ ଉପାୟ:**\n\n୧. **ସରକାରୀ ORS ପ୍ୟାକେଟ୍:**\n   - ଗୋଟିଏ ପ୍ୟାକେଟ୍ କୁ **୧ ଲିଟର ଫୁଟା ଥଣ୍ଡା ପାଣିରେ** ଭଲଭାବେ ଗୋଳାନ୍ତୁ।\n   - ପ୍ରତିଥର ଝାଡ଼ା ହେବା ପରେ ପିଆନ୍ତୁ।\n\n୨. **ଘରୋଇ ଲୁଣ-ଚିନି ପାଣି (ଯଦି ORS ନାହିଁ):**\n   - **୧ ଲିଟର ଫୁଟା ପାଣି** + **୬ ଚାମଚ ଚିନି** + **ଅଧା ଚାମଚ ଲୁଣ** ମିଶାନ୍ତୁ।\n\n୩. **ଜିଙ୍କ୍ (Zinc) ବଟିକା:**\n   - ପିଲାମାନଙ୍କୁ ୧୪ ଦିନ ପାଇଁ ନିୟମିତ ଜିଙ୍କ୍ ବଟିକା ଦିଅନ୍ତୁ।`,
+      te: `**డీహైడ్రేషన్ బారిన పడకుండా ఉండటానికి సూచనలు:**\n\n1. **ప్రభుత్వ ORS ప్యాకెట్:**\n   - 1 ప్యాకెట్‌ను **1 లీటర్ కాచి చల్లార్చిన నీటిలో** కలపండి.\n   - ప్రతిసారి విరేచనం అయిన తర్వాత కొద్దికొద్దిగా తాగించండి.\n\n2. **ఇంట్లో తయారుచేసే ఉప్పు-చక్కెర ద్రావణం:**\n   - **1 లీటర్ కాచిన నీరు** + **6 చెంచాల చక్కెర** + **అర చెంచా ఉప్పు** కలపండి.\n\n3. **జింక్ మాత్రలు:**\n   - 6 నెలల పైబడిన పిల్లలకు 14 రోజుల పాటు రోజూ జింక్ మాత్ర ఇవ్వండి.`,
+      ta: `**உடல் நீர்ச்சத்து இழப்பை தடுக்கும் வழிகள்:**\n\n1. **அரசு ORS பாக்கெட்:**\n   - 1 பாக்கெட்டை **1 லிட்டர் காய்ச்சி ஆறவைத்த நீரில்** கலக்கவும்.\n   - ஒவ்வொரு முறை வயிற்றுப்போக்கிற்குப் பிறகும் சிறிது சிறிதாக குடிக்கவும்.\n\n2. **வீட்டு உப்பு-சர்க்கரை கரைசல்:**\n   - **1 லிட்டர் காய்ச்சிய நீர்** + **6 தேக்கரண்டி சர்க்கரை** + **அரை தேக்கரண்டி உப்பு** சேர்க்கவும்.\n\n3. **ஜிங்க் மாத்திரை:**\n   - குழந்தைகளுக்கு 14 நாட்களுக்கு தொடர்ந்து ஜிங்க் மாத்திரை கொடுக்கவும்.`,
+      mr: `**जुलाबात होणारा डिहायड्रेशनचा धोका टाळण्यासाठी उपाय:**\n\n१. **सरकारी ओआरएस (ORS) पाकीट:**\n   - १ पाकीट **१ लिटर उकळून थंड केलेल्या पाण्यात** विरघळवा.\n   - प्रत्येक जुलाबानंतर थोडे थोडे पाजा. २४ तासांत संपवा.\n\n२. **घरी बनवलेले मीठ-साखरेचे पाणी:**\n   - **१ लिटर उकळलेले पाणी** + **६ चमचे साखर** + **अर्धा चमचा मीठ** एकत्र करा.\n\n३. **झिंकची गोळी:**\n   - ६ महिन्यांपेक्षा मोठ्या बालकांना १४ दिवस झिंकची गोळी द्यावी.`
+    },
     action: {
-      label: '📝 Log Case for Doctor Review',
+      label: { en: '📝 Log Case for Doctor Review', hi: '📝 डॉक्टर जांच हेतु केस दर्ज करें', bn: '📝 ডাক্তারের কাছে পাঠান', or: '📝 ଡାକ୍ତରଙ୍କ ପାଇଁ କେସ୍ ଦାଖଲ କରନ୍ତୁ', te: '📝 డాక్టర్ సమీక్షకు పంపండి', ta: '📝 மருத்துவருக்கு அனுப்பவும்', mr: '📝 डॉक्टरांकडे केस नोंदवा' },
       type: 'navigate',
       value: 'teleconsult_new'
     }
   },
   {
     id: 'fever_chills',
-    keywords: ['fever', 'bukhar', 'jwar', 'tapa', 'high temperature', 'chills', 'thand', 'body pain', 'joint pain'],
-    title: '🔥 High Fever & Vector-Borne Screening Advice',
-    severity: 'Moderate to High Attention',
-    content: `**FEVER MANAGEMENT & CARE INSTRUCTIONS:**
-
-1. **Immediate Comfort:**
-   - **Tepid water sponging** on forehead, neck, and armpits (use normal tap/lukewarm water, never ice water).
-   - Keep patient in a well-ventilated room wearing light cotton clothes.
-   - Paracetamol 500mg/650mg for adults (or age-appropriate pediatric syrup for children) every 6-8 hours after food.
-
-2. **Hydration & Fluids:**
-   - Drink plenty of clean boiled water, coconut water, lemon water, and thin dal/kanji to prevent dehydration.
-
-3. **When to Suspect Outbreak / Dengue / Malaria:**
-   - High fever with severe joint/bone pain ("breakbone") or red rashes -> Suspect Dengue/Chikungunya.
-   - Shivering chills every alternate day -> Suspect Malaria.
-   - Check our **Epidemic Radar** to see if your village has an active fever cluster!`,
+    keywords: ['fever', 'bukhar', 'jwar', 'tapa', 'high temperature', 'chills', 'thand', 'body pain', 'joint pain', 'बुखार', 'জ্বর', 'ଜ୍ୱର', 'జ్వరం', 'காய்ச்சல்', 'ताप'],
+    titles: {
+      en: '🔥 High Fever & Vector-Borne Screening Advice',
+      hi: '🔥 तेज बुखार, डेंगू व मलेरिया प्रबंधन सलाह',
+      bn: '🔥 তীব্র জ্বর, ডেঙ্গু ও ম্যালেরিয়া সংক্রান্ত পরামর্শ',
+      or: '🔥 ପ୍ରବଳ ଜ୍ୱର ଓ ଡେଙ୍ଗୁ-ମ୍ୟାଲେରିଆ ସତର୍କତା',
+      te: '🔥 తీవ్ర జ్వరం, డెంగ్యూ & మలేరియా జాగ్రత్తలు',
+      ta: '🔥 கடுமையான காய்ச்சல் & டெங்கு-மலேரியா ஆலோசனை',
+      mr: '🔥 तीव्र ताप, डेंग्यू व हिवताप व्यवस्थापन सल्ला'
+    },
+    severities: {
+      en: 'Moderate to High Attention',
+      hi: 'मध्यम से उच्च निगरानी',
+      bn: 'বিশেষ সতর্কতা প্রয়োজন',
+      or: 'ସତର୍କତା ଆବଶ୍ୟକ',
+      te: 'శ్రద్ధ వహించండి',
+      ta: 'கவனிக்க வேண்டிய நிலை',
+      mr: 'तातडीचे लक्ष आवश्यक'
+    },
+    content: {
+      en: `**FEVER MANAGEMENT INSTRUCTIONS:**\n\n1. **Tepid Sponging:** Use normal tap/lukewarm water cloth on forehead, neck, and armpits.\n2. **Hydration:** Drink boiled water, coconut water, thin dal.\n3. **Paracetamol:** Take appropriate dosage after food every 6-8 hours.\n4. **Outbreak Warning:** If multiple people in your village have fever/joint pain, check the Epidemic Radar!`,
+      hi: `**बुखार प्रबंधन व देखभाल के निर्देश:**\n\n1. **पानी की पट्टी रखें:** माथे, गर्दन और बगलों पर ताजे या गुनगुने पानी की पट्टी रखें (बर्फ का पानी कभी न लगाएं)।\n2. **तरल पदार्थ दें:** उबला पानी, नारियल पानी, नींबू पानी और पतली दाल भरपूर मात्रा में दें।\n3. **पैरासिटामोल:** डॉक्टर या आशा कार्यकर्ता की सलाह से भोजन के बाद दें।\n4. **महामारी जांच:** यदि गांव में कई लोगों को तेज बुखार या जोड़ों का दर्द है, तो महामारी राडार देखें!`,
+      bn: `**জ্বরের সময় প্রয়োজনীয় পরিচর্যা:**\n\n১. কপালে ও গলায় সাধারণ জলের জলপট্টি দিন।\n২. প্রচুর পরিমাণে জল, ডাবের জল ও পাতলা স্যুপ পান করান।\n৩. খাওয়ার পর প্যারাসিটামল দিন।\n৪. গ্রামে একাধিক মানুষের জ্বর হলে মহামারী রাডার পরীক্ষা করুন।`,
+      or: `**ଜ୍ୱର ସମୟରେ ଯତ୍ନ ଓ ଚିକିତ୍ସା:**\n\n୧. କପାଳ ଓ ବେକରେ ସାଧାରଣ ପାଣି ପଟି ପକାନ୍ତୁ।\n୨. ପ୍ରଚୁର ପରିମାଣରେ ଫୁଟା ପାଣି ଓ ପଇଡ଼ ପାଣି ପିଅନ୍ତୁ।\n୩. ଖାଇବା ପରେ ପାରାସିଟାମଲ୍ ବଟିକା ନିଅନ୍ତୁ।`,
+      te: `**జ్వరం వచ్చినప్పుడు తీసుకోవలసిన జాగ్రత్తలు:**\n\n1. నుదురు మరియు మెడపై సాధారణ నీటితో తడి గుడ్డ వేయండి.\n2. కాచి చల్లార్చిన నీరు, కొబ్బరి నీళ్లు ఎక్కువగా తాగించండి.\n3. భోజనం తర్వాత పారాసిటమాల్ వేసుకోండి.`,
+      ta: `**காய்ச்சலின் போது செய்ய வேண்டியவை:**\n\n1. நெற்றியில் சாதாரண நீர் கொண்டு ஒத்தடம் கொடுக்கவும்.\n2. காய்ச்சிய நீர், இளநீர் அதிகமாக குடிக்கவும்.\n3. உணவுக்குப் பின் பாராசிட்டமால் மாத்திரை எடுத்துக் கொள்ளவும்.`,
+      mr: `**तापाच्या वेळी घ्यावयाची काळजी:**\n\n१. कपाळावर व मानेवर कोमट पाण्याच्या पट्ट्या ठेवा.\n२. भरपूर उकळलेले पाणी, नारळ पाणी व पातळ सूप प्या.\n३. जेवणानंतर पॅरासिटामॉल गोळी घ्या.`
+    },
     action: {
-      label: '📡 View Village Outbreak Radar',
+      label: { en: '📡 View Village Outbreak Radar', hi: '📡 गांव महामारी राडार देखें', bn: '📡 মহামারী রাডার দেখুন', or: '📡 ମହାମାରୀ ରାଡାର୍ ଦେଖନ୍ତୁ', te: '📡 రాడార్ చూడండి', ta: '📡 ரேடாரை காண்க', mr: '📡 साथरोग रडार पहा' },
       type: 'navigate',
       value: 'epidemic'
-    }
-  },
-  {
-    id: 'dog_bite',
-    keywords: ['dog', 'kutta', 'bite', 'rabies', 'animal bite', 'cat bite', 'monkey'],
-    title: '🐕 Animal / Dog Bite Rabies Prevention Protocol',
-    severity: 'URGENT - Rabies is 100% Fatal but 100% Preventable',
-    content: `**IMMEDIATE 15-MINUTE FIRST AID:**
-
-1. **Wash thoroughly with running tap water and soap for AT LEAST 15 MINUTES.**
-   - Soap actively dissolves the lipid envelope of the rabies virus!
-2. Apply antiseptic (Povidone Iodine or Betadine) if available.
-3. ❌ **NEVER apply red chilli powder, lime, turmeric, or oil to the wound.**
-4. ❌ Do NOT stitch the wound immediately.
-
-**VACCINATION SCHEDULE (At PHC/District Hospital):**
-- Receive Anti-Rabies Vaccine (ARV) on **Day 0 (today), Day 3, Day 7, and Day 28**.
-- For deep bleeding bites (Category III), Rabies Immunoglobulin (RIG) is mandatory!`,
-    action: {
-      label: '📍 Find Nearest PHC / Call 104',
-      type: 'call',
-      value: '104'
     }
   },
   {
     id: 'pregnancy_danger',
-    keywords: ['pregnant', 'pregnancy', 'garbhavastha', 'garbh', 'danger signs', 'bleeding', 'swelling', 'anc', 'trimester'],
-    title: '🤰 High-Risk Pregnancy Alarm Signs (Janani Suraksha)',
-    severity: 'High Priority Maternal Care',
-    content: `**CRITICAL PREGNANCY ALARM SIGNS:**
-
-If an expectant mother experiences ANY of these, do not wait — go to the nearest First Referral Unit (FRU) or Hospital:
-- 🔴 **Vaginal Bleeding** or sudden fluid leakage at any stage.
-- 🔴 **Severe headache with blurred vision** or epigastric pain (signs of severe pre-eclampsia/high BP).
-- 🔴 **Sudden extreme swelling** of face, hands, and feet.
-- 🔴 **High fever with foul-smelling vaginal discharge**.
-- 🔴 **Decreased or absent fetal movements** (<10 kicks in 12 hours during 3rd trimester).
-- 🔴 **Convulsions / Fits**.
-
-✅ **Every mother needs at least 4 ANC visits, 180 IFA tablets, and 2 Td vaccine injections!**`,
+    keywords: ['pregnant', 'pregnancy', 'garbhavastha', 'garbh', 'danger signs', 'bleeding', 'swelling', 'anc', 'trimester', 'गर्भावस्था', 'গর্ভাবস্থা', 'ଗର୍ଭ', 'గర్భధారణ', 'கர்ப்பம்', 'गरोदर'],
+    titles: {
+      en: '🤰 High-Risk Pregnancy Alarm Signs (Janani Suraksha)',
+      hi: '🤰 गर्भावस्था के गंभीर खतरे के लक्षण (जननी सुरक्षा)',
+      bn: '🤰 গর্ভাবস্থায় বিপদের সংকেত ও সতর্কতা',
+      or: '🤰 ଗର୍ଭାବସ୍ଥାରେ ବିପଦପୂର୍ଣ୍ଣ ଲକ୍ଷଣ (ଜନନୀ ସୁରକ୍ଷା)',
+      te: '🤰 గర్భధారణలో ప్రమాదకర లక్షణాలు (జనని సురక్ష)',
+      ta: '🤰 கர்ப்பகால ஆபத்தான அறிகுறிகள் (ஜனனி சுரக்ஷா)',
+      mr: '🤰 गरोदरपणातील धोक्याची लक्षणे (जननी सुरक्षा)'
+    },
+    severities: {
+      en: 'High Priority Maternal Care',
+      hi: 'उच्च प्राथमिकता मातृ स्वास्थ्य',
+      bn: 'বিশেষ অগ্রাধিকার মাতৃসেবা',
+      or: 'ଅତ୍ୟନ୍ତ ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ ମାତୃ ସୁରକ୍ଷା',
+      te: 'అత్యవసర మాతృ సంరక్షణ',
+      ta: 'அதிமுக்கிய தாய்மை நலம்',
+      mr: 'अति-तातडीची माता काळजी'
+    },
+    content: {
+      en: `**CRITICAL PREGNANCY ALARM SIGNS:**\n\nIf an expectant mother experiences ANY of these, go to the nearest Hospital immediately:\n- 🔴 **Vaginal Bleeding** at any stage.\n- 🔴 **Severe headache with blurred vision** (high BP/pre-eclampsia).\n- 🔴 **Sudden extreme swelling** of face and hands.\n- 🔴 **Decreased or absent fetal kicks** (<10 kicks in 12 hours).\n- 🔴 **High fever or convulsions**.\n\n✅ Every mother needs at least 4 ANC visits, 180 IFA tablets, and 2 Td injections!`,
+      hi: `**गर्भावस्था में खतरे के गंभीर लक्षण:**\n\nयदि गर्भवती महिला में इनमें से कोई भी लक्षण दिखे, तो बिना देर किए अस्पताल ले जाएं:\n- 🔴 **रक्तस्राव (खून बहना)** किसी भी महीने में।\n- 🔴 **तेज सिरदर्द के साथ आंखों के आगे धुंधलापन** (उच्च रक्तचाप का संकेत)।\n- 🔴 **चेहरे और हाथों पर अचानक भारी सूजन**।\n- 🔴 **बच्चे की हलचल कम होना या बंद होना** (12 घंटे में 10 से कम लात)।\n- 🔴 **तेज बुखार या दौरे/झटके आना**।\n\n✅ प्रत्येक माता को कम से कम 4 ANC जांच, 180 आयरन की गोलियां और 2 टिटनेस (Td) टीके अवश्य लगवाने चाहिए!`,
+      bn: `**গর্ভাবস্থায় মারাত্মক বিপদের সংকেত:**\n\n- 🔴 যে কোনো সময় রক্তপাত বা জল ভাঙা।\n- 🔴 তীব্র মাথা ব্যথা ও চোখে ঝাপসা দেখা (উচ্চ রক্তচাপ)।\n- 🔴 মুখ ও হাতে হঠাৎ অতিরিক্ত ফোলাভাব।\n- 🔴 গর্ভের শিশুর নড়াচড়া কমে যাওয়া (১২ ঘণ্টায় ১০ বারের কম)।\n- 🔴 খিঁচুনি বা প্রচণ্ড জ্বর।\n\n✅ প্রতিটি মায়ের অন্তত ৪ বার স্বাস্থ্য পরীক্ষা ও ১৮০টি আয়রন ট্যাবলেট প্রয়োজন!`,
+      or: `**ଗର୍ଭାବସ୍ଥାରେ ଜରୁରୀ ବିପଦ ସଙ୍କେତ:**\n\n- 🔴 ରକ୍ତସ୍ରାବ ହେବା।\n- 🔴 ପ୍ରବଳ ମୁଣ୍ଡବିନ୍ଧା ଓ ଆଖିକୁ ଅସ୍ପଷ୍ଟ ଦିଶିବା।\n- 🔴 ମୁହଁ ଓ ହାତ ହଠାତ୍ ଫୁଲିଯିବା।\n- 🔴 ପିଲାର ଚଳପ୍ରଚଳ କମିଯିବା।\n- 🔴 ବାତ ବା କମ୍ପ ଆସିବା।\n\n✅ ପ୍ରତ୍ୟେକ ମାଆଙ୍କୁ ଅତି କମରେ ୪ ଥର ANC ଯାଞ୍ଚ ଓ ୧୮୦ଟି ଆଇରନ୍ ବଟିକା ଖାଇବା ନିତାନ୍ତ ଜରୁରୀ!`,
+      te: `**గర్భధారణలో ప్రమాదకర లక్షణాలు:**\n\n- 🔴 రక్తస్రావం కావడం.\n- 🔴 తీవ్రమైన తలనొప్పి మరియు కంటిచూపు మందగించడం.\n- 🔴 ముఖం మరియు చేతులు అకస్మాత్తుగా వాపు రావడం.\n- 🔴 కడుపులో బిడ్డ కదలికలు తగ్గడం.\n- 🔴 ఫిట్స్ లేదా తీవ్రమైన జ్వరం రావడం.\n\n✅ ప్రతి గర్భిణీ కనీసం 4 సార్లు ANC పరీక్షలు మరియు 180 ఐరన్ మాత్రలు వాడాలి!`,
+      ta: `**கர்ப்பகால ஆபத்து அறிகுறிகள்:**\n\n- 🔴 ரத்தப்போக்கு ஏற்படுதல்.\n- 🔴 கடுமையான தலைவலி மற்றும் பார்வை மங்குதல்.\n- 🔴 முகம் மற்றும் கைகளில் திடீர் வீக்கம்.\n- 🔴 குழந்தையின் அசைவு குறைதல்.\n- 🔴 வலிப்பு அல்லது கடுமையான காய்ச்சல்.\n\n✅ ஒவ்வொரு கர்ப்பிணியும் 4 முறை மருத்துவ பரிசோதனை மற்றும் 180 இரும்புச்சத்து மாத்திரைகள் எடுக்க வேண்டும்!`,
+      mr: `**गरोदरपणातील धोक्याची लक्षणे:**\n\n- 🔴 अचानक रक्तस्त्राव होणे.\n- 🔴 तीव्र डोकेदुखी व डोळ्यांसमोर अंधारी येणे.\n- 🔴 चेहरा आणि हातांवर अचानक सूज येणे.\n- 🔴 बाळाची हालचाल कमी होणे किंवा थांबणे.\n- 🔴 झटके येणे किंवा अति तीव्र ताप.\n\n✅ प्रत्येक मातेने किमान ४ ANC तपासण्या व १८० लोह गोळ्या घेतल्याच पाहिजेत!`
+    },
     action: {
-      label: '🤰 Open Janani ANC Tracker',
+      label: { en: '🤰 Open Janani ANC Tracker', hi: '🤰 जननी सुरक्षा ट्रैकर खोलें', bn: '🤰 মাতৃ ট্র্যাকার খুলুন', or: '🤰 ମାତୃ ଟ୍ରାକର୍ ଖୋଲନ୍ତୁ', te: '🤰 గర్భిణీ ట్రాకర్ తెరవండి', ta: '🤰 தாய்மை டிராக்கரை காண்க', mr: '🤰 माता ट्रॅकर उघडा' },
       type: 'navigate',
       value: 'maternal_mom'
-    }
-  },
-  {
-    id: 'child_vaccines',
-    keywords: ['vaccine', 'tika', 'immunization', 'baby', 'shishu', 'polio', 'bcg', 'pentavalent', 'measles'],
-    title: '👶 Universal Child Immunization Schedule Guide',
-    severity: 'Routine Essential Healthcare',
-    content: `**INDIA NATIONAL IMMUNIZATION SCHEDULE (Key Milestones):**
-
-- 🌟 **At Birth:** BCG (TB protection), OPV-0 (Polio drops), Hepatitis B birth dose (within 24 hours).
-- 🌟 **6 Weeks:** Pentavalent-1 (5 deadly diseases in 1 shot), OPV-1, Rotavirus-1 (Diarrhea), fIPV-1 & PCV-1.
-- 🌟 **10 Weeks:** Pentavalent-2, OPV-2, Rotavirus-2.
-- 🌟 **14 Weeks:** Pentavalent-3, OPV-3, Rotavirus-3, fIPV-2 & PCV-2.
-- 🌟 **9-12 Months:** Measles-Rubella-1 (MR-1), Vitamin A Dose 1, PCV Booster.
-- 🌟 **16-24 Months:** DPT Booster-1, MR-2, OPV Booster.
-- 🌟 **5 Years:** DPT Booster-2.
-
-*Vaccines protect your child from lifelong paralysis, blindness, and fatal infections!*`,
-    action: {
-      label: '📋 View Child Vaccine Card',
-      type: 'navigate',
-      value: 'maternal_child'
-    }
-  },
-  {
-    id: 'app_navigation_teleconsult',
-    keywords: ['consult', 'doctor', 'case', 'prescription', 'how to use', 'book', 'teleconsult'],
-    title: '📱 How Teleconsultation Works in BioBits',
-    severity: 'Platform Guide',
-    content: `**STORE & FORWARD ASYNCHRONOUS TELECONSULTATION:**
-
-1. Tap **"+ Log New Case File"** on the Teleconsultation tab.
-2. Select body area & check symptoms (Fever, Rash, Pain, Cough, etc.).
-3. Record basic vitals (Temp, BP, Pulse, Blood Sugar) — our app automatically colors normal vs danger values.
-4. Attach a photo (skin rash, eye redness, wound) or record a quick audio voice note.
-5. Submit! Even without internet, your case is saved locally in the **Offline Queue**.
-6. When connectivity returns, it syncs to the PHC Doctor who reviews it and issues a digital prescription with visual medicine schedules!`,
-    action: {
-      label: '➕ Create New Case File Now',
-      type: 'navigate',
-      value: 'teleconsult_new'
-    }
-  },
-  {
-    id: 'app_navigation_epidemic',
-    keywords: ['epidemic', 'radar', 'outbreak', 'cluster', 'water', 'warning', 'spike'],
-    title: '📡 About BioBits Syndromic Epidemic Early-Warning',
-    severity: 'Platform Guide',
-    content: `**HOW EPIDEMIC RADAR CATCHES OUTBREAKS EARLY:**
-
-- Health workers & citizens log cases across villages.
-- BioBits algorithms analyze 7-day symptom clusters and statistical anomalies.
-- If acute diarrhea cases surge by >400% in Rampur, an instant **Emergency Alert** is triggered.
-- PHC health officers can dispatch water testing kits, seal contaminated handpumps, and send bulk SMS warnings before the disease spreads to neighboring hamlets!`,
-    action: {
-      label: '🗺️ Open Epidemic Outbreak Radar',
-      type: 'navigate',
-      value: 'epidemic'
     }
   }
 ];
 
-export const findBotResponse = (query) => {
+export const findBotResponse = (query, lang = 'en') => {
+  const targetLang = ['en', 'hi', 'bn', 'or', 'te', 'ta', 'mr'].includes(lang) ? lang : 'en';
+
   if (!query || query.trim() === '') {
+    const defaultWelcome = {
+      en: {
+        title: '👋 Welcome to Sahay Saathi!',
+        content: 'I am your offline rural health assistant. You can ask me about common symptoms, first-aid emergencies (snakebite, dog bite, ORS), child vaccination dates, pregnancy danger signs, or how to use this app.',
+      },
+      hi: {
+        title: '👋 सहाय साथी में आपका स्वागत है!',
+        content: 'मैं आपका ऑफ़लाइन ग्रामीण स्वास्थ्य व प्राथमिक उपचार सहायक हूँ। आप मुझसे बुखार, दस्त, खांसी, सांप काटने, कुत्ते के काटने, ओआरएस, टीकाकरण या गर्भावस्था संबंधी सवाल पूछ सकते हैं।',
+      },
+      bn: {
+        title: '👋 সহায় সাথীতে স্বাগতম!',
+        content: 'আমি আপনার অফলাইন স্বাস্থ্য ও প্রাথমিক চিকিৎসা সহায়ক। জ্বর, ডায়রিয়া, কাশি, সাপে কাটা, কুকুরে কামড়ানো, ওআরএস, শিশুর টিকা বা গর্ভাবস্থা সম্পর্কে প্রশ্ন করতে পারেন।',
+      },
+      or: {
+        title: '👋 ସହାୟ ସାଥୀକୁ ସ୍ୱାଗତ!',
+        content: 'ମୁଁ ଆପଣଙ୍କ ଅଫଲାଇନ୍ ଗ୍ରାମୀଣ ସ୍ୱାସ୍ଥ୍ୟ ଓ ପ୍ରାଥମିକ ଚିକିତ୍ସା ସହାୟକ। ଆପଣ ଜ୍ୱର, ଝାଡ଼ା, କାଶ, ସାପ କାମୁଡ଼ା, କୁକୁର କାମୁଡ଼ା, ORS କିମ୍ବା ଟିକାକରଣ ବିଷୟରେ ପଚାରିପାରିବେ।',
+      },
+      te: {
+        title: '👋 సహాయ్ సారథికి స్వాగతం!',
+        content: 'నేను మీ ఆఫ్‌లైన్ గ్రామీణ ఆరోగ్య మరియు ప్రథమ చికిత్స సహాయకుడిని. జ్వరం, విరేచనాలు, దగ్గు, పాము కాటు, కుక్క కాటు, ORS, టీకాలు లేదా గర్భధారణ గురించి నన్ను అడగవచ్చు.',
+      },
+      ta: {
+        title: '👋 சஹாய் தோழனுக்கு நல்வரவு!',
+        content: 'நான் உங்கள் ஆஃப்லைன் கிராமப்புற சுகாதார மற்றும் முதலுதவி உதவியாளர். காய்ச்சல், வயிற்றுப்போக்கு, இருமல், பாம்பு கடி, நாய் கடி, ORS அல்லது தடுப்பூசி பற்றி என்னிடம் கேட்கலாம்.',
+      },
+      mr: {
+        title: '👋 सहाय मित्र मध्ये आपले स्वागत आहे!',
+        content: 'मी तुमचा ऑफलाईन ग्रामीण आरोग्य व प्रथमोपचार सहाय्यक आहे. ताप, जुलाब, खोकला, सर्पदंश, कुत्रा चावणे, ओआरएस किंवा बाल लसीकरणाबद्दल तुम्ही मला विचारू शकता.',
+      }
+    };
+
+    const welcome = defaultWelcome[targetLang] || defaultWelcome.en;
     return {
-      title: '👋 Welcome to BioBits Swasthya Saathi!',
-      content: 'I am your offline rural health assistant. You can ask me about common symptoms, first-aid emergencies (snakebite, dog bite, ORS), child vaccination dates, pregnancy danger signs, or how to use this app.',
+      title: welcome.title,
+      content: welcome.content,
       action: null,
       matched: false,
     };
@@ -209,11 +275,19 @@ export const findBotResponse = (query) => {
   for (const intent of INTENTS) {
     for (const kw of intent.keywords) {
       if (cleanQuery.includes(kw.toLowerCase())) {
+        const title = intent.titles[targetLang] || intent.titles.en;
+        const severity = intent.severities[targetLang] || intent.severities.en;
+        const content = intent.content[targetLang] || intent.content.en;
+        const actionLabel = intent.action.label[targetLang] || intent.action.label.en;
+
         return {
-          title: intent.title,
-          severity: intent.severity,
-          content: intent.content,
-          action: intent.action,
+          title,
+          severity,
+          content,
+          action: {
+            ...intent.action,
+            label: actionLabel,
+          },
           matched: true,
         };
       }
@@ -221,19 +295,59 @@ export const findBotResponse = (query) => {
   }
 
   // Generic intelligent triage response
+  const genericResponses = {
+    en: {
+      title: '🩺 General Health & Symptom Guidance',
+      severity: 'General Advisory',
+      content: `Thank you for sharing your symptom query: *"${query}"*.\n\n**Recommended Steps:**\n1. If the patient has severe chest pain, breathing difficulty, severe bleeding, or loss of consciousness, please call **108 Ambulance** immediately.\n2. For ongoing illness, we recommend logging a **New Case File** under Teleconsultation with vitals (temperature, blood pressure) and photos for a PHC Doctor to review.\n3. Check the **Epidemic Radar** tab to see if similar symptoms have been flagged in your village.\n\n*You can also tap any of the quick emergency topic chips above for immediate first-aid guidance.*`,
+      actionLabel: '📝 Log Case for Doctor Review'
+    },
+    hi: {
+      title: '🩺 सामान्य स्वास्थ्य व लक्षण मार्गदर्शन',
+      severity: 'सामान्य परामर्श',
+      content: `आपके द्वारा पूछे गए लक्षण: *"${query}"* के लिए मार्गदर्शन:\n\n**अनुशंसित कदम:**\n1. यदि मरीज को सीने में तेज दर्द, सांस लेने में अत्यधिक तकलीफ, भारी रक्तस्राव या बेहोशी है, तो तुरंत **108 एम्बुलेंस** को फोन करें।\n2. सामान्य बीमारी की स्थिति में, टेलीकंसल्टेशन टैब में जाकर **नया केस दर्ज करें** ताकि प्राथमिक स्वास्थ्य केंद्र के डॉक्टर जांच कर सकें।\n3. अपने गांव में संक्रामक रोगों की स्थिति जानने हेतु **महामारी राडार** अवश्य देखें।\n\n*आप त्वरित प्राथमिक उपचार के लिए ऊपर दिए गए किसी भी विषय पर टैप कर सकते हैं।*`,
+      actionLabel: '📝 डॉक्टर जांच हेतु केस दर्ज करें'
+    },
+    bn: {
+      title: '🩺 সাধারণ স্বাস্থ্য ও উপসর্গ সংক্রান্ত পরামর্শ',
+      severity: 'সাধারণ নির্দেশিকা',
+      content: `আপনার উল্লেখিত শারীরিক সমস্যা: *"${query}"* সংক্রান্ত পরামর্শ:\n\n**করণীয় পদক্ষেপ:**\n১. বুকে তীব্র ব্যথা, শ্বাসকষ্ট, অতিরিক্ত রক্তপাত বা অজ্ঞান হয়ে যাওয়ার মতো গুরুতর অবস্থায় অবিলম্বে **১০৮ অ্যাম্বুলেন্স** ডাকুন।\n২. সাধারণ অসুস্থতায় টেলিকনসালটেশন বিভাগে গিয়ে **নতুন কেস নথিভুক্ত করুন** যাতে সরকারি ডাক্তার দেখে প্রেসক্রিপশন দিতে পারেন।\n৩. গ্রামে কোনো রোগের প্রাদুর্ভাব আছে কিনা জানতে **মহামারী রাডার** দেখুন।`,
+      actionLabel: '📝 ডাক্তারের পরামর্শের জন্য নথিভুক্ত করুন'
+    },
+    or: {
+      title: '🩺 ସାଧାରଣ ସ୍ୱାସ୍ଥ୍ୟ ଓ ଲକ୍ଷଣ ପରାମର୍ଶ',
+      severity: 'ସାଧାରଣ ନିର୍ଦ୍ଦେଶାବଳୀ',
+      content: `ଆପଣଙ୍କ ପ୍ରଶ୍ନ: *"${query}"* ପାଇଁ ସ୍ୱାସ୍ଥ୍ୟ ପରାମର୍ଶ:\n\n**ଆବଶ୍ୟକୀୟ ପଦକ୍ଷେପ:**\n୧. ଛାତିରେ ଅତ୍ୟଧିକ ଯନ୍ତ୍ରଣା, ଶ୍ୱାସକଷ୍ଟ କିମ୍ବା ରକ୍ତସ୍ରାବ ହେଲେ ତୁରନ୍ତ **୧୦୮ ଆମ୍ବୁଲାନ୍ସ** ଡାକନ୍ତୁ।\n୨. ଅନ୍ୟାନ୍ୟ ସମସ୍ୟା ପାଇଁ ଟେଲିକନସଲ୍ଟେସନ୍ ବିଭାଗରେ **ନୂଆ ରୋଗୀ ପଞ୍ଜୀକରଣ କରନ୍ତୁ**।\n୩. ଗାଁର ସ୍ଥିତି ଜାଣିବା ପାଇଁ **ମହାମାରୀ ରାଡାର୍** ଦେଖନ୍ତୁ।`,
+      actionLabel: '📝 ଡାକ୍ତରଙ୍କ ପାଇଁ କେସ୍ ଦାଖଲ କରନ୍ତୁ'
+    },
+    te: {
+      title: '🩺 సాధారణ ఆరోగ్య & లక్షణాల మార్గదర్శకత్వం',
+      severity: 'సాధారణ సలహా',
+      content: `మీరు అడిగిన ప్రశ్న: *"${query}"* కోసం సలహాలు:\n\n**చేయవలసిన పనులు:**\n1. తీవ్రమైన ఛాతీ నొప్పి, శ్వాస ఆడకపోవడం లేదా రక్తస్రావం జరిగితే వెంటనే **108 అంబులెన్స్** కు కాల్ చేయండి.\n2. సాధారణ సమస్యల కోసం టెలికన్సల్టేషన్ విభాగంలో **కొత్త కేస్ నమోదు చేయండి**.\n3. గ్రామంలో వ్యాధుల పరిస్థితిని తెలుసుకోవడానికి **రాడార్** తనిఖీ చేయండి.`,
+      actionLabel: '📝 డాక్టర్ సలహా కోసం కేస్ నమోదు చేయండి'
+    },
+    ta: {
+      title: '🩺 பொது சுகாதார வழிகாட்டுதல்',
+      severity: 'பொது ஆலோசனை',
+      content: `உங்கள் கேள்வி: *"${query}"* க்கான வழிகாட்டுதல்:\n\n**செய்ய வேண்டியவை:**\n1. நெஞ்சு வலி, மூச்சுத்திணறல், தீவிர ரத்தப்போக்கு ஏற்பட்டால் உடனடியாக **108 ஆம்புலன்ஸ்** அழைக்கவும்.\n2. தொலைதூர மருத்துவ பிரிவில் **புதிய வழக்கை பதிவு செய்க**.\n3. கிராம நோய் நிலவரத்தை அறிய **ரேடாரை** காண்க.`,
+      actionLabel: '📝 மருத்துவர் ஆலோசனைக்கு பதிவு செய்க'
+    },
+    mr: {
+      title: '🩺 सामान्य आरोग्य व लक्षण सल्ला',
+      severity: 'सामान्य मार्गदर्शन',
+      content: `आपली विचारणा: *"${query}"* बाबत मार्गदर्शन:\n\n**पुढील पावले:**\n१. छातीत तीव्र वेदना, श्वास घेण्यास त्रास किंवा बेशुद्ध पडल्यास त्वरित **१०८ रुग्णवाहिका** बोलवा.\n२. टेलिकन्सल्टेशन विभागात **नवीन केस नोंदवा** जेणेकरून डॉक्टर तपासू शकतील.\n३. गावातील रोगांची माहिती घेण्यासाठी **साथरोग रडार** तपासा.`,
+      actionLabel: '📝 डॉक्टर सल्ल्यासाठी केस नोंदवा'
+    }
+  };
+
+  const generic = genericResponses[targetLang] || genericResponses.en;
+
   return {
-    title: '🩺 General Health & Symptom Guidance',
-    severity: 'General Advisory',
-    content: `Thank you for sharing your symptom query: *"${query}"*.
-
-**Recommended Steps:**
-1. If the patient has severe chest pain, breathing difficulty, severe bleeding, or loss of consciousness, please call **108 Ambulance** immediately.
-2. For ongoing illness, we recommend logging a **New Case File** under Teleconsultation with vitals (temperature, blood pressure) and photos for a PHC Doctor to review.
-3. Check the **Epidemic Radar** tab to see if similar symptoms have been flagged in your village.
-
-*You can also tap any of the quick emergency topic chips above for immediate first-aid guidance.*`,
+    title: generic.title,
+    severity: generic.severity,
+    content: generic.content,
     action: {
-      label: '📝 Log Case for Doctor Review',
+      label: generic.actionLabel,
       type: 'navigate',
       value: 'teleconsult_new'
     },

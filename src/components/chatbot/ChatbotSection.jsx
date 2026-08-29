@@ -4,19 +4,9 @@ import {
   Bot,
   Send,
   Sparkles,
-  Volume2,
-  PhoneCall,
-  User,
-  CheckCircle2,
-  AlertTriangle,
-  HelpCircle,
-  Stethoscope,
-  Activity,
-  Heart,
-  Baby,
-  X
+  User
 } from 'lucide-react';
-import { QUICK_PROMPTS, findBotResponse } from '../../data/chatbotKnowledge';
+import { getQuickPrompts, findBotResponse } from '../../data/chatbotKnowledge';
 import { useLanguage } from '../../context/LanguageContext';
 import { useHealthData } from '../../context/HealthDataContext';
 import { AudioVoiceButton } from '../common/AudioVoiceButton';
@@ -26,13 +16,14 @@ export const ChatbotSection = () => {
   const { setIsNewCaseModalOpen } = useHealthData();
   const navigate = useNavigate();
 
+  const initialBotWelcome = findBotResponse('', currentLang);
+
   const [messages, setMessages] = useState([
     {
       id: 'msg-0',
       sender: 'bot',
-      title: 'Namaste! I am Sahay Saathi 🙏',
-      content:
-        'I am your offline rural health & first-aid assistant. You can ask me about symptoms (fever, diarrhea, cough), emergency protocols (snakebite, dog bite, ORS), baby vaccines, pregnancy checkups, or how to use the app.\n\n*Tap any of the quick emergency topics below or type your question:*',
+      title: initialBotWelcome.title,
+      content: initialBotWelcome.content,
       action: null,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
@@ -41,6 +32,25 @@ export const ChatbotSection = () => {
   const [inputQuery, setInputQuery] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
+
+  // Update initial welcome message when language changes if no conversation happened yet
+  useEffect(() => {
+    if (messages.length === 1 && messages[0].sender === 'bot') {
+      const localizedWelcome = findBotResponse('', currentLang);
+      setMessages([
+        {
+          id: 'msg-0',
+          sender: 'bot',
+          title: localizedWelcome.title,
+          content: localizedWelcome.content,
+          action: null,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        },
+      ]);
+    }
+  }, [currentLang]);
+
+  const quickPrompts = getQuickPrompts(currentLang);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -65,13 +75,13 @@ export const ChatbotSection = () => {
     setInputQuery('');
     setIsTyping(true);
 
-    // Simulate instant yet realistic AI reasoning delay (500ms)
+    // Simulate instant yet realistic AI reasoning delay (450ms)
     setTimeout(() => {
-      const botResponse = findBotResponse(textToSend);
+      const botResponse = findBotResponse(textToSend, currentLang);
       const newBotMsg = {
         id: `msg-bot-${Date.now()}`,
         sender: 'bot',
-        title: botResponse.title.replace('BioBits Swasthya Saathi', 'Sahay Saathi'),
+        title: botResponse.title,
         severity: botResponse.severity,
         content: botResponse.content,
         action: botResponse.action,
@@ -107,7 +117,7 @@ export const ChatbotSection = () => {
         <div className="space-y-2 max-w-2xl text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/20 text-rose-200 text-xs font-bold border border-brand-primary/30">
             <Sparkles className="w-3.5 h-3.5 text-rose-300" />
-            <span>100% Offline Standalone AI • Diagnostic First-Aid Decision Trees</span>
+            <span>{t('offlineDecisionTreeBanner', '100% Offline Standalone AI • Diagnostic First-Aid Decision Trees')}</span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -115,7 +125,7 @@ export const ChatbotSection = () => {
               {t('chatTitle', 'Sahay Saathi (Health Assistant)')}
             </h2>
             <AudioVoiceButton
-              text="Welcome to Sahay Saathi, your offline rural health assistant. Tap quick emergency chips or type your health question."
+              text={`${t('chatTitle')}. ${t('chatSubtitle')}`}
               size="md"
               className="bg-white/20 text-white border-white/30"
             />
@@ -130,9 +140,9 @@ export const ChatbotSection = () => {
         </div>
 
         <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/20 text-xs space-y-1 self-start text-left shrink-0">
-          <span className="font-bold text-rose-300 block">🚑 Emergency Helplines:</span>
-          <p className="text-[11px] text-white">Ambulance: <strong>108</strong></p>
-          <p className="text-[11px] text-white">Health Helpline: <strong>104</strong></p>
+          <span className="font-bold text-rose-300 block">🚑 {t('call108Direct', 'Emergency Helplines')}:</span>
+          <p className="text-[11px] text-white">{t('pathwayEmergency', 'Ambulance')}: <strong>108</strong></p>
+          <p className="text-[11px] text-white">{t('pathwayDoctor', 'Health Helpline')}: <strong>104</strong></p>
         </div>
       </div>
 
@@ -143,10 +153,10 @@ export const ChatbotSection = () => {
         <div className="bg-cream-panel border-b border-cream-border p-3 sm:p-4 overflow-x-auto text-left">
           <div className="flex items-center gap-2 text-xs text-text-muted font-bold mb-2">
             <Sparkles className="w-3.5 h-3.5 text-brand-primary" />
-            <span>Quick Rural Health Questions & Emergency Chips:</span>
+            <span>{t('quickPromptsLabel', 'Quick Rural Health Questions & Emergency Chips')}:</span>
           </div>
           <div className="flex gap-2 min-w-max pb-1">
-            {QUICK_PROMPTS.map((prompt, idx) => (
+            {quickPrompts.map((prompt, idx) => (
               <button
                 key={idx}
                 type="button"
@@ -192,7 +202,7 @@ export const ChatbotSection = () => {
                     <div className="flex items-center justify-between border-b border-cream-border/60 pb-2">
                       <div className="flex items-center gap-2">
                         <span className="font-extrabold text-xs text-text-dark">
-                          {msg.title || 'Sahay Saathi'}
+                          {msg.title || t('appTitle', 'Sahay Saathi')}
                         </span>
                         {msg.severity && (
                           <span className="bg-rose-50 text-brand-primary text-[10px] font-bold px-2 py-0.5 rounded-full border border-rose-100">

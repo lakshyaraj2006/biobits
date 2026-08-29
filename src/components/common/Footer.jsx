@@ -14,10 +14,10 @@ export const Footer = () => {
           <div>
             <div className="flex items-center gap-2 text-rose-400 font-bold text-sm uppercase tracking-wider">
               <PhoneCall className="w-4 h-4 animate-bounce text-rose-500" />
-              <span>National Rural Health Emergency Helplines (24x7 Toll-Free)</span>
+              <span>{t('call108Direct', 'National Rural Health Emergency Helplines (24x7 Toll-Free)')}</span>
             </div>
             <p className="text-xs text-stone-400 mt-1">
-              Tap any helpline number to initiate emergency phone call from your mobile device.
+              {t('operatorNote', 'Tap any helpline number to initiate emergency phone call from your mobile device.')}
             </p>
           </div>
 
@@ -26,19 +26,19 @@ export const Footer = () => {
               href="tel:108"
               className="flex items-center gap-2 bg-brand-primary hover:bg-brand-deep text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-colors shadow-sm"
             >
-              <span>🚑 108 Emergency Ambulance</span>
+              <span>🚑 108 {t('pathwayEmergency', 'Emergency Ambulance')}</span>
             </a>
             <a
               href="tel:104"
               className="flex items-center gap-2 bg-stone-700 hover:bg-stone-600 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-colors shadow-sm"
             >
-              <span>🩺 104 Health Helpline</span>
+              <span>🩺 104 {t('pathwayDoctor', 'Health Helpline')}</span>
             </a>
             <a
               href="tel:1098"
               className="flex items-center gap-2 bg-stone-700 hover:bg-stone-600 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-colors shadow-sm"
             >
-              <span>👶 1098 Childline India</span>
+              <span>👶 1098 {t('tabChildren', 'Childline India')}</span>
             </a>
           </div>
         </div>
@@ -52,56 +52,56 @@ export const Footer = () => {
                 S
               </div>
               <span className="text-lg font-extrabold text-white">
-                Sahay <span className="text-brand-light text-sm font-semibold opacity-70">Coordination Network</span>
+                {t('appTitle', 'Sahay')} <span className="text-brand-light text-sm font-semibold opacity-70">{t('appSubtitle', 'Coordination Network')}</span>
               </span>
             </div>
             <p className="text-xs text-stone-400 leading-relaxed max-w-lg">
-              Serving as the coordination layer between family and the health ecosystem in India. Providing verified facility routing, local Sahay Mitra support, emergency transport alignment, and offline-first case history.
+              {t('heroSubheading', 'Serving as the coordination layer between family and the health ecosystem in India. Providing verified facility routing, local Sahay Mitra support, emergency transport alignment, and offline-first case history.')}
             </p>
             <div className="flex items-center gap-3 pt-2 text-[11px] text-stone-400">
               <span className="flex items-center gap-1">
                 <Database className="w-3.5 h-3.5 text-brand-primary" />
-                Offline-First Data Storage
+                {t('offlineManagerSubtitle', 'Offline-First Data Storage')}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
                 <Shield className="w-3.5 h-3.5 text-brand-primary" />
-                ABDM & NHM Data Privacy
+                {t('ayushmanAligned', 'ABDM & NHM Data Privacy')}
               </span>
             </div>
           </div>
 
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-stone-200 mb-3">Core Coordination Services</h4>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-stone-200 mb-3">{t('exploreServices', 'Core Coordination Services')}</h4>
             <ul className="space-y-2 text-xs text-stone-400">
-              <li className="hover:text-brand-primary transition-colors cursor-pointer">• Emergency Routing & Operators</li>
-              <li className="hover:text-brand-primary transition-colors cursor-pointer">• Verified Hospitals & Live Status</li>
-              <li className="hover:text-brand-primary transition-colors cursor-pointer">• Community Blood & e-RaktKosh</li>
-              <li className="hover:text-brand-primary transition-colors cursor-pointer">• Sahay Mitra Local Face</li>
-              <li className="hover:text-brand-primary transition-colors cursor-pointer">• Primary Care Guidance & Doctor Queue</li>
+              <li className="hover:text-brand-primary transition-colors cursor-pointer">• {t('pathwayEmergency', 'Emergency Routing & Operators')}</li>
+              <li className="hover:text-brand-primary transition-colors cursor-pointer">• {t('pathwayHospitals', 'Verified Hospitals & Live Status')}</li>
+              <li className="hover:text-brand-primary transition-colors cursor-pointer">• {t('pathwayBlood', 'Community Blood & e-RaktKosh')}</li>
+              <li className="hover:text-brand-primary transition-colors cursor-pointer">• {t('coordL1Title', 'Sahay Mitra Local Grassroots')}</li>
+              <li className="hover:text-brand-primary transition-colors cursor-pointer">• {t('pathwayDoctor', 'Primary Care Guidance & Doctor Queue')}</li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-stone-200 mb-3">Hackathon Details</h4>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-stone-200 mb-3">SIH 2026</h4>
             <div className="bg-stone-900/60 p-3.5 rounded-xl border border-stone-800 text-xs space-y-1.5">
-              <p className="text-brand-primary font-bold">Smart India Hackathon (SIH)</p>
+              <p className="text-brand-primary font-bold">Smart India Hackathon</p>
               <p className="text-stone-300 font-medium">Problem Statement: 133</p>
-              <p className="text-stone-400 text-[11px]">Theme: MedTech</p>
-              <p className="text-rose-300 font-semibold pt-1">Designed by: Team BioBits</p>
+              <p className="text-stone-400 text-[11px]">{t('medtechTheme', 'Theme: MedTech | Rural Healthcare Access')}</p>
+              <p className="text-rose-300 font-semibold pt-1">{t('teamName', 'Team BioBits')}</p>
             </div>
           </div>
         </div>
 
         {/* Bottom copyright */}
         <div className="pt-6 flex flex-wrap items-center justify-between gap-4 text-xs text-stone-500">
-          <p>© 2026 Sahay Network. Designed for Smart India Hackathon. Made for rural healthcare coordination in India.</p>
+          <p>© 2026 {t('appTitle', 'Sahay')}. {t('appSubtitle', 'Rural Healthcare Coordination Network')}.</p>
           <div className="flex items-center gap-2 text-stone-400">
-            <span>Built with React & Tailwind CSS</span>
+            <span>{t('ayushmanAligned', 'Ayushman Bharat & NHM Aligned')}</span>
             <span>•</span>
             <span className="flex items-center gap-1 text-brand-primary">
               <Heart className="w-3.5 h-3.5 text-rose-600 fill-rose-600" />
-              For Indian Villages
+              <span>BioBits Rural Health OS</span>
             </span>
           </div>
         </div>
