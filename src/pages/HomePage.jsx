@@ -1,242 +1,485 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Stethoscope,
   Activity,
   HeartHandshake,
   Bot,
-  PlusCircle,
-  AlertTriangle,
-  Sparkles,
-  ShieldCheck,
   Radio,
-  Clock,
-  CheckCircle2,
-  FileText,
-  Heart,
-  Baby,
   ArrowRight,
-  TrendingUp,
-  MapPin,
   Flame,
-  Volume2,
-  Users,
+  PhoneCall,
   Wifi,
   WifiOff,
-  Database
+  Database,
+  Phone,
+  Heart,
+  X,
+  Sparkles
 } from 'lucide-react';
 import { useHealthData } from '../context/HealthDataContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useOffline } from '../context/OfflineContext';
 import { StatCard } from '../components/common/StatCard';
 import { AudioVoiceButton } from '../components/common/AudioVoiceButton';
+import { EmergencyFlowModal } from '../components/common/EmergencyFlowModal';
+import { FinancialHelpHub } from '../components/common/FinancialHelpHub';
+import { BloodSupportHub } from '../components/common/BloodSupportHub';
+import { TrustBadge } from '../components/common/TrustBadge';
+import { LiveStatusIndicator } from '../components/common/LiveStatusIndicator';
 
 export const HomePage = () => {
   const { cases, epidemicClusters, pregnantMothers, childVaccinations, setIsNewCaseModalOpen } = useHealthData();
   const { t } = useLanguage();
-  const { isOffline, toggleOfflineSimulation, pendingSyncQueue, syncOfflineQueue, isSyncing } = useOffline();
+  const { isOffline, toggleOfflineSimulation, pendingSyncQueue } = useOffline();
   const navigate = useNavigate();
+
+  // Dialog / Modal States
+  const [isEmergencyOpen, setIsEmergencyOpen] = useState(false);
+  const [isFinancialOpen, setIsFinancialOpen] = useState(false);
+  const [isBloodOpen, setIsBloodOpen] = useState(false);
+  const [isCallingMitra, setIsCallingMitra] = useState(false);
+  const [mitraCallStatus, setMitraCallStatus] = useState('connecting'); // connecting, talking
 
   const totalCases = cases.length;
   const reviewedCases = cases.filter((c) => c.status === 'reviewed').length;
-  const pendingCases = cases.filter((c) => c.status === 'pending').length;
   const emergencyHotspot = epidemicClusters.find((c) => c.riskLevel === 'Emergency');
 
-  const voiceWelcome = `Welcome to BioBits Swasthya, offline rural health operating system for Smart India Hackathon Problem Statement 133. Select Teleconsultation to consult a doctor, Epidemic Radar for village disease tracking, Maternal and Child for baby vaccines, or talk to our AI assistant.`;
+  const voiceWelcome = `Welcome to Sahay, Rural Healthcare Coordination Network. When healthcare gets complicated, we help you find the next step. Direct call help option is available. Tap emergency button for operator assistance.`;
+
+  // Start simulated call to Mitra
+  const triggerMitraCall = () => {
+    setIsCallingMitra(true);
+    setMitraCallStatus('connecting');
+    const t = setTimeout(() => {
+      setMitraCallStatus('talking');
+    }, 2000);
+    return () => clearTimeout(t);
+  };
+
+  // Simulated Live Hospital Capacity List for homepage
+  const homepageFacilities = [
+    { name: 'Rampur Sub-District Hospital', icu: '2 Beds', level: 'high', time: '8:42 PM', type: 'government' },
+    { name: 'Kalyanpur CHC Facility', icu: '1 Bed', level: 'medium', time: '8:15 PM', type: 'sahay_checked' }
+  ];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-10 animate-in fade-in duration-300">
       
       {/* Live Outbreak Alert Ticker */}
       {emergencyHotspot && (
-        <div className="bg-rose-600 text-white px-4 py-2.5 rounded-2xl shadow-md flex items-center justify-between gap-3 text-xs sm:text-sm font-semibold animate-pulse">
+        <div className="bg-brand-primary text-white px-4 py-3 rounded-2xl shadow-md flex items-center justify-between gap-3 text-xs sm:text-sm font-semibold animate-pulse border border-brand-deep">
           <div className="flex items-center gap-2">
             <Flame className="w-4 h-4 text-rose-200 shrink-0" />
             <span>
-              <strong>EPIDEMIC ALERT:</strong> Unusual spike in {emergencyHotspot.primarySymptom} detected in {emergencyHotspot.villageName} ({emergencyHotspot.spikePercentage}). Water contamination reported.
+              <strong>OUTBREAK WATCH:</strong> Anomaly spike in {emergencyHotspot.primarySymptom} reported at {emergencyHotspot.villageName}. Sahay coordinates response kits with local Mitras.
             </span>
           </div>
           <Link
             to="/epidemic"
-            className="bg-white text-rose-700 hover:bg-rose-50 px-3 py-1 rounded-lg text-xs font-bold shrink-0 transition-colors"
+            className="bg-white text-brand-primary hover:bg-rose-50 px-3 py-1 rounded-xl text-xs font-black shrink-0 transition-colors"
           >
-            View Outbreak Radar →
+            Open Radar →
           </Link>
         </div>
       )}
 
       {/* Hero Banner with Layman Friendly Visual Launchpad */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-900 via-teal-900 to-slate-950 text-white p-6 sm:p-10 shadow-2xl border border-emerald-700/40">
-        <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs font-bold border border-emerald-400/30">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-300" />
-            <span>Smart India Hackathon 2026 • Problem Statement 133 (MedTech)</span>
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-deep via-[#5c0d24] to-stone-950 text-white p-6 sm:p-12 shadow-2xl border border-rose-900/40">
+        <div className="relative z-10 max-w-3xl space-y-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/20 text-rose-200 text-xs font-bold border border-brand-primary/30">
+            <Sparkles className="w-3.5 h-3.5 text-rose-300" />
+            <span>Sahay • Rural Healthcare Coordination Network</span>
           </div>
 
           <div className="flex items-center gap-3">
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
-              Bio<span className="text-emerald-400">Bits</span> Swasthya
+              When healthcare gets complicated, <span className="text-rose-200">Sahay</span> helps you find the next step.
             </h1>
             <AudioVoiceButton
               text={voiceWelcome}
               size="lg"
-              className="bg-white/20 text-white border-white/30"
+              className="bg-white/20 text-white border-white/30 shrink-0"
             />
           </div>
 
-          <p className="text-sm sm:text-lg text-emerald-100/90 leading-relaxed font-medium">
-            Bridging rural healthcare disparities with zero-connectivity asynchronous teleconsultations, real-time syndromic epidemic outbreak surveillance, and automated maternal-child immunization reminders.
+          <p className="text-sm sm:text-lg text-rose-100/90 leading-relaxed font-medium">
+            We are not a hospital or doctor, but the coordination bridge for rural families. Connecting you with verified ambulance transport, official blood inventory lookup, local volunteer Mitras, and cashless government schemes.
           </p>
 
           {/* Layman 1-Tap Quick Action Buttons */}
           <div className="pt-3 flex flex-wrap items-center gap-3">
             <button
-              onClick={() => {
-                navigate('/teleconsult');
-                setIsNewCaseModalOpen(true);
-              }}
-              className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm px-5 py-3 rounded-xl shadow-lg shadow-emerald-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
+              onClick={() => setIsEmergencyOpen(true)}
+              className="flex items-center gap-2 bg-white text-brand-deep hover:bg-rose-50 font-black text-xs sm:text-sm px-6 py-3.5 rounded-xl shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all"
             >
-              <PlusCircle className="w-4 h-4 text-slate-950" />
-              <span>{t('btnNewCase', '+ Log New Case for Doctor')}</span>
+              <PhoneCall className="w-4 h-4 text-brand-primary" />
+              <span>Get Help Now</span>
             </button>
 
-            <Link
-              to="/chatbot"
-              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm px-4 py-3 rounded-xl backdrop-blur-md border border-white/20 transition-all"
+            <a
+              href="#services-section"
+              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm px-5 py-3.5 rounded-xl backdrop-blur-md border border-white/20 transition-all"
             >
-              <Bot className="w-4 h-4 text-emerald-300" />
-              <span>Talk to AI Health Saathi</span>
-            </Link>
+              <span>Explore Services</span>
+            </a>
 
             <button
               type="button"
               onClick={toggleOfflineSimulation}
-              className={`flex items-center gap-1.5 text-xs font-semibold px-3.5 py-3 rounded-xl border transition-all ${
+              className={`flex items-center gap-1.5 text-xs font-semibold px-4 py-3.5 rounded-xl border transition-all ${
                 isOffline
                   ? 'bg-amber-500/20 text-amber-200 border-amber-400/40 hover:bg-amber-500/30'
-                  : 'bg-emerald-950/80 hover:bg-emerald-950 text-emerald-200 border border-emerald-600/30'
+                  : 'bg-stone-900/60 hover:bg-stone-900 text-stone-200 border border-stone-800'
               }`}
             >
-              {isOffline ? <WifiOff className="w-3.5 h-3.5 text-amber-400" /> : <Wifi className="w-3.5 h-3.5 text-emerald-400" />}
-              <span>{isOffline ? 'Offline Mode Active (Tap to switch)' : 'Online Mode (Tap to simulate offline)'}</span>
+              {isOffline ? <WifiOff className="w-3.5 h-3.5 text-amber-400" /> : <Wifi className="w-3.5 h-3.5 text-rose-400" />}
+              <span>{isOffline ? 'Offline Mode active' : 'Simulate Offline'}</span>
             </button>
+          </div>
+
+          {/* Urgent Desk Banner Callout */}
+          <div
+            onClick={() => setIsEmergencyOpen(true)}
+            className="pt-2 flex items-center gap-2 text-rose-300 text-xs font-bold hover:text-white cursor-pointer transition-colors"
+          >
+            <span>🆘 Need urgent help?</span>
+            <span className="underline">Talk directly to Sahay Care Desk Operator →</span>
           </div>
         </div>
 
         {/* Ambient background blur blobs */}
-        <div className="absolute right-0 top-0 -mt-10 -mr-10 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute right-40 bottom-0 -mb-10 w-72 h-72 bg-teal-500/10 rounded-full blur-2xl pointer-events-none"></div>
+        <div className="absolute right-0 top-0 -mt-10 -mr-10 w-96 h-96 bg-brand-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute right-40 bottom-0 -mb-10 w-72 h-72 bg-brand-deep/20 rounded-full blur-2xl pointer-events-none"></div>
       </div>
 
-      {/* 4 Core Module Route Cards */}
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h2 className="text-lg sm:text-xl font-extrabold text-slate-900">
-              Core Public Health Modules
-            </h2>
-            <p className="text-xs text-slate-500">
-              Select a specialized module to access clinical tools, surveillance radar, and patient management.
+      {/* CORE LAUNCHPAD: "What help do you need?" */}
+      <div className="space-y-4">
+        <div className="text-center sm:text-left">
+          <h2 className="text-xl sm:text-2xl font-black text-text-dark">
+            What do you need help with?
+          </h2>
+          <p className="text-xs sm:text-sm text-text-muted mt-0.5">
+            Select one of the emergency pathways below. Sahay coordinates the entire journey.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+          
+          {/* Pathway 1: Emergency */}
+          <div
+            onClick={() => setIsEmergencyOpen(true)}
+            className="p-5 rounded-2xl bg-white border border-rose-100 hover:border-brand-primary shadow-xs hover:shadow-md cursor-pointer transition-all flex flex-col items-center text-center space-y-3 hover:-translate-y-0.5"
+          >
+            <div className="w-12 h-12 rounded-xl bg-rose-50 text-brand-primary border border-rose-100 flex items-center justify-center font-bold text-xl">
+              🟥
+            </div>
+            <strong className="text-xs font-black text-text-dark">Emergency</strong>
+            <p className="text-[10px] text-text-muted leading-tight">Operator Desk & Live Routing</p>
+          </div>
+
+          {/* Pathway 2: Blood */}
+          <div
+            onClick={() => setIsBloodOpen(true)}
+            className="p-5 rounded-2xl bg-white border border-rose-50 hover:border-brand-primary shadow-xs hover:shadow-md cursor-pointer transition-all flex flex-col items-center text-center space-y-3 hover:-translate-y-0.5"
+          >
+            <div className="w-12 h-12 rounded-xl bg-rose-50 text-brand-primary border border-rose-100 flex items-center justify-center font-bold text-xl">
+              🩸
+            </div>
+            <strong className="text-xs font-black text-text-dark">Blood Drop</strong>
+            <p className="text-[10px] text-text-muted leading-tight">e-RaktKosh Stock Verification</p>
+          </div>
+
+          {/* Pathway 3: Hospital Capacity */}
+          <div
+            onClick={() => {
+              navigate('/teleconsult');
+            }}
+            className="p-5 rounded-2xl bg-white border border-cream-border hover:border-brand-primary shadow-xs hover:shadow-md cursor-pointer transition-all flex flex-col items-center text-center space-y-3 hover:-translate-y-0.5"
+          >
+            <div className="w-12 h-12 rounded-xl bg-[#fdfbf7] text-brand-primary border border-cream-border flex items-center justify-center font-bold text-xl">
+              🏥
+            </div>
+            <strong className="text-xs font-black text-text-dark">Hospitals</strong>
+            <p className="text-[10px] text-text-muted leading-tight">ICU Bed & Oxygen Confidence</p>
+          </div>
+
+          {/* Pathway 4: Consultation */}
+          <div
+            onClick={() => {
+              navigate('/teleconsult');
+              setIsNewCaseModalOpen(true);
+            }}
+            className="p-5 rounded-2xl bg-white border border-cream-border hover:border-brand-primary shadow-xs hover:shadow-md cursor-pointer transition-all flex flex-col items-center text-center space-y-3 hover:-translate-y-0.5"
+          >
+            <div className="w-12 h-12 rounded-xl bg-[#fdfbf7] text-brand-primary border border-cream-border flex items-center justify-center font-bold text-xl">
+              👩‍⚕️
+            </div>
+            <strong className="text-xs font-black text-text-dark">PHC Doctor</strong>
+            <p className="text-[10px] text-text-muted leading-tight">Log Case file for doctor review</p>
+          </div>
+
+          {/* Pathway 5: Medicines */}
+          <div
+            onClick={() => setIsFinancialOpen(true)}
+            className="p-5 rounded-2xl bg-white border border-cream-border hover:border-brand-primary shadow-xs hover:shadow-md cursor-pointer transition-all flex flex-col items-center text-center space-y-3 hover:-translate-y-0.5"
+          >
+            <div className="w-12 h-12 rounded-xl bg-[#fdfbf7] text-brand-primary border border-cream-border flex items-center justify-center font-bold text-xl">
+              💊
+            </div>
+            <strong className="text-xs font-black text-text-dark">Medicine Help</strong>
+            <p className="text-[10px] text-text-muted leading-tight">Match pharmacy stock inventories</p>
+          </div>
+
+          {/* Pathway 6: Financial Schemes */}
+          <div
+            onClick={() => setIsFinancialOpen(true)}
+            className="p-5 rounded-2xl bg-white border border-cream-border hover:border-brand-primary shadow-xs hover:shadow-md cursor-pointer transition-all flex flex-col items-center text-center space-y-3 hover:-translate-y-0.5"
+          >
+            <div className="w-12 h-12 rounded-xl bg-[#fdfbf7] text-brand-primary border border-cream-border flex items-center justify-center font-bold text-xl">
+              💰
+            </div>
+            <strong className="text-xs font-black text-text-dark">Financial Help</strong>
+            <p className="text-[10px] text-text-muted leading-tight">PM-JAY check & medical loans</p>
+          </div>
+
+        </div>
+      </div>
+
+      {/* THREE-LEVEL COORDINATION MODEL VISUAL SECTION */}
+      <div className="bg-cream-panel rounded-3xl border border-cream-border p-6 sm:p-8 space-y-6">
+        <div className="text-center max-w-2xl mx-auto space-y-2">
+          <span className="text-[10px] font-bold text-brand-primary uppercase tracking-widest block">
+            HOW SAHAY WORKS
+          </span>
+          <h2 className="text-lg sm:text-2xl font-black text-text-dark">
+            Our Three-Level Coordination Model
+          </h2>
+          <p className="text-xs sm:text-sm text-text-muted leading-relaxed">
+            Sahay does not replace clinical facilities or ambulances. We coordinate the existing systems to bridge information and support gaps.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+          {/* Level 1: Sahay Mitra */}
+          <div className="bg-white rounded-2xl p-5 border border-cream-border space-y-3 text-left">
+            <div className="flex items-center gap-3">
+              <span className="w-8 h-8 rounded-lg bg-rose-50 text-brand-primary flex items-center justify-center font-bold text-sm">
+                1
+              </span>
+              <div>
+                <strong className="text-xs sm:text-sm font-black text-text-dark block">Level 1 — Sahay Mitra</strong>
+                <span className="text-[9px] font-bold text-brand-primary">Trusted Local Workers</span>
+              </div>
+            </div>
+            <p className="text-[11px] text-text-muted leading-relaxed">
+              Your village ASHA worker or volunteer. They handle basic bookings, guide families through the app, and coordinate elderly support offline.
             </p>
           </div>
+
+          {/* Level 2: Care Desk */}
+          <div className="bg-white rounded-2xl p-5 border border-cream-border space-y-3 text-left shadow-sm">
+            <div className="flex items-center gap-3">
+              <span className="w-8 h-8 rounded-lg bg-rose-50 text-brand-primary flex items-center justify-center font-bold text-sm">
+                2
+              </span>
+              <div>
+                <strong className="text-xs sm:text-sm font-black text-text-dark block">Level 2 — Care Desk</strong>
+                <span className="text-[9px] font-bold text-brand-primary">Central Operations Heart</span>
+              </div>
+            </div>
+            <p className="text-[11px] text-text-muted leading-relaxed">
+              Central trained operators handling emergency calls, validating ICU beds/oxygen, dispatching ambulance transport, and arranging callbacks.
+            </p>
+          </div>
+
+          {/* Level 3: clinical network */}
+          <div className="bg-white rounded-2xl p-5 border border-cream-border space-y-3 text-left">
+            <div className="flex items-center gap-3">
+              <span className="w-8 h-8 rounded-lg bg-rose-50 text-brand-primary flex items-center justify-center font-bold text-sm">
+                3
+              </span>
+              <div>
+                <strong className="text-xs sm:text-sm font-black text-text-dark block">Level 3 — Partners</strong>
+                <span className="text-[9px] font-bold text-brand-primary">External Health Providers</span>
+              </div>
+            </div>
+            <p className="text-[11px] text-text-muted leading-relaxed">
+              Hospitals, blood banks, government PM-JAY coordinators, and emergency transport. Sahay acts as their trusted coordinating layer.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* SAHAY MITRA: Local face panel */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+        
+        {/* Left: Call your Sahay Mitra Helper */}
+        <div className="bg-white rounded-3xl border border-cream-border p-6 flex flex-col justify-between space-y-4 text-left">
+          <div className="space-y-2">
+            <span className="bg-rose-50 text-brand-primary text-[10px] font-bold px-2 py-0.5 rounded border border-rose-100 uppercase tracking-wider">
+              Accessible Care
+            </span>
+            <h3 className="text-lg font-black text-text-dark">Can't operate the app? Call your Mitra</h3>
+            <p className="text-xs text-text-muted leading-relaxed">
+              If you have an elderly relative or find it difficult to fill out forms, tap to call your designated village Sahay Mitra. They are trained to log cases for you.
+            </p>
+          </div>
+
+          <div className="p-4 bg-cream-bg rounded-2xl border border-cream-border flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center text-sm font-black">
+                SD
+              </div>
+              <div>
+                <strong className="text-xs font-extrabold text-text-dark block">Sunita Devi (Sahay Mitra)</strong>
+                <span className="text-[10px] text-text-muted block">Rampur Cluster ASHA Worker</span>
+              </div>
+            </div>
+            <button
+              onClick={triggerMitraCall}
+              className="bg-brand-primary hover:bg-brand-deep text-white p-2.5 rounded-xl shadow-md transition-colors"
+              title="Call Mitra"
+            >
+              <Phone className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Right: Live Capacity Confidence Box */}
+        <div className="bg-white rounded-3xl border border-cream-border p-6 space-y-4 text-left flex flex-col justify-between">
+          <div className="space-y-1">
+            <h3 className="text-sm font-extrabold text-text-dark">Verified Local Facility Capacity</h3>
+            <p className="text-[11px] text-text-muted leading-relaxed">
+              We verify availability timestamps before travel. Confidence states degrade over time automatically.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            {homepageFacilities.map((f, idx) => (
+              <div key={idx} className="p-3 bg-cream-bg/40 border border-cream-border/80 rounded-2xl space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <strong className="font-extrabold text-stone-800">{f.name}</strong>
+                  <TrustBadge type={f.type} />
+                </div>
+                <LiveStatusIndicator level={f.level} time={f.time} />
+              </div>
+            ))}
+          </div>
+
+          <p className="text-[10px] text-text-muted italic">
+            *Hospital confirmation required before travel. Care Desk will reserve bed upon call request.
+          </p>
+        </div>
+
+      </div>
+
+      {/* CORE PUBLIC HEALTH MODULES (Explore Services) */}
+      <div id="services-section" className="space-y-4">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-black text-text-dark">
+            Explore Health Services Network
+          </h2>
+          <p className="text-xs sm:text-sm text-text-muted">
+            Secondary services are available below to log teleconsultations, check outbreak radars, or consult the AI assistant.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
           
-          {/* Card 1: Teleconsultation */}
+          {/* Service 1: Teleconsultation */}
           <Link
             to="/teleconsult"
-            className="group bg-white rounded-3xl border border-slate-200 p-5 shadow-xs hover:shadow-xl hover:border-emerald-500/40 transition-all duration-200 flex flex-col justify-between"
+            className="group bg-white rounded-3xl border border-cream-border p-5 shadow-xs hover:shadow-md hover:border-brand-primary/40 transition-all flex flex-col justify-between text-left"
           >
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-brand-primary border border-rose-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Stethoscope className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">
+              <h3 className="text-xs sm:text-sm font-extrabold text-text-dark group-hover:text-brand-primary transition-colors">
                 Asynchronous Teleconsultation
               </h3>
-              <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
+              <p className="text-[11px] text-text-muted mt-1.5 leading-relaxed">
                 Log cases with vitals & photos. Doctors review offline and issue signed e-prescriptions anytime.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-emerald-700">
+            <div className="mt-4 pt-3 border-t border-cream-border/60 flex items-center justify-between text-[11px] font-bold text-brand-primary">
               <span>{cases.length} Registered Cases</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
 
-          {/* Card 2: Epidemic Early-Warning */}
+          {/* Service 2: Epidemic Early-Warning */}
           <Link
             to="/epidemic"
-            className="group bg-white rounded-3xl border border-slate-200 p-5 shadow-xs hover:shadow-xl hover:border-rose-500/40 transition-all duration-200 flex flex-col justify-between"
+            className="group bg-white rounded-3xl border border-cream-border p-5 shadow-xs hover:shadow-md hover:border-brand-primary/40 transition-all flex flex-col justify-between text-left"
           >
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-700 border border-rose-200 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-brand-primary border border-rose-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Activity className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-1.5">
-                <h3 className="text-base font-extrabold text-slate-900 group-hover:text-rose-700 transition-colors">
-                  Epidemic Early-Warning
+                <h3 className="text-xs sm:text-sm font-extrabold text-text-dark group-hover:text-brand-primary transition-colors">
+                  Epidemic Radar
                 </h3>
-                <span className="bg-rose-500 text-white text-[9px] font-extrabold px-1.5 py-0.2 rounded-full animate-pulse">
-                  HOTSPOT
+                <span className="bg-brand-primary text-white text-[9px] font-extrabold px-1.5 py-0.2 rounded-full animate-pulse">
+                  SURGE
                 </span>
               </div>
-              <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
+              <p className="text-[11px] text-text-muted mt-1.5 leading-relaxed">
                 Syndromic anomaly detector flags disease clusters across villages to stop outbreaks before they spread.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-rose-700">
+            <div className="mt-4 pt-3 border-t border-cream-border/60 flex items-center justify-between text-[11px] font-bold text-brand-primary">
               <span>{epidemicClusters.length} Village Clusters</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
 
-          {/* Card 3: Maternal & Child */}
+          {/* Service 3: Maternal & Child */}
           <Link
             to="/maternal-child"
-            className="group bg-white rounded-3xl border border-slate-200 p-5 shadow-xs hover:shadow-xl hover:border-teal-500/40 transition-all duration-200 flex flex-col justify-between"
+            className="group bg-white rounded-3xl border border-cream-border p-5 shadow-xs hover:shadow-md hover:border-brand-primary/40 transition-all flex flex-col justify-between text-left"
           >
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-teal-50 text-teal-700 border border-teal-200 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-brand-primary border border-rose-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <HeartHandshake className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-extrabold text-slate-900 group-hover:text-teal-700 transition-colors">
+              <h3 className="text-xs sm:text-sm font-extrabold text-text-dark group-hover:text-brand-primary transition-colors">
                 Maternal & Child Health
               </h3>
-              <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
+              <p className="text-[11px] text-text-muted mt-1.5 leading-relaxed">
                 Janani 4-stage ANC tracking, Universal Child Immunization schedule (UIP), and automated reminders.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-teal-700">
+            <div className="mt-4 pt-3 border-t border-cream-border/60 flex items-center justify-between text-[11px] font-bold text-brand-primary">
               <span>{pregnantMothers.length} Mothers • {childVaccinations.length} Babies</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
 
-          {/* Card 4: AI Health Saathi */}
+          {/* Service 4: AI Health Saathi */}
           <Link
             to="/chatbot"
-            className="group bg-white rounded-3xl border border-slate-200 p-5 shadow-xs hover:shadow-xl hover:border-sky-500/40 transition-all duration-200 flex flex-col justify-between"
+            className="group bg-white rounded-3xl border border-cream-border p-5 shadow-xs hover:shadow-md hover:border-brand-primary/40 transition-all flex flex-col justify-between text-left"
           >
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-700 border border-sky-200 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-brand-primary border border-rose-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Bot className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-1.5">
-                <h3 className="text-base font-extrabold text-slate-900 group-hover:text-sky-700 transition-colors">
-                  BioBits AI Saathi
+                <h3 className="text-xs sm:text-sm font-extrabold text-text-dark group-hover:text-brand-primary transition-colors">
+                  Sahay Saathi AI
                 </h3>
-                <span className="bg-sky-500 text-white text-[9px] font-extrabold px-1.5 py-0.2 rounded-full">
+                <span className="bg-brand-primary text-white text-[9px] font-extrabold px-1.5 py-0.2 rounded-full">
                   OFFLINE
                 </span>
               </div>
-              <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
+              <p className="text-[11px] text-text-muted mt-1.5 leading-relaxed">
                 Offline triage decision trees for snakebites, ORS recipes, high fever, dog bites, and baby care.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-sky-700">
+            <div className="mt-4 pt-3 border-t border-cream-border/60 flex items-center justify-between text-[11px] font-bold text-brand-primary">
               <span>24/7 Vernacular Guide</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -251,7 +494,7 @@ export const HomePage = () => {
           value={totalCases}
           subtitle={`${reviewedCases} prescriptions ready`}
           icon={Stethoscope}
-          color="emerald"
+          color="rose"
         />
         <StatCard
           title="Monitored Clusters"
@@ -265,34 +508,34 @@ export const HomePage = () => {
           value={pregnantMothers.length + childVaccinations.length}
           subtitle="Janani & Shishu immunization"
           icon={Heart}
-          color="sky"
+          color="rose"
         />
         <StatCard
           title="Offline Sync Queue"
           value={pendingSyncQueue.length}
           subtitle={isOffline ? 'Offline Mode Active' : 'Synced with PHC Server'}
           icon={Database}
-          color={pendingSyncQueue.length > 0 ? 'amber' : 'indigo'}
+          color={pendingSyncQueue.length > 0 ? 'amber' : 'rose'}
         />
       </div>
 
-      {/* Two Column Section: Recent Teleconsult Cases Feed & Maternal Reminders Ticker */}
+      {/* Two Column Section: Recent Cases & Maternal Reminders */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        {/* Left: Recent Teleconsultations */}
-        <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        {/* Left: Recent Cases */}
+        <div className="bg-white rounded-3xl border border-cream-border p-5 sm:p-6 space-y-4 text-left">
+          <div className="flex items-center justify-between border-b border-cream-border pb-3">
             <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-lg bg-emerald-50 text-emerald-700">
+              <span className="p-1.5 rounded-lg bg-rose-50 text-brand-primary">
                 <Stethoscope className="w-4 h-4" />
               </span>
-              <h3 className="text-sm sm:text-base font-extrabold text-slate-900">
+              <h3 className="text-xs sm:text-sm font-extrabold text-text-dark">
                 Recent Teleconsultation Cases
               </h3>
             </div>
             <Link
               to="/teleconsult"
-              className="text-xs font-bold text-emerald-700 hover:text-emerald-800"
+              className="text-xs font-bold text-brand-primary hover:text-brand-deep"
             >
               View All ({cases.length}) →
             </Link>
@@ -302,12 +545,12 @@ export const HomePage = () => {
             {cases.slice(0, 3).map((c) => (
               <div
                 key={c.id}
-                className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3 hover:bg-slate-100/70 transition-colors"
+                className="p-3 rounded-2xl bg-cream-panel border border-cream-border flex items-center justify-between gap-3 hover:bg-stone-50 transition-colors"
               >
                 <div>
                   <div className="flex items-center gap-2">
-                    <strong className="text-xs font-extrabold text-slate-900">{c.patientName}</strong>
-                    <span className={`text-[10px] font-bold px-2 py-0.2 rounded-full ${
+                    <strong className="text-xs font-extrabold text-text-dark">{c.patientName}</strong>
+                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md ${
                       c.triageLevel === 'Emergency'
                         ? 'bg-rose-100 text-rose-800'
                         : c.triageLevel === 'Urgent'
@@ -317,14 +560,14 @@ export const HomePage = () => {
                       {c.triageLevel}
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
+                  <p className="text-[10px] text-text-muted mt-0.5">
                     {c.village} • Symptoms: {c.symptoms.slice(0, 2).join(', ')}
                   </p>
                 </div>
 
                 <Link
                   to="/teleconsult"
-                  className="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-800 text-xs font-bold hover:bg-emerald-50 hover:text-emerald-800 transition-colors shrink-0"
+                  className="px-3 py-1.5 rounded-xl bg-white border border-cream-border text-text-dark text-xs font-bold hover:bg-rose-50 hover:text-brand-primary transition-colors shrink-0"
                 >
                   {c.status === 'reviewed' ? '✓ View Rx' : 'Review →'}
                 </Link>
@@ -333,20 +576,20 @@ export const HomePage = () => {
           </div>
         </div>
 
-        {/* Right: Maternal Care & Vaccines Scheduled */}
-        <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        {/* Right: Maternal Care */}
+        <div className="bg-white rounded-3xl border border-cream-border p-5 sm:p-6 space-y-4 text-left">
+          <div className="flex items-center justify-between border-b border-cream-border pb-3">
             <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-lg bg-teal-50 text-teal-700">
+              <span className="p-1.5 rounded-lg bg-rose-50 text-brand-primary">
                 <HeartHandshake className="w-4 h-4" />
               </span>
-              <h3 className="text-sm sm:text-base font-extrabold text-slate-900">
+              <h3 className="text-xs sm:text-sm font-extrabold text-text-dark">
                 Upcoming Maternal & Child Milestones
               </h3>
             </div>
             <Link
               to="/maternal-child"
-              className="text-xs font-bold text-teal-700 hover:text-teal-800"
+              className="text-xs font-bold text-brand-primary hover:text-brand-deep"
             >
               Open Janani Hub →
             </Link>
@@ -356,57 +599,104 @@ export const HomePage = () => {
             {pregnantMothers.slice(0, 2).map((mom) => (
               <div
                 key={mom.id}
-                className="p-3 rounded-2xl bg-rose-50/50 border border-rose-200/60 flex items-center justify-between gap-3"
+                className="p-3 rounded-2xl bg-rose-50/20 border border-rose-100 flex items-center justify-between gap-3"
               >
                 <div>
                   <div className="flex items-center gap-2">
-                    <strong className="text-xs font-extrabold text-slate-900">{mom.name}</strong>
-                    <span className="text-[10px] font-bold text-rose-700 bg-rose-100 px-2 py-0.2 rounded-full">
+                    <strong className="text-xs font-extrabold text-text-dark">{mom.name}</strong>
+                    <span className="text-[9px] font-bold text-brand-primary bg-rose-50 px-2 py-0.5 rounded border border-rose-100">
                       {mom.trimester} ({mom.gestationalWeeks}w)
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
+                  <p className="text-[10px] text-text-muted mt-0.5">
                     {mom.highRisk ? `⚠️ Alert: ${mom.riskReason}` : 'Healthy baseline progress'}
                   </p>
                 </div>
 
                 <Link
                   to="/maternal-child"
-                  className="px-3 py-1.5 rounded-xl bg-white border border-rose-200 text-rose-800 text-xs font-bold hover:bg-rose-100 transition-colors shrink-0"
+                  className="px-3 py-1.5 rounded-xl bg-white border border-rose-100 text-brand-primary text-xs font-bold hover:bg-rose-50 transition-colors shrink-0"
                 >
                   ANC Plan →
                 </Link>
               </div>
             ))}
-
-            {childVaccinations.slice(0, 1).map((ch) => (
-              <div
-                key={ch.id}
-                className="p-3 rounded-2xl bg-sky-50/50 border border-sky-200/60 flex items-center justify-between gap-3"
-              >
-                <div>
-                  <div className="flex items-center gap-2">
-                    <strong className="text-xs font-extrabold text-slate-900">{ch.name}</strong>
-                    <span className="text-[10px] font-bold text-sky-700 bg-sky-100 px-2 py-0.2 rounded-full">
-                      Immunization Card
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
-                    Mother: {ch.motherName} • {ch.weightKg} kg • Due: Pentavalent-3
-                  </p>
-                </div>
-
-                <Link
-                  to="/maternal-child"
-                  className="px-3 py-1.5 rounded-xl bg-white border border-sky-200 text-sky-800 text-xs font-bold hover:bg-sky-100 transition-colors shrink-0"
-                >
-                  Vaccine Card →
-                </Link>
-              </div>
-            ))}
           </div>
         </div>
+
       </div>
+
+      {/* MITRA CALL SIMULATOR DIALOG */}
+      {isCallingMitra && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-cream-bg rounded-3xl border border-cream-border w-full max-w-sm overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="bg-brand-deep text-white p-5 flex items-center justify-between">
+              <span className="text-xs font-bold tracking-tight">Outgoing Call Coordinator</span>
+              <button
+                onClick={() => setIsCallingMitra(false)}
+                className="p-1 rounded bg-white/10 text-white hover:bg-white/20"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            
+            <div className="p-6 text-center space-y-6">
+              <div className="mx-auto w-16 h-16 bg-rose-50 rounded-full flex items-center justify-center animate-pulse border border-brand-primary/20">
+                <Phone className="w-6 h-6 text-brand-primary animate-bounce" />
+              </div>
+
+              <div className="space-y-1">
+                <strong className="text-sm text-text-dark block">Sunita Devi</strong>
+                <span className="text-[10px] text-text-muted block">Rampur village Mitra / ASHA Worker</span>
+              </div>
+
+              {mitraCallStatus === 'connecting' ? (
+                <div className="space-y-2">
+                  <span className="text-xs text-brand-primary font-bold">Calling...</span>
+                  <div className="flex justify-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-brand-primary animate-bounce"></span>
+                    <span className="w-2 h-2 rounded-full bg-brand-primary animate-bounce delay-100"></span>
+                    <span className="w-2 h-2 rounded-full bg-brand-primary animate-bounce delay-200"></span>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3 animate-in fade-in duration-200">
+                  <span className="text-xs text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+                    🟢 Connection Established
+                  </span>
+                  <blockquote className="italic text-[11px] text-text-dark font-medium border-l-2 border-brand-primary pl-2 text-left bg-stone-50 py-1">
+                    "Namaste. I am Sunita, your Sahay Mitra. I can log your teleconsultation details or contact the Care Desk for you. What is the emergency?"
+                  </blockquote>
+                </div>
+              )}
+
+              <button
+                onClick={() => setIsCallingMitra(false)}
+                className="w-full bg-brand-primary hover:bg-brand-deep text-white font-bold py-2.5 rounded-xl text-xs"
+              >
+                End Call
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODALS */}
+      <EmergencyFlowModal
+        isOpen={isEmergencyOpen}
+        onClose={() => setIsEmergencyOpen(false)}
+      />
+
+      <FinancialHelpHub
+        isOpen={isFinancialOpen}
+        onClose={() => setIsFinancialOpen(false)}
+      />
+
+      <BloodSupportHub
+        isOpen={isBloodOpen}
+        onClose={() => setIsBloodOpen(false)}
+      />
+
     </div>
   );
 };

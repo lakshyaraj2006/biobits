@@ -15,7 +15,7 @@ import { ChatbotWidget } from './components/chatbot/ChatbotWidget';
 
 const AppLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 selection:bg-emerald-500 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-cream-bg selection:bg-brand-primary selection:text-white">
       {/* Top Navigation Bar */}
       <Navbar />
 

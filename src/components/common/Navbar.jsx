@@ -50,27 +50,27 @@ export const Navbar = () => {
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
       {/* Top micro banner for SIH & Team BioBits */}
-      <div className="bg-gradient-to-r from-emerald-800 via-teal-800 to-emerald-900 text-white text-xs px-4 py-1.5 flex flex-wrap items-center justify-between gap-2">
+      <div className="bg-gradient-to-r from-brand-deep via-brand-primary to-brand-deep text-white text-xs px-4 py-1.5 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2 font-medium">
-          <span className="bg-emerald-500/30 text-emerald-200 px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase border border-emerald-400/30">
+          <span className="bg-white/20 text-rose-100 px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase border border-white/10">
             SIH 2026 • PS 133
           </span>
-          <span className="hidden sm:inline text-emerald-100">Theme: MedTech | Rural Healthcare Access</span>
-          <span className="text-emerald-300 font-semibold">• Team BioBits</span>
+          <span className="hidden sm:inline text-rose-100">Theme: MedTech | Rural Healthcare Access</span>
+          <span className="text-rose-200 font-semibold">• Team BioBits</span>
         </div>
 
         <div className="flex items-center gap-3 text-[11px]">
           <button
             onClick={handleVoiceHelp}
-            className="flex items-center gap-1 text-emerald-200 hover:text-white transition-colors bg-white/10 px-2 py-0.5 rounded-full"
+            className="flex items-center gap-1 text-rose-200 hover:text-white transition-colors bg-white/10 px-2 py-0.5 rounded-full"
             title="Audio guidance"
           >
             <Volume2 className="w-3 h-3" />
             <span className="hidden md:inline">{t('audioHelp', 'Listen Guide')}</span>
           </button>
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span className="text-emerald-200 font-medium">Ayushman Bharat & NHM Aligned</span>
+            <span className="w-2 h-2 rounded-full bg-rose-300 animate-pulse"></span>
+            <span className="text-rose-200 font-medium">Ayushman Bharat & NHM Aligned</span>
           </div>
         </div>
       </div>
@@ -81,23 +81,23 @@ export const Navbar = () => {
           
           {/* Logo & Brand */}
           <Link to="/" className="flex items-center gap-2 cursor-pointer shrink-0">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white shadow-sm ring-1 ring-emerald-400/40">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-brand-primary flex items-center justify-center text-white shadow-sm ring-1 ring-rose-400/40">
               <Sparkles className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
-                  Bio<span className="text-emerald-600">Bits</span>
+                <span className="text-base sm:text-lg font-black text-text-dark tracking-tight">
+                  Sahay
                 </span>
-                <span className="text-[10px] font-extrabold text-teal-700 bg-teal-50 border border-teal-200/80 px-1.5 py-0.5 rounded">
-                  Swasthya
+                <span className="text-[10px] font-extrabold text-brand-primary bg-brand-light border border-brand-primary/20 px-1.5 py-0.5 rounded">
+                  Coordination
                 </span>
               </div>
             </div>
           </Link>
 
           {/* Desktop Navigation Tabs - Using React Router NavLinks */}
-          <nav className="hidden lg:flex items-center gap-1 bg-slate-100/80 p-1 rounded-xl border border-slate-200/60">
+          <nav className="hidden lg:flex items-center gap-1 bg-cream-panel p-1 rounded-xl border border-cream-border">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -108,17 +108,17 @@ export const Navbar = () => {
                   className={({ isActive }) =>
                     `flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 relative ${
                       isActive
-                        ? 'bg-white text-emerald-700 shadow-xs font-bold border border-slate-200/50'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                        ? 'bg-white text-brand-primary shadow-xs font-bold border border-cream-border'
+                        : 'text-text-muted hover:text-text-dark hover:bg-white/50'
                     }`
                   }
                 >
                   {({ isActive }) => (
                     <>
-                      <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-emerald-600' : 'text-slate-400'}`} />
+                      <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-brand-primary' : 'text-text-muted'}`} />
                       <span>{item.label}</span>
                       {item.badge && (
-                        <span className="px-1.5 py-0.2 text-[9px] font-extrabold rounded-full bg-rose-500 text-white">
+                        <span className="px-1.5 py-0.2 text-[9px] font-extrabold rounded-full bg-brand-primary text-white">
                           {item.badge}
                         </span>
                       )}
@@ -133,16 +133,16 @@ export const Navbar = () => {
           <div className="flex items-center gap-2">
             
             {/* Language Switcher */}
-            <div className="flex items-center gap-1 bg-slate-50 hover:bg-slate-100 px-2 py-1.2 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 transition-colors">
-              <Globe className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+            <div className="flex items-center gap-1 bg-cream-panel hover:bg-cream-border/40 px-2 py-1.2 rounded-lg border border-cream-border text-xs font-medium text-text-dark transition-colors">
+              <Globe className="w-3.5 h-3.5 text-brand-primary shrink-0" />
               <select
                 value={currentLang}
                 onChange={(e) => setLanguage(e.target.value)}
-                className="bg-transparent border-none text-xs font-semibold text-slate-800 focus:outline-none cursor-pointer pr-1"
+                className="bg-transparent border-none text-xs font-semibold text-text-dark focus:outline-none cursor-pointer pr-1"
                 aria-label="Select Language"
               >
                 {languages.map((l) => (
-                  <option key={l.code} value={l.code} className="text-slate-900">
+                  <option key={l.code} value={l.code} className="text-text-dark bg-cream-panel">
                     {l.flag} {l.native}
                   </option>
                 ))}
@@ -151,12 +151,12 @@ export const Navbar = () => {
 
             {/* Role Switcher */}
             <div className="hidden sm:flex items-center">
-              <div className="flex items-center gap-1 bg-emerald-50/80 hover:bg-emerald-100/60 px-2 py-1.2 rounded-lg border border-emerald-200 text-xs text-emerald-900 transition-colors">
-                <UserCheck className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+              <div className="flex items-center gap-1 bg-brand-light hover:bg-brand-light/60 px-2 py-1.2 rounded-lg border border-brand-primary/20 text-xs text-brand-deep transition-colors">
+                <UserCheck className="w-3.5 h-3.5 text-brand-primary shrink-0" />
                 <select
                   value={userRole}
                   onChange={(e) => setUserRole(e.target.value)}
-                  className="bg-transparent border-none text-xs font-semibold text-emerald-900 focus:outline-none cursor-pointer"
+                  className="bg-transparent border-none text-xs font-semibold text-brand-deep focus:outline-none cursor-pointer"
                   aria-label="Select Role"
                 >
                   {roles.map((r) => (
@@ -175,7 +175,7 @@ export const Navbar = () => {
               className={`flex items-center gap-1.5 px-2.5 py-1.2 rounded-lg text-xs font-bold transition-all duration-150 border ${
                 isOffline
                   ? 'bg-amber-100 text-amber-900 border-amber-300 ring-1 ring-amber-400'
-                  : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
+                  : 'bg-cream-panel text-text-dark border-cream-border hover:bg-cream-border/40'
               }`}
               title="Click to toggle offline mode directly on this page"
             >
@@ -186,7 +186,7 @@ export const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <Wifi className="w-3.5 h-3.5 text-emerald-600" />
+                  <Wifi className="w-3.5 h-3.5 text-brand-primary" />
                   <span className="hidden md:inline text-[11px]">Online</span>
                 </>
               )}
@@ -203,7 +203,7 @@ export const Navbar = () => {
               <button
                 onClick={syncOfflineQueue}
                 disabled={isSyncing}
-                className="hidden md:flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1.2 rounded-lg text-xs font-bold shadow-xs transition-colors disabled:opacity-50"
+                className="hidden md:flex items-center gap-1 bg-brand-primary hover:bg-brand-deep text-white px-2.5 py-1.2 rounded-lg text-xs font-bold shadow-xs transition-colors disabled:opacity-50"
               >
                 <RefreshCw className={`w-3 h-3 ${isSyncing ? 'animate-spin' : ''}`} />
                 <span className="text-[11px]">{isSyncing ? 'Syncing...' : 'Sync'}</span>
@@ -224,7 +224,7 @@ export const Navbar = () => {
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-5 space-y-3 shadow-lg">
+        <div className="lg:hidden bg-cream-bg border-b border-cream-border px-4 pt-3 pb-5 space-y-3 shadow-lg">
           <div className="grid grid-cols-2 gap-2">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -237,14 +237,14 @@ export const Navbar = () => {
                   className={({ isActive }) =>
                     `flex items-center gap-2 p-2.5 rounded-xl text-xs font-bold text-left transition-all ${
                       isActive
-                        ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
-                        : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
+                        ? 'bg-brand-primary text-white shadow-md shadow-brand-primary/20'
+                        : 'bg-cream-panel text-text-dark hover:bg-cream-border/40 border border-cream-border'
                     }`
                   }
                 >
                   {({ isActive }) => (
                     <>
-                      <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-500'}`} />
+                      <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-text-muted'}`} />
                       <span className="truncate">{item.label}</span>
                     </>
                   )}
@@ -253,13 +253,13 @@ export const Navbar = () => {
             })}
           </div>
 
-          <div className="pt-2 border-t border-slate-100 flex flex-wrap gap-2 items-center justify-between">
+          <div className="pt-2 border-t border-cream-border flex flex-wrap gap-2 items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-slate-500">Role:</span>
+              <span className="text-xs font-semibold text-text-muted">Role:</span>
               <select
                 value={userRole}
                 onChange={(e) => setUserRole(e.target.value)}
-                className="bg-emerald-50 text-emerald-900 border border-emerald-200 text-xs font-bold rounded-lg px-2 py-1"
+                className="bg-brand-light text-brand-deep border border-brand-primary/20 text-xs font-bold rounded-lg px-2 py-1"
               >
                 {roles.map((r) => (
                   <option key={r.id} value={r.id}>
@@ -273,7 +273,7 @@ export const Navbar = () => {
               <button
                 onClick={syncOfflineQueue}
                 disabled={isSyncing}
-                className="flex items-center gap-1.5 bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"
+                className="flex items-center gap-1.5 bg-brand-primary text-white px-3 py-1.5 rounded-lg text-xs font-bold"
               >
                 <RefreshCw className={`w-3 h-3 ${isSyncing ? 'animate-spin' : ''}`} />
                 <span>Sync {pendingSyncQueue.length} items</span>

@@ -10,8 +10,8 @@ export const LANGUAGES = [
 
 export const TRANSLATIONS = {
   en: {
-    appTitle: 'BioBits Swasthya',
-    appSubtitle: 'Offline-First Rural Health OS | Smart India Hackathon',
+    appTitle: 'Sahay',
+    appSubtitle: 'Rural Healthcare Coordination Network | Smart India Hackathon',
     teamName: 'Team BioBits',
     psNumber: 'SIH PS 133: Rural & Underserved Public Healthcare Access',
     
@@ -19,7 +19,7 @@ export const TRANSLATIONS = {
     navTeleconsult: 'Teleconsultation',
     navEpidemic: 'Epidemic Radar',
     navMaternal: 'Maternal & Child',
-    navChatbot: 'AI Health Saathi',
+    navChatbot: 'Sahay Saathi AI',
     
     // Roles
     roleCitizen: 'Rural Citizen',
@@ -81,11 +81,11 @@ export const TRANSLATIONS = {
     highRiskAlert: 'High-Risk Pregnancy Flag',
     
     // Chatbot
-    chatTitle: 'BioBits Swasthya Saathi',
+    chatTitle: 'Sahay Saathi',
     chatSubtitle: '24/7 Vernacular Health & Emergency Assistant',
     chatPlaceholder: 'Describe symptoms or ask health question...',
     chatSend: 'Ask Saathi',
-    emergencyDisclaimer: 'BioBits AI provides triage decision support and emergency first-aid advice. In critical danger, call 108 immediately.',
+    emergencyDisclaimer: 'Sahay AI provides triage decision support and emergency first-aid advice. In critical danger, call 108 immediately.',
     
     // Common
     save: 'Save',
@@ -104,15 +104,15 @@ export const TRANSLATIONS = {
   },
   
   hi: {
-    appTitle: 'बायोबिट्स स्वास्थ्य',
-    appSubtitle: 'ग्रामीण स्वास्थ्य संचालन प्रणाली | स्मार्ट इंडिया हैकाथॉन',
+    appTitle: 'सहाय',
+    appSubtitle: 'ग्रामीण स्वास्थ्य समन्वय नेटवर्क | स्मार्ट इंडिया हैकाथॉन',
     teamName: 'टीम बायोबिट्स',
     psNumber: 'SIH PS 133: ग्रामीण एवं दुर्गम क्षेत्रों में गुणवत्तापूर्ण स्वास्थ्य सेवा',
     
     navTeleconsult: 'ई-परामर्श (टेलीकंसल्ट)',
     navEpidemic: 'महामारी पूर्व-चेतावनी',
     navMaternal: 'मातृ एवं शिशु स्वास्थ्य',
-    navChatbot: 'स्वास्थ्य साथी AI',
+    navChatbot: 'सहाय साथी AI',
     
     roleCitizen: 'ग्रामीण नागरिक',
     roleAsha: 'आशा कार्यकर्ता',
@@ -168,11 +168,11 @@ export const TRANSLATIONS = {
     ifaTablets: 'आयरन-फॉलिक गोली ट्रैकर',
     highRiskAlert: 'उच्च जोखिम गर्भावस्था चेतावनी',
     
-    chatTitle: 'बायोबिट्स स्वास्थ्य साथी',
+    chatTitle: 'सहाय साथी',
     chatSubtitle: '24/7 मातृभाषा में स्वास्थ्य व प्राथमिक उपचार सहायक',
     chatPlaceholder: 'अपनी बीमारी या सवाल यहाँ लिखें...',
     chatSend: 'साथी से पूछें',
-    emergencyDisclaimer: 'बायोबिट्स AI प्राथमिक स्वास्थ्य मार्गदर्शन देता है। गंभीर आपातकाल में तुरंत 108 पर कॉल करें।',
+    emergencyDisclaimer: 'सहाय AI प्राथमिक स्वास्थ्य मार्गदर्शन देता है। गंभीर आपातकाल में तुरंत 108 पर कॉल करें।',
     
     save: 'सुरक्षित करें',
     cancel: 'रद्द करें',
@@ -190,15 +190,15 @@ export const TRANSLATIONS = {
   },
 
   bn: {
-    appTitle: 'বায়োবিটস স্বাস্থ্য',
-    appSubtitle: 'অফলাইন গ্রামীণ স্বাস্থ্য ব্যবস্থা | স্মার্ট ইন্ডিয়া হ্যাকাথন',
+    appTitle: 'সহায়',
+    appSubtitle: 'গ্রামীণ স্বাস্থ্য সমন্বয় নেটওয়ার্ক | স্মার্ট ইন্ডিয়া হ্যাকাথন',
     teamName: 'টিম বায়োবিটস',
     psNumber: 'SIH PS 133: গ্রামীণ এলাকায় উন্নত স্বাস্থ্য পরিষেবা নিশ্চিতকরণ',
     
     navTeleconsult: 'টেলিকনসালটেশন',
     navEpidemic: 'মহামারী সতর্কবার্তা',
     navMaternal: 'মাতৃ ও শিশু স্বাস্থ্য',
-    navChatbot: 'স্বাস্থ্য সাথী AI',
+    navChatbot: 'সহায় সাথী AI',
     
     roleCitizen: 'গ্রামীণ নাগরিক',
     roleAsha: 'আশা কর্মী',
@@ -254,11 +254,11 @@ export const TRANSLATIONS = {
     ifaTablets: 'আয়রন ট্যাবলেট ট্র্যাকার',
     highRiskAlert: 'উচ্চ ঝুঁকিপূর্ণ গর্ভাবস্থা',
     
-    chatTitle: 'বায়োবিটস স্বাস্থ্য সাথী',
+    chatTitle: 'সহায় সাথী',
     chatSubtitle: '২৪/৭ মাতৃভাষায় স্বাস্থ্য পরামর্শ ও প্রাথমিক চিকিৎসা সহায়ক',
     chatPlaceholder: 'আপনার শারীরিক সমস্যা বা প্রশ্ন লিখুন...',
     chatSend: 'সাথীকে জিজ্ঞেস করুন',
-    emergencyDisclaimer: 'বায়োবিটস AI প্রাথমিক সহায়তা প্রদান করে। গুরুতর পরিস্থিতিতে ১০৮ নম্বরে যোগাযোগ করুন।',
+    emergencyDisclaimer: 'সহায় AI প্রাথমিক সহায়তা প্রদান করে। গুরুতর পরিস্থিতিতে ১০৮ নম্বরে যোগাযোগ করুন।',
     
     save: 'সংরক্ষণ করুন',
     cancel: 'বাতিল',
@@ -276,15 +276,15 @@ export const TRANSLATIONS = {
   },
 
   or: {
-    appTitle: 'ବାୟୋବିଟ୍ସ ସ୍ୱାସ୍ଥ୍ୟ',
-    appSubtitle: 'ଅଫଲାଇନ୍ ଗ୍ରାମୀଣ ସ୍ୱାସ୍ଥ୍ୟ ବ୍ୟବସ୍ଥା | ସ୍ମାର୍ଟ ଇଣ୍ଡିଆ ହ୍ୟାକାଥନ୍',
+    appTitle: 'ସହାୟ',
+    appSubtitle: 'ଗ୍ରାମୀଣ ସ୍ୱାସ୍ଥ୍ୟ ସମନ୍ୱୟ ନେଟୱାର୍କ | ସ୍ମାର୍ଟ ଇଣ୍ଡିଆ ହ୍ୟାକାଥନ୍',
     teamName: 'ଟିମ୍ ବାୟୋବିଟ୍ସ',
     psNumber: 'SIH PS 133: ଗ୍ରାମାଞ୍ଚଳରେ ଉନ୍ନତ ସ୍ୱାସ୍ଥ୍ୟସେବା',
     
     navTeleconsult: 'ଟେଲିକନସଲ୍ଟେସନ୍',
     navEpidemic: 'ମହାମାରୀ ସତର୍କତା',
     navMaternal: 'ମାତୃ ଓ ଶିଶୁ ସ୍ୱାସ୍ଥ୍ୟ',
-    navChatbot: 'ସ୍ୱାସ୍ଥ୍ୟ ସାଥୀ AI',
+    navChatbot: 'ସହାୟ ସାଥୀ AI',
     
     roleCitizen: 'ଗ୍ରାମବାସୀ',
     roleAsha: 'ଆଶା କର୍ମୀ',
@@ -340,11 +340,11 @@ export const TRANSLATIONS = {
     ifaTablets: 'ଆଇରନ୍ ବଟିକା ଟ୍ରାକର୍',
     highRiskAlert: 'ଅଧିକ ବିପଦପୂର୍ଣ୍ଣ ଗର୍ଭାବସ୍ଥା',
     
-    chatTitle: 'ବାୟୋବିଟ୍ସ ସ୍ୱାସ୍ଥ୍ୟ ସାଥୀ',
+    chatTitle: 'ସହାୟ ସାଥୀ',
     chatSubtitle: '୨୪/୭ ଓଡ଼ିଆରେ ସ୍ୱାସ୍ଥ୍ୟ ଓ ପ୍ରାଥମିକ ଚିକିତ୍ସା ସହାୟକ',
     chatPlaceholder: 'ଆପଣଙ୍କ ସମସ୍ୟା ଲେଖନ୍ତୁ...',
     chatSend: 'ପଚାରନ୍ତୁ',
-    emergencyDisclaimer: 'ଜରୁରୀ ପରିସ୍ଥିତିରେ ୧୦୮ ଡାକନ୍ତୁ।',
+    emergencyDisclaimer: 'ସହାୟ AI ପ୍ରାଥମିକ ସହାୟତା ପ୍ରଦାନ କରେ। ଜରୁରୀ ପରିସ୍ଥିତିରେ ୧୦୮ ଡାକନ୍ତୁ।',
     
     save: 'ସାଇତନ୍ତୁ',
     cancel: 'ବାତିଲ୍',
@@ -362,15 +362,15 @@ export const TRANSLATIONS = {
   },
 
   te: {
-    appTitle: 'బయోబిట్స్ స్వాస్థ్య',
-    appSubtitle: 'ఆఫ్‌లైన్ గ్రామీణ ఆరోగ్య వ్యవస్థ | స్మార్ట్ ఇండియా హ్యాకథాన్',
+    appTitle: 'సహాయ్',
+    appSubtitle: 'గ్రామీణ ఆరోగ్య సమన్వయ నెట్‌వర్క్ | స్మార్ట్ ఇండియా హ్యాకథాన్',
     teamName: 'టీమ్ బయోబిట్స్',
     psNumber: 'SIH PS 133: గ్రామీణ ప్రాంతాల్లో మెరుగైన ప్రభుత్వ వైద్య సేవలు',
     
     navTeleconsult: 'టెలికన్సల్టేషన్',
     navEpidemic: 'అంటువ్యాధుల హెచ్చరిక',
     navMaternal: 'మాతృ & శిశు సంరక్షణ',
-    navChatbot: 'ఆరోగ్య సారథి AI',
+    navChatbot: 'సహాయ్ సారథి AI',
     
     roleCitizen: 'గ్రామీణ పౌరుడు',
     roleAsha: 'ఆశా కార్యకర్త',
@@ -426,11 +426,11 @@ export const TRANSLATIONS = {
     ifaTablets: 'ఐరన్ మాత్రలు',
     highRiskAlert: 'హై-రిస్క్ గర్భధారణ హెచ్చరిక',
     
-    chatTitle: 'బయోబిట్స్ ఆరోగ్య సారథి',
+    chatTitle: 'సహాయ్ సారథి',
     chatSubtitle: '24/7 తెలుగులో ఆరోగ్య సలహాలు మరియు ప్రథమ చికిత్స',
     chatPlaceholder: 'మీ సమస్యను ఇక్కడ టైప్ చేయండి...',
     chatSend: 'అడగండి',
-    emergencyDisclaimer: 'అత్యవసర పరిస్థితుల్లో 108 కు కాల్ చేయండి.',
+    emergencyDisclaimer: 'సహాయ్ AI ప్రాథమిక సహాయాన్ని అందిస్తుంది. అత్యవసర పరిస్థితుల్లో 108 కు కాల్ చేయండి.',
     
     save: 'సేవ్ చేయండి',
     cancel: 'రద్దు చేయండి',
@@ -448,15 +448,15 @@ export const TRANSLATIONS = {
   },
 
   ta: {
-    appTitle: 'பயோபிட்ஸ் சுகாதாரம்',
-    appSubtitle: 'ஆஃப்லைன் கிராமப்புற சுகாதார தளம் | ஸ்மார்ட் இந்தியா ஹேக்கத்தான்',
+    appTitle: 'சஹாய்',
+    appSubtitle: 'கிராமப்புற சுகாதார ஒருங்கிணைப்பு நெட்வொர்க் | ஸ்மார்ட் இந்தியா ஹேக்கத்தான்',
     teamName: 'டீம் பயோபிட்ஸ்',
     psNumber: 'SIH PS 133: கிராமப்புறங்களில் தரமான பொது சுகாதார சேவை',
     
     navTeleconsult: 'தொலைதூர மருத்துவம்',
     navEpidemic: 'தொற்றுநோய் எச்சரிக்கை',
     navMaternal: 'தாய் & சேய் நலம்',
-    navChatbot: 'சுகாதார தோழன் AI',
+    navChatbot: 'சஹாய் தோழன் AI',
     
     roleCitizen: 'கிராம மக்கள்',
     roleAsha: 'ஆஷா பணியாளர்',
@@ -512,11 +512,11 @@ export const TRANSLATIONS = {
     ifaTablets: 'இரும்புச்சத்து மாத்திரைகள்',
     highRiskAlert: 'அதிக ஆபத்துள்ள கர்ப்பம்',
     
-    chatTitle: 'பயோபிட்ஸ் சுகாதார தோழன்',
+    chatTitle: 'சஹாய் தோழன்',
     chatSubtitle: '24/7 தமிழில் சுகாதார ஆலோசனைகள் மற்றும் முதலுதவி',
     chatPlaceholder: 'உங்கள் பிரச்சினையை இங்கே தட்டச்சு செய்யவும்...',
     chatSend: 'கேளுங்கள்',
-    emergencyDisclaimer: 'அவசர காலங்களில் உடனடியாக 108 ஐ அழைக்கவும்.',
+    emergencyDisclaimer: 'சஹாய் AI அவசர வழிகாட்டுதலை வழங்குகிறது. அவசர காலங்களில் உடனடியாக 108 ஐ அழைக்கவும்.',
     
     save: 'சேமிக்க',
     cancel: 'ரத்து செய்',
@@ -534,15 +534,15 @@ export const TRANSLATIONS = {
   },
 
   mr: {
-    appTitle: 'बायोबिट्स स्वास्थ्य',
-    appSubtitle: 'ऑफलाईन ग्रामीण आरोग्य प्रणाली | स्मार्ट इंडिया हॅकाथॉन',
+    appTitle: 'सहाय',
+    appSubtitle: 'ग्रामीण आरोग्य समन्वय नेटवर्क | स्मार्ट इंडिया हॅकाथॉन',
     teamName: 'टीम बायोबिट्स',
     psNumber: 'SIH PS 133: ग्रामीण भागात दर्जेदार आरोग्य सेवा सुलभ करणे',
     
     navTeleconsult: 'टेलिकन्सल्टेशन',
     navEpidemic: 'साथरोग पूर्वसूचना',
     navMaternal: 'माता व बाल आरोग्य',
-    navChatbot: 'आरोग्य मित्र AI',
+    navChatbot: 'सहाय मित्र AI',
     
     roleCitizen: 'ग्रामीण नागरिक',
     roleAsha: 'आशा सेविका',
@@ -598,11 +598,11 @@ export const TRANSLATIONS = {
     ifaTablets: 'लोह गोळ्या ट्रॅकर',
     highRiskAlert: 'धोकादायक गरोदरपण इशारा',
     
-    chatTitle: 'बायोबिट्स आरोग्य मित्र',
+    chatTitle: 'सहाय मित्र',
     chatSubtitle: '२४/७ मराठीत आरोग्य सल्ला व प्रथमोपचार सहाय्यक',
     chatPlaceholder: 'तुमची लक्षणे किंवा प्रश्न येथे लिहा...',
     chatSend: 'विचारा',
-    emergencyDisclaimer: 'गंभीर परिस्थितीत तात्काळ १०८ वर संपर्क साधा.',
+    emergencyDisclaimer: 'सहाय AI गंभीर परिस्थितीत तात्काळ १०८ वर संपर्क साधण्याचा सल्ला देते.',
     
     save: 'जतन करा',
     cancel: 'रद्द करा',

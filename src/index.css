@@ -1,80 +1,144 @@
 @import "tailwindcss";
 
+/* Tailwind v4 theme tokens: these MUST be registered here for custom
+   utilities such as bg-brand-primary, bg-cream-bg, text-text-dark,
+   border-cream-border, etc. to actually generate CSS. */
+@theme {
+  --font-heading: 'Outfit', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  --color-brand-primary: #be123c;
+  --color-brand-deep: #881337;
+  --color-brand-light: #fef2f2;
+  --color-cream-bg: #fdfbf7;
+  --color-cream-panel: #faf8f5;
+  --color-cream-border: #eaddcd;
+  --color-text-dark: #292524;
+  --color-text-muted: #57534e;
+}
+
 @layer base {
   :root {
     --font-heading: 'Outfit', sans-serif;
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --color-brand-primary: #be123c;
+    --color-brand-deep: #881337;
+    --color-brand-light: #fef2f2;
+    --color-cream-bg: #fdfbf7;
+    --color-cream-panel: #faf8f5;
+    --color-cream-border: #eaddcd;
+    --color-text-dark: #292524;
+    --color-text-muted: #57534e;
   }
 
   body {
     font-family: var(--font-sans);
     -webkit-tap-highlight-color: transparent;
+    background: var(--color-cream-bg);
+    color: var(--color-text-dark);
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-heading);
-  }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); }
 }
 
-/* Custom modern animations & utility styles */
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
-  }
-  50% {
-    box-shadow: 0 0 25px rgba(16, 185, 129, 0.8);
-  }
+/* =========================================================
+   SAHAY — VISIBILITY / CONTRAST SYSTEM
+   ========================================================= */
+button { min-height: 34px; border-radius: 0.625rem; }
+button:not(:disabled)[class*="opacity-"] { opacity: 1 !important; }
+button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* Controls that were intentionally translucent are made opaque so
+   their labels remain readable. This does not affect page backgrounds. */
+button[class*="bg-white/"] {
+  background-color: #ffffff !important;
+  color: var(--color-brand-deep) !important;
+  border-color: #e5cfd2 !important;
+  opacity: 1 !important;
+}
+button[class*="bg-brand-primary/"] {
+  background-color: var(--color-brand-primary) !important;
+  color: #ffffff !important;
+  border-color: var(--color-brand-primary) !important;
+  opacity: 1 !important;
+}
+button[class*="bg-brand-deep/"] {
+  background-color: var(--color-brand-deep) !important;
+  color: #ffffff !important;
+  border-color: var(--color-brand-deep) !important;
+  opacity: 1 !important;
+}
+button[class*="bg-transparent"] {
+  background-color: #ffffff !important;
+  color: var(--color-brand-deep) !important;
+  border: 1px solid var(--color-cream-border) !important;
+  opacity: 1 !important;
+}
+a[class*="bg-white/"] {
+  background-color: #ffffff !important;
+  color: var(--color-brand-deep) !important;
+  border-color: #e5cfd2 !important;
+}
+a[class*="bg-brand-primary/"] {
+  background-color: var(--color-brand-primary) !important;
+  color: #ffffff !important;
+  border-color: var(--color-brand-primary) !important;
 }
 
-@keyframes radar-sweep {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 3px solid rgba(190, 18, 60, 0.28);
+  outline-offset: 2px;
 }
 
-@keyframes wave-bounce {
-  0%, 100% { transform: scaleY(0.4); }
-  50% { transform: scaleY(1.2); }
+/* =========================================================
+   LEGACY GREEN/TEAL -> SAHAY RED PALETTE
+   ========================================================= */
+.bg-emerald-950 { background-color: #4c0519 !important; }
+.bg-emerald-900 { background-color: #881337 !important; }
+.bg-emerald-800 { background-color: #9f1239 !important; }
+.bg-emerald-700 { background-color: #be123c !important; }
+.bg-emerald-600 { background-color: #be123c !important; }
+.bg-emerald-500 { background-color: #e11d48 !important; }
+.bg-emerald-100 { background-color: #ffe4e6 !important; }
+.bg-emerald-50 { background-color: #fff1f2 !important; }
+.text-emerald-950 { color: #4c0519 !important; }
+.text-emerald-900 { color: #881337 !important; }
+.text-emerald-800 { color: #9f1239 !important; }
+.text-emerald-700 { color: #be123c !important; }
+.text-emerald-600 { color: #be123c !important; }
+.text-emerald-500 { color: #e11d48 !important; }
+.text-emerald-300 { color: #fda4af !important; }
+.text-emerald-200 { color: #fecdd3 !important; }
+.text-emerald-100 { color: #ffe4e6 !important; }
+.border-emerald-700 { border-color: #9f1239 !important; }
+.border-emerald-600 { border-color: #be123c !important; }
+.border-emerald-500 { border-color: #e11d48 !important; }
+.border-emerald-400 { border-color: #fb7185 !important; }
+
+.animate-pulse-glow { animation: sahay-pulse-glow 2.5s infinite; }
+@keyframes sahay-pulse-glow {
+  0%, 100% { box-shadow: 0 0 15px rgba(190, 18, 60, 0.22); }
+  50% { box-shadow: 0 0 25px rgba(190, 18, 60, 0.42); }
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 2.5s infinite;
-}
+select, input, textarea { color: var(--color-text-dark); }
+select { background-color: var(--color-cream-panel); }
 
-.animate-radar {
-  animation: radar-sweep 6s linear infinite;
-}
+@keyframes radar-sweep { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes wave-bounce { 0%, 100% { transform: scaleY(0.4); } 50% { transform: scaleY(1.2); } }
+.animate-radar { animation: radar-sweep 6s linear infinite; }
 
-/* Custom clean scrollbars */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: rgba(241, 245, 249, 0.8); }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-::-webkit-scrollbar-track {
-  background: rgba(241, 245, 249, 0.8);
-}
-
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-/* Glassmorphism helpers */
 .glass-panel {
   background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(226, 232, 240, 0.8);
 }
-
 .glass-panel-dark {
   background: rgba(15, 23, 42, 0.85);
   backdrop-filter: blur(14px);
@@ -82,21 +146,9 @@
   border: 1px solid rgba(51, 65, 85, 0.7);
 }
 
-/* Print stylesheet for prescription slips */
 @media print {
-  body * {
-    visibility: hidden;
-  }
-  #printable-prescription, #printable-prescription * {
-    visibility: visible;
-  }
-  #printable-prescription {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-  }
-  .no-print {
-    display: none !important;
-  }
+  body * { visibility: hidden; }
+  #printable-prescription, #printable-prescription * { visibility: visible; }
+  #printable-prescription { position: absolute; left: 0; top: 0; width: 100%; }
+  .no-print { display: none !important; }
 }

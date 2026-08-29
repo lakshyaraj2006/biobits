@@ -35,19 +35,20 @@ export const OfflineStatusBar = () => {
         </div>
       )}
 
-      {/* Offline Alert Sticky Banner if Offline or has pending items */}
       {isOffline && (
-        <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-xs sm:text-sm text-amber-900 flex flex-wrap items-center justify-between gap-2 shadow-inner">
-          <div className="flex items-center gap-2 font-semibold">
-            <span className="p-1 rounded-md bg-amber-200 text-amber-900">
+        <div className="bg-amber-50 border-b border-amber-200 px-4 py-2.5 text-xs sm:text-sm text-amber-900 flex flex-wrap items-center justify-between gap-2 shadow-inner">
+          <div className="flex items-center gap-2 font-semibold text-left">
+            <span className="p-1 rounded-md bg-amber-200 text-amber-950 shrink-0">
               <WifiOff className="w-4 h-4" />
             </span>
-            <span>
-              {t('offlineMode', 'Offline Mode Active (Low/Zero Connectivity)')}
-            </span>
-            <span className="text-amber-700 font-normal hidden sm:inline">
-              — All case files, vitals, and vaccine entries are stored locally on your device.
-            </span>
+            <div>
+              <span className="font-extrabold text-amber-950 block sm:inline">
+                You're offline.
+              </span>
+              <span className="text-amber-800 font-medium sm:ml-1 text-xs">
+                Saved family information and emergency guidance remain available. We'll reconnect automatically when the network returns.
+              </span>
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
